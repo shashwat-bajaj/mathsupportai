@@ -1,0 +1,101 @@
+:root {
+  --bg: #0b1020;
+  --panel: #151c34;
+  --text: #eef2ff;
+  --muted: #a5b4fc;
+  --accent: #7c3aed;
+  --border: #2a355d;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(180deg, #090d1a, #11182d);
+  color: var(--text);
+}
+
+a { color: inherit; text-decoration: none; }
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: rgba(9, 13, 26, 0.85);
+  backdrop-filter: blur(10px);
+}
+
+.topbar nav { display: flex; gap: 18px; }
+.brand { font-weight: 700; }
+.container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+.hero {
+  display: grid;
+  gap: 18px;
+  padding: 48px 0 24px;
+}
+.hero h1 { font-size: 3rem; line-height: 1.05; margin: 0; }
+.hero p { color: #d1d5db; max-width: 760px; font-size: 1.1rem; }
+.buttonRow { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn, button {
+  background: var(--accent);
+  color: white;
+  border: 0;
+  padding: 12px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn.secondary, button.secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+}
+.card {
+  background: rgba(21, 28, 52, 0.92);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+}
+.grid { display: grid; gap: 16px; }
+.grid.cols-3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+label { display: block; margin-bottom: 8px; font-weight: 600; }
+input, textarea, select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #0d1327;
+  color: white;
+}
+textarea { min-height: 140px; resize: vertical; }
+pre {
+  white-space: pre-wrap;
+  line-height: 1.6;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.muted { color: #c7d2fe; }
+.price {
+  font-size: 2rem;
+  font-weight: 700;
+}
+.list { display: grid; gap: 10px; padding-left: 18px; }
+.badge {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(124, 58, 237, 0.15);
+  border: 1px solid rgba(124, 58, 237, 0.35);
+  color: #ddd6fe;
+  font-size: 0.9rem;
+}
+.responseBox {
+  min-height: 260px;
+  background: #0b1123;
+  border-radius: 14px;
+  padding: 16px;
+  border: 1px solid var(--border);
+}
+.small { font-size: 0.92rem; color: #d1d5db; }
