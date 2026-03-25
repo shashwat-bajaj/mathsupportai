@@ -16,6 +16,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <a href="/">Home</a>
             <a href="/pricing">Free Beta</a>
             <a href="/history">History</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
             <a href="/dashboard">Dashboard</a>
           </nav>
         </header>
@@ -28,6 +30,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               MathSupport AI is currently a free beta product for educational support.
             </p>
             <div className="buttonRow">
+              <a href="/about">About</a>
+              <a href="/contact">Contact</a>
               <a href="/privacy">Privacy Policy</a>
               <a href="/terms">Terms of Use</a>
             </div>
