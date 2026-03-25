@@ -1,3 +1,5 @@
+@import 'katex/dist/katex.min.css';
+
 :root {
   --bg: #0b1020;
   --panel: #151c34;
@@ -99,3 +101,71 @@ pre {
   border: 1px solid var(--border);
 }
 .small { font-size: 0.92rem; color: #d1d5db; }
+
+.formatted-content {
+  line-height: 1.7;
+}
+
+.formatted-content h1,
+.formatted-content h2,
+.formatted-content h3,
+.formatted-content h4 {
+  margin: 20px 0 10px;
+  line-height: 1.25;
+  color: #eef2ff;
+}
+
+.formatted-content h2 {
+  font-size: 1.25rem;
+}
+
+.formatted-content h3 {
+  font-size: 1.08rem;
+}
+
+.formatted-content p {
+  margin: 0 0 14px;
+}
+
+.formatted-content ul,
+.formatted-content ol {
+  margin: 0 0 14px 20px;
+  padding: 0;
+}
+
+.formatted-content li {
+  margin-bottom: 8px;
+}
+
+.formatted-content strong {
+  font-weight: 700;
+}
+
+.formatted-content code {
+  background: rgba(124, 58, 237, 0.08);
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.formatted-content pre {
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+.formatted-content hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 18px 0;
+}
+
+.formatted-content blockquote {
+  margin: 0 0 14px;
+  padding-left: 14px;
+  border-left: 3px solid rgba(124, 58, 237, 0.5);
+  color: #d8defd;
+}
+
+.question-block {
+  white-space: pre-wrap;
+  line-height: 1.6;
+}

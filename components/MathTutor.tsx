@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import RenderedContent from '@/components/RenderedContent';
 
 export default function MathTutor() {
   const [email, setEmail] = useState('');
@@ -56,6 +57,7 @@ export default function MathTutor() {
         <div>
           <label>Level</label>
           <select value={gradeLevel} onChange={(e) => setGradeLevel(e.target.value)}>
+            <option value="elementary">Elementary</option>
             <option value="middle-school">Middle school</option>
             <option value="high-school">High school</option>
             <option value="college">College</option>
@@ -83,7 +85,7 @@ export default function MathTutor() {
       </div>
 
       <div className="responseBox">
-        <pre>{answer || 'Your tutor response will appear here.'}</pre>
+        {answer ? <RenderedContent content={answer} /> : <p>Your tutor response will appear here.</p>}
       </div>
     </div>
   );
