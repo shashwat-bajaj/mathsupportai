@@ -18,7 +18,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <a href="/history">History</a>
             <a href="/about">About</a>
             <a href="/contact">Contact</a>
-            <a href="/dashboard">Dashboard</a>
           </nav>
         </header>
 
