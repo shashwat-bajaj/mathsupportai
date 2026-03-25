@@ -19,7 +19,20 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <a href="/dashboard">Dashboard</a>
           </nav>
         </header>
+
         <main className="container">{children}</main>
+
+        <footer className="container" style={{ paddingBottom: 32 }}>
+          <div className="card" style={{ marginTop: 24 }}>
+            <p className="small">
+              MathSupport AI is currently a free beta product for educational support.
+            </p>
+            <div className="buttonRow">
+              <a href="/privacy">Privacy Policy</a>
+              <a href="/terms">Terms of Use</a>
+            </div>
+          </div>
+        </footer>
       </body>
     </html>
   );
