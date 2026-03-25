@@ -1,6 +1,15 @@
 import { createAdminSupabase } from '@/lib/supabase-admin';
+import RenderedContent from '@/components/RenderedContent';
 
 export const dynamic = 'force-dynamic';
+
+function formatDate(value: string) {
+  try {
+    return new Date(value).toLocaleString();
+  } catch {
+    return value;
+  }
+}
 
 async function getTutorSessions() {
   const supabase = createAdminSupabase();
@@ -46,9 +55,7 @@ export default async function DashboardPage({
       <div className="grid" style={{ gap: 24 }}>
         <section className="card">
           <h1>Admin dashboard</h1>
-          <p className="small">
-            This page is restricted.
-          </p>
+          <p className="small">This page is restricted.</p>
 
           <form method="GET" className="grid" style={{ gap: 12 }}>
             <div>
@@ -105,10 +112,10 @@ export default async function DashboardPage({
                   <strong>Email:</strong> {signup.email}
                 </p>
                 <p className="small">
-                  <strong>Joined:</strong> {new Date(signup.created_at).toLocaleString()}
+                  <strong>Joined:</strong> {formatDate(signup.created_at)}
                 </p>
-                <p>
-                  <strong>Goal:</strong><br />
+                <p className="question-block">
+                  <strong>Goal:</strong>{' '}
                   {signup.goal || 'No goal provided'}
                 </p>
               </div>
@@ -134,12 +141,11 @@ export default async function DashboardPage({
                   <strong>Email:</strong> {message.email}
                 </p>
                 <p className="small">
-                  <strong>Sent:</strong> {new Date(message.created_at).toLocaleString()}
+                  <strong>Sent:</strong> {formatDate(message.created_at)}
                 </p>
-                <p>
-                  <strong>Message:</strong><br />
-                  {message.message}
-                </p>
+                <div className="card questionSurface">
+                  <div className="question-block">{message.message}</div>
+                </div>
               </div>
             ))}
           </div>
@@ -153,26 +159,35 @@ export default async function DashboardPage({
         ) : !sessions || sessions.length === 0 ? (
           <p className="small">No tutor sessions yet.</p>
         ) : (
-          <div className="grid" style={{ gap: 16 }}>
+          <div className="grid" style={{ gap: 18 }}>
             {sessions.map((session) => (
               <div key={session.id} className="card">
                 <p className="small">
                   <strong>Email:</strong> {session.email || 'Not provided'}
                 </p>
                 <p className="small">
-                  <strong>Mode:</strong> {session.mode} | <strong>Level:</strong> {session.level}
+                  <strong>Mode:</strong> {session.mode} | <strong>Level:</strong>{' '}
+                  {session.level}
                 </p>
                 <p className="small">
-                  <strong>Asked:</strong> {new Date(session.created_at).toLocaleString()}
+                  <strong>Asked:</strong> {formatDate(session.created_at)}
                 </p>
-                <p>
-                  <strong>Question:</strong><br />
-                  {session.prompt}
-                </p>
-                <p>
-                  <strong>Answer:</strong><br />
-                  {session.response}
-                </p>
+
+                <div className="grid" style={{ gap: 12 }}>
+                  <div>
+                    <h3>Question</h3>
+                    <div className="card questionSurface">
+                      <div className="question-block">{session.prompt}</div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3>Answer</h3>
+                    <div className="card answerSurface">
+                      <RenderedContent content={session.response} />
+                    </div>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
