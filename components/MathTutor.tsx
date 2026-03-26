@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import RenderedContent from '@/components/RenderedContent';
+import { createClient } from '@/lib/supabase/client';
 
 type MathTutorProps = {
   audience?: 'student' | 'parent';
@@ -19,6 +20,7 @@ export default function MathTutor({
   placeholder
 }: MathTutorProps) {
   const [email, setEmail] = useState('');
+  const [accountEmail, setAccountEmail] = useState('');
   const [question, setQuestion] = useState(
     audience === 'parent'
       ? 'My child is learning fractions. How can I explain why 1/2 is larger than 1/4 without just giving the answer?'
@@ -27,9 +29,24 @@ export default function MathTutor({
   const [gradeLevel, setGradeLevel] = useState(
     audience === 'parent' ? 'elementary' : 'high-school'
   );
-  const [mode, setMode] = useState<"teach" | "hint" | "diagnose" | "quiz">(lockedMode || 'teach');
+  const [mode, setMode] = useState<'teach' | 'hint' | 'diagnose' | 'quiz'>(lockedMode || 'teach');
   const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    async function loadUser() {
+      const supabase = createClient();
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
+
+      if (user?.email) {
+        setAccountEmail(user.email);
+      }
+    }
+
+    loadUser();
+  }, []);
 
   async function submitQuestion() {
     setLoading(true);
@@ -39,7 +56,13 @@ export default function MathTutor({
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question, gradeLevel, mode, email, audience })
+        body: JSON.stringify({
+          question,
+          gradeLevel,
+          mode,
+          email: accountEmail ? '' : email,
+          audience
+        })
       });
 
       const data = await res.json();
@@ -60,15 +83,23 @@ export default function MathTutor({
         </div>
       )}
 
-      <div>
-        <label>Email (optional for beta history and usage tracking)</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@example.com"
-        />
-      </div>
+      {accountEmail ? (
+        <div className="card">
+          <p className="small">
+            Signed in as <strong>{accountEmail}</strong>. Tutor history will be saved to your account automatically.
+          </p>
+        </div>
+      ) : (
+        <div>
+          <label>Email (optional for beta history and usage tracking)</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@example.com"
+          />
+        </div>
+      )}
 
       <div className="grid cols-3">
         {!lockedMode ? (
