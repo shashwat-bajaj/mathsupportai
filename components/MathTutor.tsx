@@ -3,11 +3,31 @@
 import { useState } from 'react';
 import RenderedContent from '@/components/RenderedContent';
 
-export default function MathTutor() {
+type MathTutorProps = {
+  audience?: 'student' | 'parent';
+  lockedMode?: 'teach' | 'hint' | 'diagnose' | 'quiz';
+  title?: string;
+  description?: string;
+  placeholder?: string;
+};
+
+export default function MathTutor({
+  audience = 'student',
+  lockedMode,
+  title,
+  description,
+  placeholder
+}: MathTutorProps) {
   const [email, setEmail] = useState('');
-  const [question, setQuestion] = useState('Solve x^2 - 5x + 6 = 0 and explain each step.');
-  const [gradeLevel, setGradeLevel] = useState('high-school');
-  const [mode, setMode] = useState('teach');
+  const [question, setQuestion] = useState(
+    audience === 'parent'
+      ? 'My child is learning fractions. How can I explain why 1/2 is larger than 1/4 without just giving the answer?'
+      : 'Solve x^2 - 5x + 6 = 0 and explain each step.'
+  );
+  const [gradeLevel, setGradeLevel] = useState(
+    audience === 'parent' ? 'elementary' : 'high-school'
+  );
+  const [mode, setMode] = useState<"teach" | "hint" | "diagnose" | "quiz">(lockedMode || 'teach');
   const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -19,7 +39,7 @@ export default function MathTutor() {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question, gradeLevel, mode, email })
+        body: JSON.stringify({ question, gradeLevel, mode, email, audience })
       });
 
       const data = await res.json();
@@ -33,6 +53,13 @@ export default function MathTutor() {
 
   return (
     <div className="grid" style={{ gap: 14 }}>
+      {(title || description) && (
+        <div className="card">
+          {title ? <h2>{title}</h2> : null}
+          {description ? <p className="small">{description}</p> : null}
+        </div>
+      )}
+
       <div>
         <label>Email (optional for beta history and usage tracking)</label>
         <input
@@ -44,15 +71,33 @@ export default function MathTutor() {
       </div>
 
       <div className="grid cols-3">
-        <div>
-          <label>Mode</label>
-          <select value={mode} onChange={(e) => setMode(e.target.value)}>
-            <option value="teach">Teach me step by step</option>
-            <option value="hint">Give hints only</option>
-            <option value="diagnose">Diagnose my mistake</option>
-            <option value="quiz">Turn this into practice questions</option>
-          </select>
-        </div>
+        {!lockedMode ? (
+          <div>
+            <label>Mode</label>
+            <select value={mode} onChange={(e) => setMode(e.target.value as any)}>
+              <option value="teach">Teach me step by step</option>
+              <option value="hint">Give hints only</option>
+              <option value="diagnose">Diagnose my mistake</option>
+              <option value="quiz">Turn this into practice questions</option>
+            </select>
+          </div>
+        ) : (
+          <div>
+            <label>Mode</label>
+            <input
+              value={
+                lockedMode === 'hint'
+                  ? 'Guided hints only'
+                  : lockedMode === 'teach'
+                  ? 'Teach step by step'
+                  : lockedMode === 'diagnose'
+                  ? 'Diagnose mistake'
+                  : 'Quiz mode'
+              }
+              readOnly
+            />
+          </div>
+        )}
 
         <div>
           <label>Level</label>
@@ -66,11 +111,18 @@ export default function MathTutor() {
       </div>
 
       <div>
-        <label>Question or your work</label>
+        <label>
+          {audience === 'parent' ? 'Question or teaching situation' : 'Question or your work'}
+        </label>
         <textarea
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
-          placeholder="Type a math problem, paste your work, or ask for a quiz on a topic."
+          placeholder={
+            placeholder ||
+            (audience === 'parent'
+              ? 'Describe what the child is learning, where they are stuck, and how much help you want.'
+              : 'Type a math problem, paste your work, or ask for a quiz on a topic.')
+          }
         />
       </div>
 

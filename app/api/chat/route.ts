@@ -26,9 +26,7 @@ async function getSymbolicCheck(question: string) {
 
 function getClientIp(request: NextRequest) {
   const forwardedFor = request.headers.get('x-forwarded-for');
-  if (forwardedFor) {
-    return forwardedFor.split(',')[0].trim();
-  }
+  if (forwardedFor) return forwardedFor.split(',')[0].trim();
 
   const realIp = request.headers.get('x-real-ip');
   if (realIp) return realIp.trim();
@@ -46,7 +44,8 @@ export async function POST(request: NextRequest) {
       question,
       gradeLevel = 'high-school',
       mode = 'teach',
-      email = ''
+      email = '',
+      audience = 'student'
     } = await request.json();
 
     if (!question || typeof question !== 'string') {
@@ -105,7 +104,8 @@ export async function POST(request: NextRequest) {
       question,
       gradeLevel,
       mode,
-      symbolicCheck
+      symbolicCheck,
+      audience
     });
 
     const response = await ai.models.generateContent({

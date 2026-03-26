@@ -14,6 +14,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <a href="/" className="brand">MathSupport AI</a>
           <nav>
             <a href="/">Home</a>
+            <a href="/tutor">Students</a>
+            <a href="/parents">Parents</a>
             <a href="/pricing">Free Beta</a>
             <a href="/history">History</a>
             <a href="/about">About</a>
