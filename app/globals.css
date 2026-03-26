@@ -214,3 +214,36 @@ pre {
     grid-template-columns: 1fr;
   }
 }
+
+.threadHeader {
+  background: #0f162d;
+}
+
+.threadTurns {
+  display: grid;
+  gap: 16px;
+}
+
+.turnCard {
+  background: rgba(21, 28, 52, 0.92);
+}
+
+.turnLabelRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.turnLabel {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(124, 58, 237, 0.15);
+  border: 1px solid rgba(124, 58, 237, 0.35);
+  color: #ddd6fe;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
