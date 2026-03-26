@@ -11,8 +11,8 @@ export default function HomePage() {
           hint-based support, mistake diagnosis, and practice workflows that are built for actual learning.
         </p>
         <div className="buttonRow">
-          <a className="btn" href="/tutor">Open student tutor</a>
-          <a className="btn secondary" href="/parents">Parent / tutor support</a>
+          <a className="btn" href="/tutor">Open Tutor for Students</a>
+          <a className="btn secondary" href="/parents">Open Tutor for Parents</a>
         </div>
       </section>
 
