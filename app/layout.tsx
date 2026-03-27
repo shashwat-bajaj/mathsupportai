@@ -1,5 +1,6 @@
 import './globals.css';
 import type { ReactNode } from 'react';
+import AuthNav from '@/components/AuthNav';
 
 export const metadata = {
   title: 'MathSupport AI',
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <a href="/history">History</a>
             <a href="/about">About</a>
             <a href="/contact">Contact</a>
+            <AuthNav />
           </nav>
         </header>
 

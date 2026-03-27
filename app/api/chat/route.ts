@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenAI } from '@google/genai';
 import { buildTutorPrompt } from '@/lib/prompts';
 import { createAdminSupabase } from '@/lib/supabase-admin';
+import { createClient as createAuthClient } from '@/lib/supabase/server';
 
 const DAILY_FREE_LIMIT = 20;
 
@@ -34,6 +35,31 @@ function getClientIp(request: NextRequest) {
   return 'unknown';
 }
 
+function buildConversationContext(turns: Array<{ prompt: string; response: string }>) {
+  if (!turns.length) return '';
+
+  const recentTurns = turns.slice(-6);
+
+  return recentTurns
+    .map(
+      (turn, index) => `
+Previous turn ${index + 1}
+Student/User:
+${turn.prompt}
+
+Tutor:
+${turn.response}
+`
+    )
+    .join('\n---\n');
+}
+
+function makeConversationTitle(question: string) {
+  const cleaned = question.replace(/\s+/g, ' ').trim();
+  if (!cleaned) return 'New session';
+  return cleaned.length > 70 ? `${cleaned.slice(0, 70)}...` : cleaned;
+}
+
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY
 });
@@ -45,7 +71,8 @@ export async function POST(request: NextRequest) {
       gradeLevel = 'high-school',
       mode = 'teach',
       email = '',
-      audience = 'student'
+      audience = 'student',
+      conversationId = null
     } = await request.json();
 
     if (!question || typeof question !== 'string') {
@@ -59,11 +86,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const authClient = await createAuthClient();
+    const {
+      data: { user }
+    } = await authClient.auth.getUser();
+
     const supabase = createAdminSupabase();
+
     const normalizedEmail =
       typeof email === 'string' && email.trim()
         ? email.trim().toLowerCase()
-        : null;
+        : user?.email?.toLowerCase() || null;
 
     const ipAddress = getClientIp(request);
     const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
@@ -73,7 +106,9 @@ export async function POST(request: NextRequest) {
       .select('id', { count: 'exact', head: true })
       .gte('created_at', since);
 
-    if (normalizedEmail) {
+    if (user?.id) {
+      countQuery = countQuery.eq('user_id', user.id);
+    } else if (normalizedEmail) {
       countQuery = countQuery.eq('email', normalizedEmail);
     } else {
       countQuery = countQuery.eq('ip_address', ipAddress);
@@ -98,10 +133,57 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    let activeConversationId: string | null = conversationId;
+    let existingTurns: Array<{ prompt: string; response: string }> = [];
+
+    if (activeConversationId) {
+      const { data: previousTurns, error: turnsError } = await supabase
+        .from('learner_sessions')
+        .select('prompt, response, turn_index, created_at')
+        .eq('conversation_id', activeConversationId)
+        .order('turn_index', { ascending: true })
+        .order('created_at', { ascending: true });
+
+      if (turnsError) {
+        console.error('SUPABASE LOAD TURNS ERROR:', turnsError);
+      } else {
+        existingTurns = (previousTurns || []).map((t) => ({
+          prompt: t.prompt,
+          response: t.response
+        }));
+      }
+    }
+
+    if (!activeConversationId) {
+      const { data: conversation, error: conversationError } = await supabase
+        .from('learner_conversations')
+        .insert({
+          user_id: user?.id || null,
+          email: normalizedEmail,
+          audience,
+          title: makeConversationTitle(question)
+        })
+        .select('id')
+        .single();
+
+      if (conversationError || !conversation) {
+        console.error('SUPABASE CREATE CONVERSATION ERROR:', conversationError);
+        return NextResponse.json(
+          { error: 'Could not create conversation.' },
+          { status: 500 }
+        );
+      }
+
+      activeConversationId = conversation.id;
+    }
+
     const symbolicCheck = await getSymbolicCheck(question);
+    const conversationContext = buildConversationContext(existingTurns);
 
     const prompt = buildTutorPrompt({
-      question,
+      question: conversationContext
+        ? `${question}\n\nConversation context:\n${conversationContext}`
+        : question,
       gradeLevel,
       mode,
       symbolicCheck,
@@ -114,9 +196,13 @@ export async function POST(request: NextRequest) {
     });
 
     const answer = response.text || 'No response returned.';
+    const turnIndex = existingTurns.length + 1;
 
     try {
       await supabase.from('learner_sessions').insert({
+        user_id: user?.id || null,
+        conversation_id: activeConversationId,
+        turn_index: turnIndex,
         email: normalizedEmail,
         ip_address: ipAddress,
         mode,
@@ -128,7 +214,10 @@ export async function POST(request: NextRequest) {
       console.error('SUPABASE SAVE ERROR:', dbError);
     }
 
-    return NextResponse.json({ answer });
+    return NextResponse.json({
+      answer,
+      conversationId: activeConversationId
+    });
   } catch (error: any) {
     console.error('CHAT API ERROR:', error);
     return NextResponse.json(
