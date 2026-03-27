@@ -492,3 +492,28 @@ pre {
     display: none;
   }
 }
+
+.themeSwitcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--panel-strong);
+}
+
+.themeOption {
+  background: transparent;
+  color: var(--text);
+  border: 0;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.themeOption.active {
+  background: var(--accent);
+  color: white;
+}

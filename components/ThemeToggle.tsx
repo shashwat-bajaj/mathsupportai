@@ -2,46 +2,98 @@
 
 import { useEffect, useState } from 'react';
 
-type ThemeMode = 'light' | 'dark';
+type ThemePreference = 'system' | 'light' | 'dark';
+type ResolvedTheme = 'light' | 'dark';
 
-function applyTheme(theme: ThemeMode) {
-  document.documentElement.setAttribute('data-theme', theme);
-}
-
-function getPreferredTheme(): ThemeMode {
+function getSystemTheme(): ResolvedTheme {
   if (typeof window === 'undefined') return 'dark';
-
-  const saved = window.localStorage.getItem('mathsupport-theme');
-  if (saved === 'light' || saved === 'dark') return saved;
-
   return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
 }
 
+function applyResolvedTheme(theme: ResolvedTheme) {
+  document.documentElement.setAttribute('data-theme', theme);
+}
+
+function getSavedPreference(): ThemePreference {
+  if (typeof window === 'undefined') return 'system';
+
+  const saved = window.localStorage.getItem('mathsupport-theme');
+  if (saved === 'light' || saved === 'dark' || saved === 'system') {
+    return saved;
+  }
+
+  return 'system';
+}
+
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<ThemeMode>('dark');
+  const [preference, setPreference] = useState<ThemePreference>('system');
 
   useEffect(() => {
-    const nextTheme = getPreferredTheme();
-    setTheme(nextTheme);
-    applyTheme(nextTheme);
+    const savedPreference = getSavedPreference();
+    setPreference(savedPreference);
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
+
+    function updateTheme(nextPreference: ThemePreference) {
+      const resolved = nextPreference === 'system'
+        ? getSystemTheme()
+        : nextPreference;
+
+      applyResolvedTheme(resolved);
+    }
+
+    updateTheme(savedPreference);
+
+    function handleSystemChange() {
+      const currentPreference = getSavedPreference();
+      if (currentPreference === 'system') {
+        applyResolvedTheme(getSystemTheme());
+      }
+    }
+
+    mediaQuery.addEventListener('change', handleSystemChange);
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleSystemChange);
+    };
   }, []);
 
-  function toggleTheme() {
-    const nextTheme: ThemeMode = theme === 'dark' ? 'light' : 'dark';
-    setTheme(nextTheme);
-    applyTheme(nextTheme);
-    window.localStorage.setItem('mathsupport-theme', nextTheme);
+  function setThemePreference(nextPreference: ThemePreference) {
+    setPreference(nextPreference);
+    window.localStorage.setItem('mathsupport-theme', nextPreference);
+
+    const resolved = nextPreference === 'system'
+      ? getSystemTheme()
+      : nextPreference;
+
+    applyResolvedTheme(resolved);
   }
 
   return (
-    <button
-      type="button"
-      onClick={toggleTheme}
-      className="themeToggle"
-      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-      title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-    >
-      {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
-    </button>
+    <div className="themeSwitcher" role="group" aria-label="Theme selection">
+      <button
+        type="button"
+        onClick={() => setThemePreference('system')}
+        className={preference === 'system' ? 'themeOption active' : 'themeOption'}
+      >
+        System
+      </button>
+
+      <button
+        type="button"
+        onClick={() => setThemePreference('light')}
+        className={preference === 'light' ? 'themeOption active' : 'themeOption'}
+      >
+        Light
+      </button>
+
+      <button
+        type="button"
+        onClick={() => setThemePreference('dark')}
+        className={preference === 'dark' ? 'themeOption active' : 'themeOption'}
+      >
+        Dark
+      </button>
+    </div>
   );
 }
