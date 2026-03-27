@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import RenderedContent from '@/components/RenderedContent';
+import ReadAloudButton from '@/components/ReadAloudButton';
 import { createClient } from '@/lib/supabase/client';
 
 type MathTutorProps = {
@@ -41,7 +42,9 @@ export default function MathTutor({
   const [gradeLevel, setGradeLevel] = useState(
     audience === 'parent' ? 'elementary' : 'high-school'
   );
-  const [mode, setMode] = useState<'teach' | 'hint' | 'diagnose' | 'quiz'>(lockedMode || 'teach');
+  const [mode, setMode] = useState<'teach' | 'hint' | 'diagnose' | 'quiz'>(
+    lockedMode || 'teach'
+  );
   const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -123,7 +126,8 @@ export default function MathTutor({
       {accountEmail ? (
         <div className="card">
           <p className="small">
-            Signed in as <strong>{accountEmail}</strong>. Tutor history will be saved to your account automatically.
+            Signed in as <strong>{accountEmail}</strong>. Tutor history will be saved to
+            your account automatically.
           </p>
         </div>
       ) : (
@@ -168,10 +172,10 @@ export default function MathTutor({
                 lockedMode === 'hint'
                   ? 'Guided hints only'
                   : lockedMode === 'teach'
-                  ? 'Teach step by step'
-                  : lockedMode === 'diagnose'
-                  ? 'Diagnose mistake'
-                  : 'Quiz mode'
+                    ? 'Teach step by step'
+                    : lockedMode === 'diagnose'
+                      ? 'Diagnose mistake'
+                      : 'Quiz mode'
               }
               readOnly
             />
@@ -216,7 +220,16 @@ export default function MathTutor({
       </div>
 
       <div className="responseBox">
-        {answer ? <RenderedContent content={answer} /> : <p>Your tutor response will appear here.</p>}
+        {answer ? (
+          <div className="grid" style={{ gap: 12 }}>
+            <div className="buttonRow">
+              <ReadAloudButton text={answer} />
+            </div>
+            <RenderedContent content={answer} />
+          </div>
+        ) : (
+          <p>Your tutor response will appear here.</p>
+        )}
       </div>
     </div>
   );
