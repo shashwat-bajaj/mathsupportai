@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import RenderedContent from '@/components/RenderedContent';
 import { createClient } from '@/lib/supabase/client';
 
@@ -10,6 +11,8 @@ type MathTutorProps = {
   title?: string;
   description?: string;
   placeholder?: string;
+  initialConversationId?: string | null;
+  newSessionHref?: string;
 };
 
 export default function MathTutor({
@@ -17,15 +20,24 @@ export default function MathTutor({
   lockedMode,
   title,
   description,
-  placeholder
+  placeholder,
+  initialConversationId = null,
+  newSessionHref
 }: MathTutorProps) {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [accountEmail, setAccountEmail] = useState('');
-  const [question, setQuestion] = useState(
-    audience === 'parent'
-      ? 'My child is learning fractions. How can I explain why 1/2 is larger than 1/4 without just giving the answer?'
-      : 'Solve x^2 - 5x + 6 = 0 and explain each step.'
+
+  const defaultQuestion = useMemo(
+    () =>
+      audience === 'parent'
+        ? 'My child is learning fractions. How can I explain why 1/2 is larger than 1/4 without just giving the answer?'
+        : 'Solve x^2 - 5x + 6 = 0 and explain each step.',
+    [audience]
   );
+
+  const [conversationId, setConversationId] = useState<string | null>(initialConversationId);
+  const [question, setQuestion] = useState(initialConversationId ? '' : defaultQuestion);
   const [gradeLevel, setGradeLevel] = useState(
     audience === 'parent' ? 'elementary' : 'high-school'
   );
@@ -48,6 +60,24 @@ export default function MathTutor({
     loadUser();
   }, []);
 
+  useEffect(() => {
+    setConversationId(initialConversationId);
+    setAnswer('');
+    setQuestion(initialConversationId ? '' : defaultQuestion);
+  }, [initialConversationId, defaultQuestion]);
+
+  function startNewSession() {
+    if (newSessionHref) {
+      router.push(newSessionHref);
+      router.refresh();
+      return;
+    }
+
+    setConversationId(null);
+    setAnswer('');
+    setQuestion(defaultQuestion);
+  }
+
   async function submitQuestion() {
     setLoading(true);
     setAnswer('');
@@ -61,12 +91,19 @@ export default function MathTutor({
           gradeLevel,
           mode,
           email: accountEmail ? '' : email,
-          audience
+          audience,
+          conversationId
         })
       });
 
       const data = await res.json();
       setAnswer(data.answer || data.error || 'No response returned.');
+
+      if (data.conversationId) {
+        setConversationId(data.conversationId);
+      }
+
+      setQuestion('');
     } catch {
       setAnswer('Something went wrong while contacting the tutor API.');
     } finally {
@@ -100,6 +137,17 @@ export default function MathTutor({
           />
         </div>
       )}
+
+      <div className="buttonRow">
+        <button className="secondary" onClick={startNewSession}>
+          New Session
+        </button>
+        {conversationId ? (
+          <span className="small">Continue this session with a follow-up question.</span>
+        ) : (
+          <span className="small">Your next question will start a new session.</span>
+        )}
+      </div>
 
       <div className="grid cols-3">
         {!lockedMode ? (
@@ -163,7 +211,7 @@ export default function MathTutor({
 
       <div className="buttonRow">
         <button onClick={submitQuestion} disabled={loading || !question.trim()}>
-          {loading ? 'Thinking...' : 'Get help'}
+          {loading ? 'Thinking...' : conversationId ? 'Send Follow-up' : 'Get help'}
         </button>
       </div>
 
