@@ -25,7 +25,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <a href="/about">About</a>
             <a href="/contact">Contact</a>
             <AuthNav />
-            <ThemeToggle />
           </nav>
         </header>
 
@@ -36,11 +35,16 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <p className="small">
               MathSupport AI is currently a free beta product for educational support.
             </p>
+
             <div className="buttonRow">
               <a href="/about">About</a>
               <a href="/contact">Contact</a>
               <a href="/privacy">Privacy Policy</a>
               <a href="/terms">Terms of Use</a>
+            </div>
+
+            <div style={{ marginTop: 14 }}>
+              <ThemeToggle />
             </div>
           </div>
         </footer>
