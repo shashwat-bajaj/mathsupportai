@@ -1,6 +1,8 @@
 import './globals.css';
 import type { ReactNode } from 'react';
 import AuthNav from '@/components/AuthNav';
+import ThemeToggle from '@/components/ThemeToggle';
+import BrandMark from '@/components/BrandMark';
 
 export const metadata = {
   title: 'MathSupport AI',
@@ -9,11 +11,12 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="dark">
       <body>
         <header className="topbar">
-          <a href="/" className="brand">MathSupport AI</a>
-          <nav>
+          <BrandMark />
+
+          <nav className="mainNav">
             <a href="/">Home</a>
             <a href="/tutor">Students</a>
             <a href="/parents">Parents</a>
@@ -22,13 +25,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <a href="/about">About</a>
             <a href="/contact">Contact</a>
             <AuthNav />
+            <ThemeToggle />
           </nav>
         </header>
 
         <main className="container">{children}</main>
 
-        <footer className="container" style={{ paddingBottom: 32 }}>
-          <div className="card" style={{ marginTop: 24 }}>
+        <footer className="container siteFooter">
+          <div className="card footerCard">
             <p className="small">
               MathSupport AI is currently a free beta product for educational support.
             </p>
