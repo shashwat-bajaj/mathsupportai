@@ -116,10 +116,11 @@ export default async function ParentsPage({
                     display: 'block',
                     padding: 12,
                     border: `1px solid ${
-                      isActive ? 'rgba(124, 58, 237, 0.9)' : 'var(--border)'
+                      isActive ? 'var(--accent-border)' : 'var(--border)'
                     }`,
                     borderRadius: 12,
-                    background: isActive ? 'rgba(124, 58, 237, 0.12)' : '#0f162d'
+                    background: isActive ? 'var(--accent-soft)' : 'var(--panel-strong)',
+                    color: 'var(--text)'
                   }}
                 >
                   <p className="small" style={{ margin: '0 0 6px' }}>
