@@ -1,4 +1,5 @@
 import AnswerDisplay from '@/components/AnswerDisplay';
+import DeleteTurnButton from '@/components/DeleteTurnButton';
 
 function formatDate(value: string) {
   try {
@@ -13,7 +14,9 @@ export default function ConversationThread({
   audience,
   createdAt,
   updatedAt,
-  turns
+  turns,
+  showDeleteTurnControls = false,
+  redirectHref
 }: {
   title: string | null;
   audience: string;
@@ -28,6 +31,8 @@ export default function ConversationThread({
     response: string;
     created_at: string;
   }>;
+  showDeleteTurnControls?: boolean;
+  redirectHref?: string;
 }) {
   return (
     <div className="grid" style={{ gap: 18 }}>
@@ -58,6 +63,12 @@ export default function ConversationThread({
                   {turn.mode} • {turn.level} • {formatDate(turn.created_at)}
                 </span>
               </div>
+
+              {showDeleteTurnControls && index > 0 && redirectHref ? (
+                <div className="buttonRow" style={{ marginBottom: 12 }}>
+                  <DeleteTurnButton turnId={turn.id} redirectHref={redirectHref} />
+                </div>
+              ) : null}
 
               <div className="grid" style={{ gap: 12 }}>
                 <div>

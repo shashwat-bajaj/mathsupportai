@@ -89,20 +89,14 @@ export default function HomePage() {
               Best for adults who want help explaining a concept clearly without over-relying on final answers.
             </p>
             <div className="buttonRow">
-              <a className="btn secondary" href="/parents">Open Tutor for Parents</a>
-            </div>
-          </div>
-
-          <div className="card innerFeatureCard">
-            <h3>Saved history</h3>
-            <p className="small">
-              Revisit previous sessions, follow-ups, and conversations from your account history.
-            </p>
-            <div className="buttonRow">
-              <a className="btn secondary" href="/history">View History</a>
+              <a className="btn" href="/parents">Open Tutor for Parents</a>
             </div>
           </div>
         </div>
+
+        <p className="small" style={{ marginTop: 14 }}>
+          Signed-in users can revisit and manage saved sessions from History.
+        </p>
       </section>
     </div>
   );

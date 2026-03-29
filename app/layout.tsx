@@ -36,14 +36,23 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               MathSupport AI is currently a free beta product for educational support.
             </p>
 
-            <div className="buttonRow">
-              <a href="/about">About</a>
-              <a href="/contact">Contact</a>
-              <a href="/privacy">Privacy Policy</a>
-              <a href="/terms">Terms of Use</a>
-            </div>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                gap: 12,
+                flexWrap: 'wrap',
+                marginTop: 14
+              }}
+            >
+              <div className="buttonRow">
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/terms">Terms of Use</a>
+              </div>
 
-            <div style={{ marginTop: 14 }}>
               <ThemeToggle />
             </div>
           </div>

@@ -2,6 +2,7 @@ import { createAdminSupabase } from '@/lib/supabase-admin';
 import { createClient as createAuthClient } from '@/lib/supabase/server';
 import MathTutor from '@/components/MathTutor';
 import ConversationThread from '@/components/ConversationThread';
+import DeleteConversationButton from '@/components/DeleteConversationButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -48,10 +49,9 @@ export default async function TutorPage({
     conversations = data || [];
   }
 
-  const selectedConversation =
-    selectedConversationId
-      ? conversations.find((conversation) => conversation.id === selectedConversationId) || null
-      : null;
+  const selectedConversation = selectedConversationId
+    ? conversations.find((conversation) => conversation.id === selectedConversationId) || null
+    : null;
 
   if (selectedConversation) {
     const { data } = await supabase
@@ -107,11 +107,11 @@ export default async function TutorPage({
               const isActive = selectedConversation?.id === conversation.id;
 
               return (
-                <a
+                <div
                   key={conversation.id}
-                  href={`/tutor?conversation=${conversation.id}`}
                   style={{
-                    display: 'block',
+                    display: 'grid',
+                    gap: 8,
                     padding: 12,
                     border: `1px solid ${
                       isActive ? 'var(--accent-border)' : 'var(--border)'
@@ -121,16 +121,26 @@ export default async function TutorPage({
                     color: 'var(--text)'
                   }}
                 >
-                  <p className="small" style={{ margin: '0 0 6px' }}>
-                    <strong>{conversation.title || 'Untitled conversation'}</strong>
-                  </p>
-                  <p className="small" style={{ margin: '0 0 6px' }}>
-                    Updated {formatDate(conversation.updated_at)}
-                  </p>
-                  <p style={{ margin: 0 }}>
-                    {makePreview(conversation.title || 'New conversation')}
-                  </p>
-                </a>
+                  <a href={`/tutor?conversation=${conversation.id}`} style={{ display: 'block' }}>
+                    <p className="small" style={{ margin: '0 0 6px' }}>
+                      <strong>{conversation.title || 'Untitled conversation'}</strong>
+                    </p>
+                    <p className="small" style={{ margin: '0 0 6px' }}>
+                      Updated {formatDate(conversation.updated_at)}
+                    </p>
+                    <p style={{ margin: 0 }}>
+                      {makePreview(conversation.title || 'New conversation')}
+                    </p>
+                  </a>
+
+                  <div className="buttonRow">
+                    <DeleteConversationButton
+                      conversationId={conversation.id}
+                      redirectHref="/tutor"
+                      compact
+                    />
+                  </div>
+                </div>
               );
             })}
           </div>
@@ -148,13 +158,22 @@ export default async function TutorPage({
 
         {selectedConversation && turns.length > 0 ? (
           <section className="card" style={{ display: 'grid', gap: 14 }}>
-            <h2 style={{ margin: 0 }}>Current Session Thread</h2>
+            <div className="buttonRow" style={{ justifyContent: 'space-between' }}>
+              <h2 style={{ margin: 0 }}>Current Session Thread</h2>
+              <DeleteConversationButton
+                conversationId={selectedConversation.id}
+                redirectHref="/tutor"
+              />
+            </div>
+
             <ConversationThread
               title={selectedConversation.title}
               audience={selectedConversation.audience}
               createdAt={selectedConversation.created_at}
               updatedAt={selectedConversation.updated_at}
               turns={turns}
+              showDeleteTurnControls
+              redirectHref={`/tutor?conversation=${selectedConversation.id}`}
             />
           </section>
         ) : null}

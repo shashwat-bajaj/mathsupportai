@@ -35,7 +35,9 @@ function getClientIp(request: NextRequest) {
   return 'unknown';
 }
 
-function buildConversationContext(turns: Array<{ prompt: string; response: string }>) {
+function buildConversationContext(
+  turns: Array<{ prompt: string; response: string; turn_index?: number | null }>
+) {
   if (!turns.length) return '';
 
   const recentTurns = turns.slice(-6);
@@ -134,7 +136,11 @@ export async function POST(request: NextRequest) {
     }
 
     let activeConversationId: string | null = conversationId;
-    let existingTurns: Array<{ prompt: string; response: string }> = [];
+    let existingTurns: Array<{
+      prompt: string;
+      response: string;
+      turn_index?: number | null;
+    }> = [];
 
     if (activeConversationId) {
       const { data: previousTurns, error: turnsError } = await supabase
@@ -149,7 +155,8 @@ export async function POST(request: NextRequest) {
       } else {
         existingTurns = (previousTurns || []).map((t) => ({
           prompt: t.prompt,
-          response: t.response
+          response: t.response,
+          turn_index: t.turn_index
         }));
       }
     }
@@ -196,7 +203,9 @@ export async function POST(request: NextRequest) {
     });
 
     const answer = response.text || 'No response returned.';
-    const turnIndex = existingTurns.length + 1;
+
+    const turnIndex =
+      existingTurns.reduce((max, turn) => Math.max(max, turn.turn_index || 0), 0) + 1;
 
     try {
       await supabase.from('learner_sessions').insert({

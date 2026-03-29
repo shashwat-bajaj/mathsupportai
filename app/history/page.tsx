@@ -1,6 +1,7 @@
 import { createAdminSupabase } from '@/lib/supabase-admin';
 import { createClient as createAuthClient } from '@/lib/supabase/server';
-import RenderedContent from '@/components/RenderedContent';
+import DeleteConversationButton from '@/components/DeleteConversationButton';
+import ConversationThread from '@/components/ConversationThread';
 
 export const dynamic = 'force-dynamic';
 
@@ -154,86 +155,67 @@ export default async function HistoryPage({
                     : `/history?email=${encodeURIComponent(fallbackEmail)}&conversation=${conversation.id}`;
 
                 return (
-                  <a
+                  <div
                     key={conversation.id}
-                    href={href}
                     className={`sessionItem ${isActive ? 'active' : ''}`}
+                    style={{ display: 'grid', gap: 8 }}
                   >
-                    <p className="small">
-                      <strong>{conversation.title || 'Untitled conversation'}</strong>
-                    </p>
-                    <p className="small">
-                      {conversation.audience} • Updated {formatDate(conversation.updated_at)}
-                    </p>
-                    <p>{makePreview(conversation.title || 'New conversation')}</p>
-                  </a>
+                    <a href={href}>
+                      <p className="small">
+                        <strong>{conversation.title || 'Untitled conversation'}</strong>
+                      </p>
+                      <p className="small">
+                        {conversation.audience} • Updated {formatDate(conversation.updated_at)}
+                      </p>
+                      <p>{makePreview(conversation.title || 'New conversation')}</p>
+                    </a>
+
+                    {historyMode === 'account' ? (
+                      <div className="buttonRow">
+                        <DeleteConversationButton
+                          conversationId={conversation.id}
+                          redirectHref="/history"
+                          compact
+                        />
+                      </div>
+                    ) : null}
+                  </div>
                 );
               })}
             </div>
           </div>
 
           <div className="card">
-            <h2>Conversation thread</h2>
+            <div className="buttonRow" style={{ justifyContent: 'space-between' }}>
+              <h2 style={{ margin: 0 }}>Conversation thread</h2>
+              {historyMode === 'account' && selectedConversation ? (
+                <DeleteConversationButton
+                  conversationId={selectedConversation.id}
+                  redirectHref="/history"
+                />
+              ) : null}
+            </div>
 
             {selectedConversation ? (
-              <div className="grid" style={{ gap: 18 }}>
-                <div className="card threadHeader">
-                  <p className="small">
-                    <strong>Title:</strong> {selectedConversation.title || 'Untitled conversation'}
-                  </p>
-                  <p className="small">
-                    <strong>Audience:</strong> {selectedConversation.audience}
-                  </p>
-                  <p className="small">
-                    <strong>Started:</strong> {formatDate(selectedConversation.created_at)}
-                  </p>
-                  <p className="small">
-                    <strong>Last updated:</strong> {formatDate(selectedConversation.updated_at)}
-                  </p>
-                </div>
-
-                {turns.length === 0 ? (
-                  <p className="small">No turns found for this conversation.</p>
-                ) : (
-                  <div className="threadTurns">
-                    {turns.map((turn, index) => {
-                      const label =
-                        index === 0
-                          ? 'Initial Question'
-                          : `Follow-up ${index}`;
-
-                      return (
-                        <div key={turn.id} className="card turnCard">
-                          <div className="turnLabelRow">
-                            <span className="turnLabel">{label}</span>
-                            <span className="small">
-                              {turn.mode} • {turn.level} • {formatDate(turn.created_at)}
-                            </span>
-                          </div>
-
-                          <div className="grid" style={{ gap: 12 }}>
-                            <div>
-                              <h3>Question</h3>
-                              <div className="card questionSurface">
-                                <div className="question-block">{turn.prompt}</div>
-                              </div>
-                            </div>
-
-                            <div>
-                              <h3>Answer</h3>
-                              <div className="card answerSurface">
-                                <RenderedContent content={turn.response} />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
+              <div style={{ marginTop: 16 }}>
+                <ConversationThread
+                  title={selectedConversation.title}
+                  audience={selectedConversation.audience}
+                  createdAt={selectedConversation.created_at}
+                  updatedAt={selectedConversation.updated_at}
+                  turns={turns}
+                  showDeleteTurnControls={historyMode === 'account'}
+                  redirectHref={
+                    historyMode === 'account'
+                      ? `/history?conversation=${selectedConversation.id}`
+                      : undefined
+                  }
+                />
               </div>
             ) : (
-              <p className="small">Select a conversation to view it.</p>
+              <p className="small" style={{ marginTop: 16 }}>
+                Select a conversation to view it.
+              </p>
             )}
           </div>
         </section>
