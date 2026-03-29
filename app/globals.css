@@ -519,3 +519,18 @@ pre {
     display: none;
   }
 }
+
+.languagePickerRow {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.languageSelect {
+  max-width: 220px;
+}
+
+.translatedSurface {
+  background: var(--surface);
+}

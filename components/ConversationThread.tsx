@@ -1,5 +1,4 @@
-import RenderedContent from '@/components/RenderedContent';
-import ReadAloudButton from '@/components/ReadAloudButton';
+import AnswerDisplay from '@/components/AnswerDisplay';
 
 function formatDate(value: string) {
   try {
@@ -71,12 +70,7 @@ export default function ConversationThread({
                 <div>
                   <h3>Answer</h3>
                   <div className="card answerSurface">
-                    <div className="grid" style={{ gap: 12 }}>
-                      <div className="buttonRow">
-                        <ReadAloudButton text={turn.response} />
-                      </div>
-                      <RenderedContent content={turn.response} />
-                    </div>
+                    <AnswerDisplay text={turn.response} />
                   </div>
                 </div>
               </div>

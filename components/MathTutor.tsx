@@ -2,8 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import RenderedContent from '@/components/RenderedContent';
-import ReadAloudButton from '@/components/ReadAloudButton';
+import AnswerDisplay from '@/components/AnswerDisplay';
 import { createClient } from '@/lib/supabase/client';
 
 type MathTutorProps = {
@@ -220,16 +219,7 @@ export default function MathTutor({
       </div>
 
       <div className="responseBox">
-        {answer ? (
-          <div className="grid" style={{ gap: 12 }}>
-            <div className="buttonRow">
-              <ReadAloudButton text={answer} />
-            </div>
-            <RenderedContent content={answer} />
-          </div>
-        ) : (
-          <p>Your tutor response will appear here.</p>
-        )}
+        {answer ? <AnswerDisplay text={answer} /> : <p>Your tutor response will appear here.</p>}
       </div>
     </div>
   );
