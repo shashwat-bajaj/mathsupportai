@@ -15,6 +15,9 @@ type MathTutorProps = {
   newSessionHref?: string;
 };
 
+type GradeLevel = 'elementary' | 'middle-school' | 'high-school' | 'college';
+type TutorMode = 'teach' | 'hint' | 'diagnose' | 'quiz';
+
 export default function MathTutor({
   audience = 'student',
   lockedMode,
@@ -38,12 +41,10 @@ export default function MathTutor({
 
   const [conversationId, setConversationId] = useState<string | null>(initialConversationId);
   const [question, setQuestion] = useState(initialConversationId ? '' : defaultQuestion);
-  const [gradeLevel, setGradeLevel] = useState(
+  const [gradeLevel, setGradeLevel] = useState<GradeLevel>(
     audience === 'parent' ? 'elementary' : 'high-school'
   );
-  const [mode, setMode] = useState<'teach' | 'hint' | 'diagnose' | 'quiz'>(
-    lockedMode || 'teach'
-  );
+  const [mode, setMode] = useState<TutorMode>(lockedMode || 'teach');
   const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -57,10 +58,30 @@ export default function MathTutor({
       if (user?.email) {
         setAccountEmail(user.email);
       }
+
+      const preferences = user?.user_metadata?.preferences || {};
+
+      if (audience === 'student') {
+        const nextStudentGrade =
+          preferences.studentDefaults?.gradeLevel || 'high-school';
+        setGradeLevel(nextStudentGrade);
+
+        if (!lockedMode) {
+          const nextStudentMode =
+            preferences.studentDefaults?.tutorMode || 'teach';
+          setMode(nextStudentMode);
+        }
+      }
+
+      if (audience === 'parent') {
+        const nextParentGrade =
+          preferences.parentDefaults?.gradeLevel || 'elementary';
+        setGradeLevel(nextParentGrade);
+      }
     }
 
     loadUser();
-  }, []);
+  }, [audience, lockedMode]);
 
   useEffect(() => {
     setConversationId(initialConversationId);
@@ -156,7 +177,7 @@ export default function MathTutor({
         {!lockedMode ? (
           <div>
             <label>Mode</label>
-            <select value={mode} onChange={(e) => setMode(e.target.value as any)}>
+            <select value={mode} onChange={(e) => setMode(e.target.value as TutorMode)}>
               <option value="teach">Teach me step by step</option>
               <option value="hint">Give hints only</option>
               <option value="diagnose">Diagnose my mistake</option>
@@ -183,7 +204,7 @@ export default function MathTutor({
 
         <div>
           <label>Level</label>
-          <select value={gradeLevel} onChange={(e) => setGradeLevel(e.target.value)}>
+          <select value={gradeLevel} onChange={(e) => setGradeLevel(e.target.value as GradeLevel)}>
             <option value="elementary">Elementary</option>
             <option value="middle-school">Middle school</option>
             <option value="high-school">High school</option>

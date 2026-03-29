@@ -22,6 +22,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <a href="/parents">Parents</a>
             <a href="/pricing">Free Beta</a>
             <a href="/history">History</a>
+            <a href="/settings">Settings</a>
             <a href="/about">About</a>
             <a href="/contact">Contact</a>
             <AuthNav />

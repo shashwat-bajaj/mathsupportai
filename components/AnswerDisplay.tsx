@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import RenderedContent from '@/components/RenderedContent';
 import ReadAloudButton from '@/components/ReadAloudButton';
+import { createClient } from '@/lib/supabase/client';
 
 const LANGUAGES = [
   'English',
@@ -20,6 +21,7 @@ type Language = (typeof LANGUAGES)[number];
 export default function AnswerDisplay({ text }: { text: string }) {
   const [displayText, setDisplayText] = useState(text);
   const [currentLanguage, setCurrentLanguage] = useState<Language>('English');
+  const [selectedLanguage, setSelectedLanguage] = useState<Language>('English');
   const [showLanguagePicker, setShowLanguagePicker] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -30,10 +32,29 @@ export default function AnswerDisplay({ text }: { text: string }) {
     setShowLanguagePicker(false);
     setLoading(false);
     setError('');
+
+    async function loadPreference() {
+      const supabase = createClient();
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
+
+      const preferredLanguage =
+        user?.user_metadata?.preferences?.translationLanguage || 'English';
+
+      if (LANGUAGES.includes(preferredLanguage)) {
+        setSelectedLanguage(preferredLanguage as Language);
+      } else {
+        setSelectedLanguage('English');
+      }
+    }
+
+    loadPreference();
   }, [text]);
 
   async function handleLanguageChange(nextLanguage: Language) {
     setError('');
+    setSelectedLanguage(nextLanguage);
     setCurrentLanguage(nextLanguage);
 
     if (nextLanguage === 'English') {
@@ -95,7 +116,7 @@ export default function AnswerDisplay({ text }: { text: string }) {
       {showLanguagePicker ? (
         <div className="languagePickerRow">
           <select
-            value={currentLanguage}
+            value={selectedLanguage}
             onChange={(e) => handleLanguageChange(e.target.value as Language)}
             className="languageSelect"
             disabled={loading}

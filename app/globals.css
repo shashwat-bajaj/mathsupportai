@@ -31,7 +31,7 @@ html[data-theme='light'] {
   --text-soft: #44506a;
   --muted: #58627a;
   --accent: #6d28d9;
-  --accent-soft: rgba(109, 40, 217, 0.10);
+  --accent-soft: rgba(109, 40, 217, 0.1);
   --accent-border: rgba(109, 40, 217, 0.22);
   --border: #dbe4f5;
   --topbar: rgba(245, 249, 255, 0.92);
@@ -339,6 +339,46 @@ pre {
   width: fit-content;
 }
 
+.languagePickerRow {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.languageSelect {
+  max-width: 220px;
+}
+
+.translatedSurface {
+  background: var(--surface);
+}
+
+/* Reusable action-card layout */
+
+.uniformActionCard {
+  display: grid;
+  grid-template-rows: auto minmax(84px, 1fr) auto;
+  height: 100%;
+  min-height: 220px;
+}
+
+.uniformActionCardTitle {
+  margin: 0 0 8px;
+}
+
+.uniformActionCardBody {
+  display: block;
+}
+
+.uniformActionCardBody p {
+  margin: 0;
+}
+
+.uniformActionCardFooter {
+  margin-top: 16px;
+}
+
 /* Rendered markdown + math */
 
 .formatted-content {
@@ -518,19 +558,4 @@ pre {
   .brandSubtitle {
     display: none;
   }
-}
-
-.languagePickerRow {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.languageSelect {
-  max-width: 220px;
-}
-
-.translatedSurface {
-  background: var(--surface);
 }

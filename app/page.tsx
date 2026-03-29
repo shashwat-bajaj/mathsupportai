@@ -1,4 +1,5 @@
 import BetaSignup from '@/components/BetaSignup';
+import ActionCard from '@/components/ActionCard';
 
 export default function HomePage() {
   return (
@@ -73,25 +74,25 @@ export default function HomePage() {
         <h2>Choose your experience</h2>
 
         <div className="grid cols-3">
-          <div className="card innerFeatureCard">
-            <h3>Tutor for Students</h3>
-            <p className="small">
-              Best for solving problems, checking your understanding, and practicing topics directly.
-            </p>
-            <div className="buttonRow">
-              <a className="btn" href="/tutor">Open Tutor for Students</a>
-            </div>
-          </div>
+          <ActionCard
+            title="Tutor for Students"
+            description="Best for solving problems, checking your understanding, and practicing topics directly."
+            action={
+              <a className="btn" href="/tutor">
+                Open Tutor for Students
+              </a>
+            }
+          />
 
-          <div className="card innerFeatureCard">
-            <h3>Tutor for Parents</h3>
-            <p className="small">
-              Best for adults who want help explaining a concept clearly without over-relying on final answers.
-            </p>
-            <div className="buttonRow">
-              <a className="btn" href="/parents">Open Tutor for Parents</a>
-            </div>
-          </div>
+          <ActionCard
+            title="Tutor for Parents"
+            description="Best for adults who want help explaining a concept clearly without over-relying on final answers."
+            action={
+              <a className="btn" href="/parents">
+                Open Tutor for Parents
+              </a>
+            }
+          />
         </div>
 
         <p className="small" style={{ marginTop: 14 }}>
