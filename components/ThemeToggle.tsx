@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
 
 type ThemePreference = 'system' | 'light' | 'dark';
 type ResolvedTheme = 'light' | 'dark';
@@ -25,24 +26,19 @@ function getSavedPreference(): ThemePreference {
   return 'system';
 }
 
+function resolveTheme(preference: ThemePreference): ResolvedTheme {
+  return preference === 'system' ? getSystemTheme() : preference;
+}
+
 export default function ThemeToggle() {
   const [preference, setPreference] = useState<ThemePreference>('system');
 
   useEffect(() => {
     const savedPreference = getSavedPreference();
     setPreference(savedPreference);
+    applyResolvedTheme(resolveTheme(savedPreference));
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
-
-    function updateTheme(nextPreference: ThemePreference) {
-      const resolved = nextPreference === 'system'
-        ? getSystemTheme()
-        : nextPreference;
-
-      applyResolvedTheme(resolved);
-    }
-
-    updateTheme(savedPreference);
 
     function handleSystemChange() {
       const currentPreference = getSavedPreference();
@@ -58,15 +54,36 @@ export default function ThemeToggle() {
     };
   }, []);
 
+  async function savePreferenceToSupabase(nextPreference: ThemePreference) {
+    try {
+      const supabase = createClient();
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
+
+      if (!user) return;
+
+      const nextMetadata = {
+        ...(user.user_metadata || {}),
+        preferences: {
+          ...(user.user_metadata?.preferences || {}),
+          themePreference: nextPreference
+        }
+      };
+
+      await supabase.auth.updateUser({
+        data: nextMetadata
+      });
+    } catch {
+      // keep local theme behavior stable even if account save fails
+    }
+  }
+
   function setThemePreference(nextPreference: ThemePreference) {
     setPreference(nextPreference);
     window.localStorage.setItem('mathsupport-theme', nextPreference);
-
-    const resolved = nextPreference === 'system'
-      ? getSystemTheme()
-      : nextPreference;
-
-    applyResolvedTheme(resolved);
+    applyResolvedTheme(resolveTheme(nextPreference));
+    void savePreferenceToSupabase(nextPreference);
   }
 
   return (
