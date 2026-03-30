@@ -17,6 +17,32 @@ type MathTutorProps = {
 
 type GradeLevel = 'elementary' | 'middle-school' | 'high-school' | 'college';
 type TutorMode = 'teach' | 'hint' | 'diagnose' | 'quiz';
+type ParentHelpStyle =
+  | 'explain-simply'
+  | 'talking-points'
+  | 'simple-example'
+  | 'practice-questions'
+  | 'likely-mistake';
+
+function ReadOnlyField({ value }: { value: string }) {
+  return (
+    <div
+      style={{
+        width: '100%',
+        padding: '12px',
+        borderRadius: '12px',
+        border: '1px solid var(--border)',
+        background: 'var(--input-bg)',
+        color: 'var(--text)',
+        minHeight: 48,
+        display: 'flex',
+        alignItems: 'center'
+      }}
+    >
+      {value}
+    </div>
+  );
+}
 
 export default function MathTutor({
   audience = 'student',
@@ -47,6 +73,11 @@ export default function MathTutor({
   const [mode, setMode] = useState<TutorMode>(lockedMode || 'teach');
   const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const [parentHelpStyle, setParentHelpStyle] =
+    useState<ParentHelpStyle>('explain-simply');
+  const [parentTopic, setParentTopic] = useState('');
+  const [parentStuckPoint, setParentStuckPoint] = useState('');
 
   useEffect(() => {
     async function loadUser() {
@@ -87,6 +118,12 @@ export default function MathTutor({
     setConversationId(initialConversationId);
     setAnswer('');
     setQuestion(initialConversationId ? '' : defaultQuestion);
+
+    if (!initialConversationId) {
+      setParentTopic('');
+      setParentStuckPoint('');
+      setParentHelpStyle('explain-simply');
+    }
   }, [initialConversationId, defaultQuestion]);
 
   function startNewSession() {
@@ -99,6 +136,9 @@ export default function MathTutor({
     setConversationId(null);
     setAnswer('');
     setQuestion(defaultQuestion);
+    setParentTopic('');
+    setParentStuckPoint('');
+    setParentHelpStyle('explain-simply');
   }
 
   async function submitQuestion() {
@@ -115,7 +155,10 @@ export default function MathTutor({
           mode,
           email: accountEmail ? '' : email,
           audience,
-          conversationId
+          conversationId,
+          parentHelpStyle: audience === 'parent' ? parentHelpStyle : null,
+          topic: audience === 'parent' ? parentTopic : '',
+          stuckPoint: audience === 'parent' ? parentStuckPoint : ''
         })
       });
 
@@ -173,45 +216,129 @@ export default function MathTutor({
         )}
       </div>
 
-      <div className="grid cols-3">
-        {!lockedMode ? (
+      {audience === 'parent' ? (
+        <>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+              gap: 16
+            }}
+          >
+            <div>
+              <label>Mode</label>
+              <ReadOnlyField value="Guided hints only" />
+            </div>
+
+            <div>
+              <label>Level</label>
+              <select
+                value={gradeLevel}
+                onChange={(e) => setGradeLevel(e.target.value as GradeLevel)}
+              >
+                <option value="elementary">Elementary</option>
+                <option value="middle-school">Middle school</option>
+                <option value="high-school">High school</option>
+                <option value="college">College</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="card" style={{ display: 'grid', gap: 16 }}>
+            <h3 style={{ margin: 0 }}>Parent support options</h3>
+
+            <div>
+              <label>Support style</label>
+              <select
+                value={parentHelpStyle}
+                onChange={(e) => setParentHelpStyle(e.target.value as ParentHelpStyle)}
+              >
+                <option value="explain-simply">Explain it simply</option>
+                <option value="talking-points">Give me parent talking points</option>
+                <option value="simple-example">Show a simple example</option>
+                <option value="practice-questions">Create practice questions</option>
+                <option value="likely-mistake">What mistake is my child likely making?</option>
+              </select>
+            </div>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+                gap: 16
+              }}
+            >
+              <div>
+                <label>Topic (optional)</label>
+                <input
+                  type="text"
+                  value={parentTopic}
+                  onChange={(e) => setParentTopic(e.target.value)}
+                  placeholder="Example: fractions, long division, algebra"
+                />
+              </div>
+
+              <div>
+                <label>Where the child is stuck (optional)</label>
+                <input
+                  type="text"
+                  value={parentStuckPoint}
+                  onChange={(e) => setParentStuckPoint(e.target.value)}
+                  placeholder="Example: comparing fractions or carrying digits"
+                />
+              </div>
+            </div>
+          </div>
+        </>
+      ) : (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+            gap: 16
+          }}
+        >
+          {!lockedMode ? (
+            <div>
+              <label>Mode</label>
+              <select value={mode} onChange={(e) => setMode(e.target.value as TutorMode)}>
+                <option value="teach">Teach me step by step</option>
+                <option value="hint">Give hints only</option>
+                <option value="diagnose">Diagnose my mistake</option>
+                <option value="quiz">Turn this into practice questions</option>
+              </select>
+            </div>
+          ) : (
+            <div>
+              <label>Mode</label>
+              <ReadOnlyField
+                value={
+                  lockedMode === 'hint'
+                    ? 'Guided hints only'
+                    : lockedMode === 'teach'
+                      ? 'Teach step by step'
+                      : lockedMode === 'diagnose'
+                        ? 'Diagnose mistake'
+                        : 'Quiz mode'
+                }
+              />
+            </div>
+          )}
+
           <div>
-            <label>Mode</label>
-            <select value={mode} onChange={(e) => setMode(e.target.value as TutorMode)}>
-              <option value="teach">Teach me step by step</option>
-              <option value="hint">Give hints only</option>
-              <option value="diagnose">Diagnose my mistake</option>
-              <option value="quiz">Turn this into practice questions</option>
+            <label>Level</label>
+            <select
+              value={gradeLevel}
+              onChange={(e) => setGradeLevel(e.target.value as GradeLevel)}
+            >
+              <option value="elementary">Elementary</option>
+              <option value="middle-school">Middle school</option>
+              <option value="high-school">High school</option>
+              <option value="college">College</option>
             </select>
           </div>
-        ) : (
-          <div>
-            <label>Mode</label>
-            <input
-              value={
-                lockedMode === 'hint'
-                  ? 'Guided hints only'
-                  : lockedMode === 'teach'
-                    ? 'Teach step by step'
-                    : lockedMode === 'diagnose'
-                      ? 'Diagnose mistake'
-                      : 'Quiz mode'
-              }
-              readOnly
-            />
-          </div>
-        )}
-
-        <div>
-          <label>Level</label>
-          <select value={gradeLevel} onChange={(e) => setGradeLevel(e.target.value as GradeLevel)}>
-            <option value="elementary">Elementary</option>
-            <option value="middle-school">Middle school</option>
-            <option value="high-school">High school</option>
-            <option value="college">College</option>
-          </select>
         </div>
-      </div>
+      )}
 
       <div>
         <label>

@@ -6,6 +6,13 @@ import { createClient as createAuthClient } from '@/lib/supabase/server';
 
 const DAILY_FREE_LIMIT = 20;
 
+type ParentHelpStyle =
+  | 'explain-simply'
+  | 'talking-points'
+  | 'simple-example'
+  | 'practice-questions'
+  | 'likely-mistake';
+
 async function getSymbolicCheck(question: string) {
   const checkerUrl = process.env.MATH_CHECKER_URL;
   if (!checkerUrl) return '';
@@ -62,6 +69,65 @@ function makeConversationTitle(question: string) {
   return cleaned.length > 70 ? `${cleaned.slice(0, 70)}...` : cleaned;
 }
 
+function getParentStyleInstruction(style: ParentHelpStyle) {
+  switch (style) {
+    case 'talking-points':
+      return `Make the response especially useful for a parent speaking directly to a child. Include short talking points the parent can say out loud.`;
+    case 'simple-example':
+      return `Focus on one very simple example and explain it gently before introducing anything more advanced.`;
+    case 'practice-questions':
+      return `Focus on creating a few simple practice prompts the parent can use after the explanation.`;
+    case 'likely-mistake':
+      return `Focus on diagnosing the most likely misunderstanding or mistake the child is making and how to correct it gently.`;
+    case 'explain-simply':
+    default:
+      return `Focus on explaining the idea in the simplest parent-friendly way possible.`;
+  }
+}
+
+function buildParentQuestion({
+  question,
+  gradeLevel,
+  topic,
+  stuckPoint,
+  helpStyle
+}: {
+  question: string;
+  gradeLevel: string;
+  topic?: string;
+  stuckPoint?: string;
+  helpStyle: ParentHelpStyle;
+}) {
+  const topicLine = topic?.trim() ? `Topic: ${topic.trim()}` : 'Topic: not specified';
+  const stuckLine = stuckPoint?.trim()
+    ? `Where the child is stuck: ${stuckPoint.trim()}`
+    : 'Where the child is stuck: not specified';
+
+  return `
+You are helping a parent support a child with math learning.
+
+Child level: ${gradeLevel}
+${topicLine}
+${stuckLine}
+
+Parent request:
+${question}
+
+Special instruction:
+${getParentStyleInstruction(helpStyle)}
+
+Please structure the response with these sections:
+1. What the child may be confused by
+2. How to explain it simply
+3. What the parent can say
+4. One short example
+5. One practice prompt
+6. One mistake to avoid
+
+Keep the tone supportive, clear, and practical for a parent. Do not jump straight to a final answer unless necessary.
+`;
+}
+
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY
 });
@@ -74,7 +140,10 @@ export async function POST(request: NextRequest) {
       mode = 'teach',
       email = '',
       audience = 'student',
-      conversationId = null
+      conversationId = null,
+      parentHelpStyle = 'explain-simply',
+      topic = '',
+      stuckPoint = ''
     } = await request.json();
 
     if (!question || typeof question !== 'string') {
@@ -161,6 +230,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    const conversationSeed = audience === 'parent' && topic.trim() ? topic : question;
+
     if (!activeConversationId) {
       const { data: conversation, error: conversationError } = await supabase
         .from('learner_conversations')
@@ -168,7 +239,7 @@ export async function POST(request: NextRequest) {
           user_id: user?.id || null,
           email: normalizedEmail,
           audience,
-          title: makeConversationTitle(question)
+          title: makeConversationTitle(conversationSeed)
         })
         .select('id')
         .single();
@@ -187,10 +258,21 @@ export async function POST(request: NextRequest) {
     const symbolicCheck = await getSymbolicCheck(question);
     const conversationContext = buildConversationContext(existingTurns);
 
+    const effectiveQuestion =
+      audience === 'parent'
+        ? buildParentQuestion({
+            question,
+            gradeLevel,
+            topic,
+            stuckPoint,
+            helpStyle: parentHelpStyle as ParentHelpStyle
+          })
+        : question;
+
     const prompt = buildTutorPrompt({
       question: conversationContext
-        ? `${question}\n\nConversation context:\n${conversationContext}`
-        : question,
+        ? `${effectiveQuestion}\n\nConversation context:\n${conversationContext}`
+        : effectiveQuestion,
       gradeLevel,
       mode,
       symbolicCheck,

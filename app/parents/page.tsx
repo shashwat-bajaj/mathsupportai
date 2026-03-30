@@ -156,7 +156,7 @@ export default async function ParentsPage({
           initialConversationId={selectedConversation?.id || null}
           newSessionHref="/parents"
           title="Tutor Support for Parents"
-          description="Use this version when you want guidance on how to help a child learn without jumping straight to the full solution."
+          description="Use this version when you want parent-friendly guidance, simple explanations, talking points, examples, and practice prompts without jumping straight to the full solution."
           placeholder="Example: My child is learning long division and gets confused after the first subtraction step. How can I explain it clearly?"
         />
 
