@@ -379,6 +379,35 @@ pre {
   margin-top: 16px;
 }
 
+/* Graphing */
+
+.graphCard {
+  display: grid;
+  gap: 12px;
+}
+
+.graphHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.graphFrame {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px;
+  overflow-x: auto;
+}
+
+.graphSvg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 /* Rendered markdown + math */
 
 .formatted-content {

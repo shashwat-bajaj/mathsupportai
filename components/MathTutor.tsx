@@ -3,7 +3,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AnswerDisplay from '@/components/AnswerDisplay';
+import FunctionGraph from '@/components/FunctionGraph';
 import { createClient } from '@/lib/supabase/client';
+import { extractGraphExpressionFromPrompt } from '@/lib/graphing';
 
 type MathTutorProps = {
   audience?: 'student' | 'parent';
@@ -74,6 +76,8 @@ export default function MathTutor({
   const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const [lastSubmittedQuestion, setLastSubmittedQuestion] = useState('');
+
   const [parentHelpStyle, setParentHelpStyle] =
     useState<ParentHelpStyle>('explain-simply');
   const [parentTopic, setParentTopic] = useState('');
@@ -123,6 +127,7 @@ export default function MathTutor({
       setParentTopic('');
       setParentStuckPoint('');
       setParentHelpStyle('explain-simply');
+      setLastSubmittedQuestion('');
     }
   }, [initialConversationId, defaultQuestion]);
 
@@ -139,11 +144,14 @@ export default function MathTutor({
     setParentTopic('');
     setParentStuckPoint('');
     setParentHelpStyle('explain-simply');
+    setLastSubmittedQuestion('');
   }
 
   async function submitQuestion() {
     setLoading(true);
     setAnswer('');
+
+    const submittedQuestion = question;
 
     try {
       const res = await fetch('/api/chat', {
@@ -164,6 +172,7 @@ export default function MathTutor({
 
       const data = await res.json();
       setAnswer(data.answer || data.error || 'No response returned.');
+      setLastSubmittedQuestion(submittedQuestion);
 
       if (data.conversationId) {
         setConversationId(data.conversationId);
@@ -176,6 +185,12 @@ export default function MathTutor({
       setLoading(false);
     }
   }
+
+  const graphExpression =
+    audience === 'student'
+      ? extractGraphExpressionFromPrompt(lastSubmittedQuestion) ||
+        extractGraphExpressionFromPrompt(answer)
+      : '';
 
   return (
     <div className="grid" style={{ gap: 14 }}>
@@ -351,7 +366,7 @@ export default function MathTutor({
             placeholder ||
             (audience === 'parent'
               ? 'Describe what the child is learning, where they are stuck, and how much help you want.'
-              : 'Type a math problem, paste your work, or ask for a quiz on a topic.')
+              : 'Type a math problem, paste your work, or ask for a quiz on a topic. Ask explicitly to graph or plot if you want a graph shown.')
           }
         />
       </div>
@@ -369,6 +384,10 @@ export default function MathTutor({
       <div className="responseBox">
         {answer ? <AnswerDisplay text={answer} /> : <p>Your tutor response will appear here.</p>}
       </div>
+
+      {audience === 'student' && graphExpression ? (
+        <FunctionGraph expression={graphExpression} />
+      ) : null}
     </div>
   );
 }
