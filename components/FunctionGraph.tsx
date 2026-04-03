@@ -20,10 +20,25 @@ type GraphFailure = {
 
 const DEFAULT_X_MIN = -10;
 const DEFAULT_X_MAX = 10;
+const DEFAULT_ZOOM = 1;
 
-function formatTick(value: number) {
-  if (Math.abs(value) < 0.00001) return '0';
-  return Number(value.toFixed(2)).toString();
+function formatTick(value: number, span: number) {
+  if (Math.abs(value) < 0.0000001) return '0';
+
+  const roundedInteger = Math.round(value);
+  if (Math.abs(value - roundedInteger) < 0.0000001) {
+    return String(roundedInteger);
+  }
+
+  if (span <= 4) {
+    return Number(value.toFixed(2)).toString();
+  }
+
+  if (span <= 20) {
+    return Number(value.toFixed(1)).toString();
+  }
+
+  return Number(value.toFixed(0)).toString();
 }
 
 function buildTicks(min: number, max: number, count = 6) {
@@ -34,17 +49,23 @@ function buildTicks(min: number, max: number, count = 6) {
   return ticks;
 }
 
+function zoomToFactor(factor: number) {
+  return Math.min(Math.max(factor, 0.5), 3);
+}
+
 export default function FunctionGraph({ expression }: { expression: string }) {
   const [xMin, setXMin] = useState(DEFAULT_X_MIN);
   const [xMax, setXMax] = useState(DEFAULT_X_MAX);
   const [yMin, setYMin] = useState(-10);
   const [yMax, setYMax] = useState(10);
   const [manualY, setManualY] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState(DEFAULT_ZOOM);
 
   useEffect(() => {
     setXMin(DEFAULT_X_MIN);
     setXMax(DEFAULT_X_MAX);
     setManualY(false);
+    setZoomLevel(DEFAULT_ZOOM);
   }, [expression]);
 
   const graph = useMemo<GraphSuccess | GraphFailure>(() => {
@@ -84,6 +105,39 @@ export default function FunctionGraph({ expression }: { expression: string }) {
     }
   }, [graph, manualY]);
 
+  function resetView() {
+    setXMin(DEFAULT_X_MIN);
+    setXMax(DEFAULT_X_MAX);
+    setManualY(false);
+    setZoomLevel(DEFAULT_ZOOM);
+  }
+
+  function fitY() {
+    if (!graph.ok) return;
+    setManualY(false);
+    setYMin(Number(graph.autoYMin.toFixed(2)));
+    setYMax(Number(graph.autoYMax.toFixed(2)));
+  }
+
+  function applyZoom(nextZoom: number) {
+    const safeZoom = zoomToFactor(nextZoom);
+    const center = (xMin + xMax) / 2;
+    const baseHalfRange = (DEFAULT_X_MAX - DEFAULT_X_MIN) / 2;
+    const nextHalfRange = baseHalfRange / safeZoom;
+
+    setZoomLevel(safeZoom);
+    setXMin(Number((center - nextHalfRange).toFixed(4)));
+    setXMax(Number((center + nextHalfRange).toFixed(4)));
+  }
+
+  function zoomBy(factor: number) {
+    const currentHalfRange = (xMax - xMin) / 2;
+    const baseHalfRange = (DEFAULT_X_MAX - DEFAULT_X_MIN) / 2;
+    const nextHalfRange = currentHalfRange * factor;
+    const inferredZoom = baseHalfRange / nextHalfRange;
+    applyZoom(inferredZoom);
+  }
+
   if (!expression.trim()) return null;
 
   if (!graph.ok) {
@@ -114,6 +168,7 @@ export default function FunctionGraph({ expression }: { expression: string }) {
             <label>X min</label>
             <input
               type="number"
+              step="any"
               value={xMin}
               onChange={(e) => setXMin(Number(e.target.value))}
             />
@@ -123,6 +178,7 @@ export default function FunctionGraph({ expression }: { expression: string }) {
             <label>X max</label>
             <input
               type="number"
+              step="any"
               value={xMax}
               onChange={(e) => setXMax(Number(e.target.value))}
             />
@@ -132,6 +188,7 @@ export default function FunctionGraph({ expression }: { expression: string }) {
             <label>Y min</label>
             <input
               type="number"
+              step="any"
               value={yMin}
               onChange={(e) => {
                 setManualY(true);
@@ -144,6 +201,7 @@ export default function FunctionGraph({ expression }: { expression: string }) {
             <label>Y max</label>
             <input
               type="number"
+              step="any"
               value={yMax}
               onChange={(e) => {
                 setManualY(true);
@@ -154,16 +212,8 @@ export default function FunctionGraph({ expression }: { expression: string }) {
         </div>
 
         <div className="buttonRow">
-          <button
-            type="button"
-            className="secondary"
-            onClick={() => {
-              setXMin(DEFAULT_X_MIN);
-              setXMax(DEFAULT_X_MAX);
-              setManualY(false);
-            }}
-          >
-            Reset View
+          <button type="button" className="secondary" onClick={resetView}>
+            Reset
           </button>
         </div>
 
@@ -185,9 +235,7 @@ export default function FunctionGraph({ expression }: { expression: string }) {
   const mapY = (y: number) =>
     padding + (1 - (y - yMin) / (yMax - yMin)) * plotHeight;
 
-  const visiblePoints = graph.points.filter((point) => point.y >= yMin && point.y <= yMax);
-
-  const path = visiblePoints
+  const path = graph.points
     .map((point, index) => {
       const command = index === 0 ? 'M' : 'L';
       return `${command}${mapX(point.x).toFixed(2)},${mapY(point.y).toFixed(2)}`;
@@ -202,6 +250,10 @@ export default function FunctionGraph({ expression }: { expression: string }) {
 
   const xTicks = buildTicks(graph.xMin, graph.xMax, 6);
   const yTicks = buildTicks(yMin, yMax, 6);
+
+  const clipId = `graph-clip-${expression.replace(/[^a-z0-9]/gi, '').slice(0, 24) || 'plot'}`;
+  const xSpan = graph.xMax - graph.xMin;
+  const ySpan = yMax - yMin;
 
   return (
     <div className="card graphCard">
@@ -221,6 +273,7 @@ export default function FunctionGraph({ expression }: { expression: string }) {
           <label>X min</label>
           <input
             type="number"
+            step="any"
             value={xMin}
             onChange={(e) => setXMin(Number(e.target.value))}
           />
@@ -230,6 +283,7 @@ export default function FunctionGraph({ expression }: { expression: string }) {
           <label>X max</label>
           <input
             type="number"
+            step="any"
             value={xMax}
             onChange={(e) => setXMax(Number(e.target.value))}
           />
@@ -239,6 +293,7 @@ export default function FunctionGraph({ expression }: { expression: string }) {
           <label>Y min</label>
           <input
             type="number"
+            step="any"
             value={yMin}
             onChange={(e) => {
               setManualY(true);
@@ -251,6 +306,7 @@ export default function FunctionGraph({ expression }: { expression: string }) {
           <label>Y max</label>
           <input
             type="number"
+            step="any"
             value={yMax}
             onChange={(e) => {
               setManualY(true);
@@ -260,22 +316,41 @@ export default function FunctionGraph({ expression }: { expression: string }) {
         </div>
       </div>
 
+      <div style={{ display: 'grid', gap: 8 }}>
+        <label style={{ marginBottom: 0 }}>Zoom</label>
+        <input
+          type="range"
+          min="0.5"
+          max="3"
+          step="0.1"
+          value={zoomLevel}
+          onChange={(e) => applyZoom(Number(e.target.value))}
+        />
+      </div>
+
       <div className="buttonRow">
-        <button
-          type="button"
-          className="secondary"
-          onClick={() => {
-            setXMin(DEFAULT_X_MIN);
-            setXMax(DEFAULT_X_MAX);
-            setManualY(false);
-          }}
-        >
-          Reset View
+        <button type="button" className="secondary" onClick={() => zoomBy(0.7)}>
+          Zoom In
+        </button>
+        <button type="button" className="secondary" onClick={() => zoomBy(1.4)}>
+          Zoom Out
+        </button>
+        <button type="button" className="secondary" onClick={fitY}>
+          Fit Y
+        </button>
+        <button type="button" className="secondary" onClick={resetView}>
+          Reset
         </button>
       </div>
 
       <div className="graphFrame">
         <svg viewBox={`0 0 ${width} ${height}`} className="graphSvg" aria-label={graph.label}>
+          <defs>
+            <clipPath id={clipId}>
+              <rect x={padding} y={padding} width={plotWidth} height={plotHeight} rx="12" />
+            </clipPath>
+          </defs>
+
           <rect
             x={padding}
             y={padding}
@@ -305,7 +380,7 @@ export default function FunctionGraph({ expression }: { expression: string }) {
                   textAnchor="middle"
                   fill="var(--text-soft)"
                 >
-                  {formatTick(tick)}
+                  {formatTick(tick, xSpan)}
                 </text>
               </g>
             );
@@ -330,7 +405,7 @@ export default function FunctionGraph({ expression }: { expression: string }) {
                   textAnchor="end"
                   fill="var(--text-soft)"
                 >
-                  {formatTick(tick)}
+                  {formatTick(tick, ySpan)}
                 </text>
               </g>
             );
@@ -363,6 +438,7 @@ export default function FunctionGraph({ expression }: { expression: string }) {
           {path ? (
             <path
               d={path}
+              clipPath={`url(#${clipId})`}
               fill="none"
               stroke="var(--accent)"
               strokeWidth="3"
@@ -392,8 +468,8 @@ export default function FunctionGraph({ expression }: { expression: string }) {
       </div>
 
       <p className="small">
-        Adjust the x and y ranges to inspect the graph more closely, then use Reset View to go
-        back to the default window.
+        Use the zoom slider or buttons to inspect the graph more closely, then use Fit Y or Reset
+        to return to a cleaner view.
       </p>
     </div>
   );
