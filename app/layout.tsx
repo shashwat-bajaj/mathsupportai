@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import AuthNav from '@/components/AuthNav';
 import ThemeToggle from '@/components/ThemeToggle';
 import BrandMark from '@/components/BrandMark';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const metadata = {
   title: 'MathSupport AI',
@@ -58,6 +59,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             </div>
           </div>
         </footer>
+
+        <SpeedInsights />
       </body>
     </html>
   );
