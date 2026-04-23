@@ -110,18 +110,24 @@ export default async function TutorPage({
 
   if (!user) {
     return (
-      <div className="grid" style={{ gap: 24 }}>
-        <section className="card spotlightCard" style={{ display: 'grid', gap: 14 }}>
+      <div className="grid" style={{ gap: 30 }}>
+        <section
+          style={{
+            display: 'grid',
+            gap: 14,
+            maxWidth: 860,
+            paddingTop: 6
+          }}
+        >
           <span className="badge">Student workspace</span>
-
-          <div style={{ display: 'grid', gap: 10 }}>
-            <h1 style={{ margin: 0 }}>Ask directly, follow up naturally, and keep the math flow going.</h1>
-            <p className="small" style={{ margin: 0, maxWidth: 840 }}>
-              Use this workspace for direct math help, graphing, worked solutions, hints, mistake
-              diagnosis, and practice questions. Signed-in users can also save sessions and revisit
-              them later.
-            </p>
-          </div>
+          <h1 style={{ margin: 0 }}>
+            Ask directly, follow up naturally, and keep the math flow going.
+          </h1>
+          <p className="small" style={{ margin: 0, maxWidth: 760 }}>
+            Use this workspace for direct math help, graphing, worked solutions, hints, mistake
+            diagnosis, and practice questions. Sign in if you want to save sessions and return to
+            them later.
+          </p>
         </section>
 
         <MathTutor
@@ -134,26 +140,36 @@ export default async function TutorPage({
   }
 
   return (
-    <div className="grid" style={{ gap: 24 }}>
-      <section className="card spotlightCard" style={{ display: 'grid', gap: 16 }}>
-        <div style={{ display: 'grid', gap: 10 }}>
+    <div className="grid" style={{ gap: 30 }}>
+      <section
+        style={{
+          display: 'grid',
+          gap: 18,
+          paddingTop: 6
+        }}
+      >
+        <div style={{ display: 'grid', gap: 10, maxWidth: 900 }}>
           <span className="badge">Student workspace</span>
-          <h1 style={{ margin: 0 }}>A tutor surface built for actual study flow, not one-off answers.</h1>
-          <p className="small" style={{ margin: 0, maxWidth: 860 }}>
+          <h1 style={{ margin: 0 }}>
+            A tutor surface built for actual study flow, not one-off answers.
+          </h1>
+          <p className="small" style={{ margin: 0, maxWidth: 820 }}>
             Ask new questions, keep follow-ups inside the same thread, graph when needed, and
             revisit saved sessions without losing context. Signed in as <strong>{user.email}</strong>.
           </p>
         </div>
 
         <div
-          className="grid"
           style={{
-            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-            gap: 12
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: 18,
+            paddingTop: 14,
+            borderTop: '1px solid var(--border)'
           }}
         >
-          <div className="card innerFeatureCard">
-            <p className="small" style={{ margin: '0 0 4px' }}>
+          <div style={{ display: 'grid', gap: 6 }}>
+            <p className="small" style={{ margin: 0 }}>
               <strong>Saved sessions</strong>
             </p>
             <p className="small" style={{ margin: 0 }}>
@@ -161,8 +177,8 @@ export default async function TutorPage({
             </p>
           </div>
 
-          <div className="card innerFeatureCard">
-            <p className="small" style={{ margin: '0 0 4px' }}>
+          <div style={{ display: 'grid', gap: 6 }}>
+            <p className="small" style={{ margin: 0 }}>
               <strong>Default flow</strong>
             </p>
             <p className="small" style={{ margin: 0 }}>
@@ -170,8 +186,8 @@ export default async function TutorPage({
             </p>
           </div>
 
-          <div className="card innerFeatureCard">
-            <p className="small" style={{ margin: '0 0 4px' }}>
+          <div style={{ display: 'grid', gap: 6 }}>
+            <p className="small" style={{ margin: 0 }}>
               <strong>Best for</strong>
             </p>
             <p className="small" style={{ margin: 0 }}>
@@ -181,32 +197,44 @@ export default async function TutorPage({
         </div>
       </section>
 
-      <section className="twoPane">
+      <section className="twoPane" style={{ alignItems: 'start' }}>
         <aside
-          className="card"
           style={{
             position: 'sticky',
-            top: 94,
+            top: 96,
             alignSelf: 'start',
             display: 'grid',
-            gap: 14
+            gap: 16
           }}
         >
-          <div style={{ display: 'grid', gap: 6 }}>
+          <div
+            style={{
+              display: 'grid',
+              gap: 8,
+              paddingBottom: 14,
+              borderBottom: '1px solid var(--border)'
+            }}
+          >
             <h2 style={{ margin: 0 }}>Student Sessions</h2>
             <p className="small" style={{ margin: 0 }}>
               Open an earlier thread or start a new one.
             </p>
-          </div>
 
-          <div className="buttonRow">
-            <a className="btn secondary" href="/tutor">
-              New Session
-            </a>
+            <div className="buttonRow" style={{ marginTop: 4 }}>
+              <a className="btn secondary" href="/tutor">
+                New Session
+              </a>
+            </div>
           </div>
 
           {conversations.length === 0 ? (
-            <div className="card questionSurface" style={{ padding: 14 }}>
+            <div
+              style={{
+                display: 'grid',
+                gap: 6,
+                padding: '2px 0'
+              }}
+            >
               <p className="small" style={{ margin: 0 }}>
                 No saved student sessions yet.
               </p>
@@ -249,7 +277,7 @@ export default async function TutorPage({
           )}
         </aside>
 
-        <main style={{ display: 'grid', gap: 18, minWidth: 0 }}>
+        <main style={{ display: 'grid', gap: 20, minWidth: 0 }}>
           <MathTutor
             audience="student"
             initialConversationId={selectedConversation?.id || null}
@@ -259,8 +287,18 @@ export default async function TutorPage({
           />
 
           {selectedConversation && turns.length > 0 ? (
-            <section className="card" style={{ display: 'grid', gap: 16 }}>
-              <div className="buttonRow" style={{ justifyContent: 'space-between' }}>
+            <section style={{ display: 'grid', gap: 16 }}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  gap: 14,
+                  alignItems: 'flex-start',
+                  flexWrap: 'wrap',
+                  paddingTop: 6,
+                  borderTop: '1px solid var(--border)'
+                }}
+              >
                 <div style={{ display: 'grid', gap: 4 }}>
                   <h2 style={{ margin: 0 }}>Current Session Thread</h2>
                   <p className="small" style={{ margin: 0 }}>

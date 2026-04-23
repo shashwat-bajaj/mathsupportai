@@ -8,10 +8,10 @@ html[data-theme='dark'] {
   --bg-mid: #0a1020;
   --bg-end: #111930;
 
-  --panel: rgba(15, 21, 38, 0.86);
-  --panel-strong: rgba(10, 15, 29, 0.95);
-  --surface: rgba(13, 18, 34, 0.92);
-  --surface-soft: rgba(18, 24, 44, 0.88);
+  --panel: rgba(15, 21, 38, 0.72);
+  --panel-strong: rgba(10, 15, 29, 0.9);
+  --surface: rgba(13, 18, 34, 0.88);
+  --surface-soft: rgba(18, 24, 44, 0.8);
   --input-bg: rgba(10, 15, 28, 0.94);
 
   --text: #f3f6ff;
@@ -20,16 +20,16 @@ html[data-theme='dark'] {
 
   --accent: #8366ff;
   --accent-soft: rgba(131, 102, 255, 0.12);
-  --accent-border: rgba(131, 102, 255, 0.26);
+  --accent-border: rgba(131, 102, 255, 0.24);
 
-  --border: rgba(157, 174, 209, 0.13);
-  --border-strong: rgba(178, 191, 221, 0.22);
+  --border: rgba(157, 174, 209, 0.12);
+  --border-strong: rgba(178, 191, 221, 0.2);
 
-  --topbar: rgba(8, 11, 22, 0.78);
+  --topbar: rgba(8, 11, 22, 0.72);
 
-  --shadow-soft: 0 14px 34px rgba(0, 0, 0, 0.2);
-  --shadow-panel: 0 22px 58px rgba(2, 6, 23, 0.34);
-  --shadow-float: 0 30px 80px rgba(3, 8, 24, 0.42);
+  --shadow-soft: 0 12px 28px rgba(0, 0, 0, 0.14);
+  --shadow-panel: 0 18px 46px rgba(2, 6, 23, 0.22);
+  --shadow-float: 0 26px 72px rgba(3, 8, 24, 0.3);
 
   --radius-md: 16px;
   --radius-lg: 22px;
@@ -45,10 +45,10 @@ html[data-theme='light'] {
   --bg-mid: #f7f9fd;
   --bg-end: #ffffff;
 
-  --panel: rgba(255, 255, 255, 0.86);
-  --panel-strong: rgba(255, 255, 255, 0.95);
-  --surface: rgba(248, 250, 255, 0.96);
-  --surface-soft: rgba(244, 247, 255, 0.94);
+  --panel: rgba(255, 255, 255, 0.76);
+  --panel-strong: rgba(255, 255, 255, 0.9);
+  --surface: rgba(248, 250, 255, 0.92);
+  --surface-soft: rgba(244, 247, 255, 0.86);
   --input-bg: rgba(247, 250, 255, 0.98);
 
   --text: #14203a;
@@ -57,16 +57,16 @@ html[data-theme='light'] {
 
   --accent: #6f57ff;
   --accent-soft: rgba(111, 87, 255, 0.1);
-  --accent-border: rgba(111, 87, 255, 0.18);
+  --accent-border: rgba(111, 87, 255, 0.16);
 
-  --border: rgba(87, 105, 141, 0.14);
-  --border-strong: rgba(76, 93, 129, 0.2);
+  --border: rgba(87, 105, 141, 0.12);
+  --border-strong: rgba(76, 93, 129, 0.18);
 
-  --topbar: rgba(251, 252, 255, 0.8);
+  --topbar: rgba(251, 252, 255, 0.76);
 
-  --shadow-soft: 0 10px 26px rgba(30, 50, 90, 0.08);
-  --shadow-panel: 0 18px 40px rgba(25, 45, 86, 0.1);
-  --shadow-float: 0 22px 56px rgba(24, 39, 75, 0.12);
+  --shadow-soft: 0 10px 24px rgba(30, 50, 90, 0.06);
+  --shadow-panel: 0 16px 34px rgba(25, 45, 86, 0.08);
+  --shadow-float: 0 20px 48px rgba(24, 39, 75, 0.1);
 
   --radius-md: 16px;
   --radius-lg: 22px;
@@ -103,8 +103,8 @@ body::before {
   z-index: -1;
   background:
     radial-gradient(circle at 12% 14%, rgba(131, 102, 255, 0.08), transparent 24%),
-    radial-gradient(circle at 86% 12%, rgba(131, 102, 255, 0.11), transparent 28%),
-    radial-gradient(circle at 72% 62%, rgba(131, 102, 255, 0.05), transparent 30%);
+    radial-gradient(circle at 86% 12%, rgba(131, 102, 255, 0.1), transparent 28%),
+    radial-gradient(circle at 72% 62%, rgba(131, 102, 255, 0.04), transparent 30%);
 }
 
 img,
@@ -128,7 +128,7 @@ a {
   justify-content: space-between;
   align-items: center;
   gap: 18px;
-  padding: 18px 24px;
+  padding: 18px 24px 16px;
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
@@ -160,7 +160,7 @@ a {
 
 .mainNav a:hover {
   color: var(--text);
-  background: color-mix(in srgb, var(--surface-soft) 88%, transparent);
+  background: color-mix(in srgb, var(--surface-soft) 84%, transparent);
   transform: translateY(-1px);
 }
 
@@ -186,7 +186,7 @@ a {
   color: white;
   font-weight: 800;
   font-size: 1.08rem;
-  box-shadow: 0 14px 30px rgba(111, 87, 255, 0.22);
+  box-shadow: 0 14px 30px rgba(111, 87, 255, 0.18);
   flex-shrink: 0;
 }
 
@@ -213,7 +213,7 @@ a {
   padding: 4px;
   border: 1px solid var(--border);
   border-radius: 999px;
-  background: var(--surface-soft);
+  background: color-mix(in srgb, var(--surface-soft) 88%, transparent);
 }
 
 .themeOption {
@@ -232,7 +232,7 @@ a {
 }
 
 .container {
-  max-width: 1180px;
+  max-width: 1220px;
   margin: 0 auto;
   padding: 28px 24px;
   width: 100%;
@@ -246,11 +246,11 @@ a {
 
 .heroCard {
   background:
-    linear-gradient(180deg, color-mix(in srgb, var(--panel) 92%, transparent), var(--panel)),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.02), transparent 42%);
+    linear-gradient(180deg, color-mix(in srgb, var(--panel) 90%, transparent), var(--panel)),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.015), transparent 42%);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
-  padding: 36px;
+  padding: 32px;
   box-shadow: var(--shadow-panel);
 }
 
@@ -302,13 +302,13 @@ button {
     box-shadow 0.22s var(--ease-premium),
     background 0.2s var(--ease-premium),
     border-color 0.2s var(--ease-premium);
-  box-shadow: 0 12px 26px rgba(111, 87, 255, 0.18);
+  box-shadow: 0 10px 22px rgba(111, 87, 255, 0.16);
 }
 
 .btn:hover,
 button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 16px 30px rgba(111, 87, 255, 0.22);
+  box-shadow: 0 14px 28px rgba(111, 87, 255, 0.2);
 }
 
 .btn:disabled,
@@ -320,7 +320,7 @@ button:disabled {
 
 .btn.secondary,
 button.secondary {
-  background: var(--surface-soft);
+  background: color-mix(in srgb, var(--surface-soft) 84%, transparent);
   border: 1px solid var(--border);
   color: var(--text);
   box-shadow: none;
@@ -328,28 +328,28 @@ button.secondary {
 
 .card {
   background:
-    linear-gradient(180deg, color-mix(in srgb, var(--panel) 94%, transparent), var(--panel)),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.018), transparent 46%);
+    linear-gradient(180deg, color-mix(in srgb, var(--panel) 92%, transparent), var(--panel)),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.014), transparent 46%);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 22px;
+  padding: 20px;
   box-shadow: var(--shadow-panel);
   min-width: 0;
 }
 
 .featureCard {
   background:
-    linear-gradient(180deg, color-mix(in srgb, var(--panel) 96%, transparent), var(--panel)),
+    linear-gradient(180deg, color-mix(in srgb, var(--panel) 94%, transparent), var(--panel)),
     var(--panel);
 }
 
 .innerFeatureCard {
-  background: color-mix(in srgb, var(--surface-soft) 92%, transparent);
+  background: color-mix(in srgb, var(--surface-soft) 90%, transparent);
 }
 
 .spotlightCard {
   background:
-    linear-gradient(180deg, color-mix(in srgb, var(--panel) 95%, transparent), var(--panel)),
+    linear-gradient(180deg, color-mix(in srgb, var(--panel) 94%, transparent), var(--panel)),
     radial-gradient(circle at top left, var(--accent-soft), transparent 34%);
 }
 
@@ -452,7 +452,7 @@ pre {
 }
 
 .siteFooter {
-  padding-bottom: 40px;
+  padding-bottom: 0;
 }
 
 .footerCard {
@@ -598,7 +598,7 @@ pre {
 /* Follow-up suggestions */
 
 .suggestionCard {
-  background: color-mix(in srgb, var(--surface-soft) 92%, transparent);
+  background: color-mix(in srgb, var(--surface-soft) 90%, transparent);
 }
 
 .suggestionChips {
@@ -742,7 +742,7 @@ pre {
   padding: 16px;
   border: 1px solid var(--border);
   border-radius: 16px;
-  background: var(--surface-soft);
+  background: color-mix(in srgb, var(--surface-soft) 90%, transparent);
   transition:
     border-color 0.22s var(--ease-premium),
     transform 0.22s var(--ease-premium),
@@ -760,7 +760,7 @@ pre {
   background:
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--surface-soft) 94%, transparent),
+      color-mix(in srgb, var(--surface-soft) 92%, transparent),
       var(--surface-soft)
     ),
     radial-gradient(circle at top left, var(--accent-soft), transparent 30%);
@@ -772,11 +772,11 @@ pre {
 
 .questionSurface,
 .answerSurface {
-  background: var(--surface);
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
 }
 
 .threadHeader {
-  background: var(--surface-soft);
+  background: color-mix(in srgb, var(--surface-soft) 92%, transparent);
 }
 
 .threadTurns {

@@ -110,20 +110,24 @@ export default async function ParentsPage({
 
   if (!user) {
     return (
-      <div className="grid" style={{ gap: 24 }}>
-        <section className="card spotlightCard" style={{ display: 'grid', gap: 14 }}>
+      <div className="grid" style={{ gap: 30 }}>
+        <section
+          style={{
+            display: 'grid',
+            gap: 14,
+            maxWidth: 860,
+            paddingTop: 6
+          }}
+        >
           <span className="badge">Parent workspace</span>
-
-          <div style={{ display: 'grid', gap: 10 }}>
-            <h1 style={{ margin: 0 }}>
-              Guidance for helping a child learn, without jumping straight to the final answer.
-            </h1>
-            <p className="small" style={{ margin: 0, maxWidth: 840 }}>
-              Use this workspace when you want parent-friendly explanation, simple examples,
-              talking points, likely-mistake guidance, and practice prompts that help a child
-              understand the concept more clearly.
-            </p>
-          </div>
+          <h1 style={{ margin: 0 }}>
+            Guidance for helping a child learn, without jumping straight to the final answer.
+          </h1>
+          <p className="small" style={{ margin: 0, maxWidth: 760 }}>
+            Use this workspace when you want parent-friendly explanation, simple examples,
+            talking points, likely-mistake guidance, and practice prompts that help a child
+            understand the concept more clearly.
+          </p>
         </section>
 
         <MathTutor
@@ -138,14 +142,20 @@ export default async function ParentsPage({
   }
 
   return (
-    <div className="grid" style={{ gap: 24 }}>
-      <section className="card spotlightCard" style={{ display: 'grid', gap: 16 }}>
-        <div style={{ display: 'grid', gap: 10 }}>
+    <div className="grid" style={{ gap: 30 }}>
+      <section
+        style={{
+          display: 'grid',
+          gap: 18,
+          paddingTop: 6
+        }}
+      >
+        <div style={{ display: 'grid', gap: 10, maxWidth: 900 }}>
           <span className="badge">Parent workspace</span>
           <h1 style={{ margin: 0 }}>
             A calmer support surface for adults helping a child learn math more clearly.
           </h1>
-          <p className="small" style={{ margin: 0, maxWidth: 860 }}>
+          <p className="small" style={{ margin: 0, maxWidth: 820 }}>
             Ask for simpler explanations, talking points, examples, likely-mistake guidance, and
             practice prompts without forcing the interaction into a full worked solution. Signed in
             as <strong>{user.email}</strong>.
@@ -153,14 +163,16 @@ export default async function ParentsPage({
         </div>
 
         <div
-          className="grid"
           style={{
-            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-            gap: 12
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: 18,
+            paddingTop: 14,
+            borderTop: '1px solid var(--border)'
           }}
         >
-          <div className="card innerFeatureCard">
-            <p className="small" style={{ margin: '0 0 4px' }}>
+          <div style={{ display: 'grid', gap: 6 }}>
+            <p className="small" style={{ margin: 0 }}>
               <strong>Saved sessions</strong>
             </p>
             <p className="small" style={{ margin: 0 }}>
@@ -168,8 +180,8 @@ export default async function ParentsPage({
             </p>
           </div>
 
-          <div className="card innerFeatureCard">
-            <p className="small" style={{ margin: '0 0 4px' }}>
+          <div style={{ display: 'grid', gap: 6 }}>
+            <p className="small" style={{ margin: 0 }}>
               <strong>Default flow</strong>
             </p>
             <p className="small" style={{ margin: 0 }}>
@@ -177,8 +189,8 @@ export default async function ParentsPage({
             </p>
           </div>
 
-          <div className="card innerFeatureCard">
-            <p className="small" style={{ margin: '0 0 4px' }}>
+          <div style={{ display: 'grid', gap: 6 }}>
+            <p className="small" style={{ margin: 0 }}>
               <strong>Best for</strong>
             </p>
             <p className="small" style={{ margin: 0 }}>
@@ -188,32 +200,44 @@ export default async function ParentsPage({
         </div>
       </section>
 
-      <section className="twoPane">
+      <section className="twoPane" style={{ alignItems: 'start' }}>
         <aside
-          className="card"
           style={{
             position: 'sticky',
-            top: 94,
+            top: 96,
             alignSelf: 'start',
             display: 'grid',
-            gap: 14
+            gap: 16
           }}
         >
-          <div style={{ display: 'grid', gap: 6 }}>
+          <div
+            style={{
+              display: 'grid',
+              gap: 8,
+              paddingBottom: 14,
+              borderBottom: '1px solid var(--border)'
+            }}
+          >
             <h2 style={{ margin: 0 }}>Parent Sessions</h2>
             <p className="small" style={{ margin: 0 }}>
               Open an earlier parent thread or start a new one.
             </p>
-          </div>
 
-          <div className="buttonRow">
-            <a className="btn secondary" href="/parents">
-              New Session
-            </a>
+            <div className="buttonRow" style={{ marginTop: 4 }}>
+              <a className="btn secondary" href="/parents">
+                New Session
+              </a>
+            </div>
           </div>
 
           {conversations.length === 0 ? (
-            <div className="card questionSurface" style={{ padding: 14 }}>
+            <div
+              style={{
+                display: 'grid',
+                gap: 6,
+                padding: '2px 0'
+              }}
+            >
               <p className="small" style={{ margin: 0 }}>
                 No saved parent sessions yet.
               </p>
@@ -256,7 +280,7 @@ export default async function ParentsPage({
           )}
         </aside>
 
-        <main style={{ display: 'grid', gap: 18, minWidth: 0 }}>
+        <main style={{ display: 'grid', gap: 20, minWidth: 0 }}>
           <MathTutor
             audience="parent"
             lockedMode="hint"
@@ -268,8 +292,18 @@ export default async function ParentsPage({
           />
 
           {selectedConversation && turns.length > 0 ? (
-            <section className="card" style={{ display: 'grid', gap: 16 }}>
-              <div className="buttonRow" style={{ justifyContent: 'space-between' }}>
+            <section style={{ display: 'grid', gap: 16 }}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  gap: 14,
+                  alignItems: 'flex-start',
+                  flexWrap: 'wrap',
+                  paddingTop: 6,
+                  borderTop: '1px solid var(--border)'
+                }}
+              >
                 <div style={{ display: 'grid', gap: 4 }}>
                   <h2 style={{ margin: 0 }}>Current Session Thread</h2>
                   <p className="small" style={{ margin: 0 }}>
