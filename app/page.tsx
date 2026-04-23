@@ -19,9 +19,20 @@ export default function HomePage() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.58, ease: 'easeOut' }}
+        style={{
+          display: 'grid',
+          gap: 28
+        }}
       >
-        <div className="homeHeroGrid">
-          <div className="homeHeroContent">
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'minmax(0, 1.05fr) minmax(260px, 0.95fr)',
+            gap: 24,
+            alignItems: 'start'
+          }}
+        >
+          <div style={{ display: 'grid', gap: 16, minWidth: 0 }}>
             <motion.span
               className="badge"
               initial={{ opacity: 0, scale: 0.96 }}
@@ -35,8 +46,12 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 0.44, ease: 'easeOut' }}
+              style={{
+                maxWidth: 860,
+                margin: 0
+              }}
             >
-              A math workspace designed to feel alive, clear, and easy to continue.
+              Math support that feels like a real product, not just a response box.
             </motion.h1>
 
             <motion.p
@@ -44,74 +59,101 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.18, duration: 0.42, ease: 'easeOut' }}
-              style={{ maxWidth: 700 }}
+              style={{ maxWidth: 760, margin: 0 }}
             >
               Built for students and parents who need explanation, graphing, and follow-up flow in
-              one calmer system — with a visual language that can grow into real-time 3D instead of
-              starting from scratch later.
+              one calmer workspace — with a visual direction that can grow into a more cinematic,
+              real-time experience.
             </motion.p>
-
-            <motion.div
-              className="buttonRow"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.26, duration: 0.4, ease: 'easeOut' }}
-            >
-              <a className="btn" href="/tutor">
-                Open Student Workspace
-              </a>
-              <a className="btn secondary" href="/parents">
-                Open Parent Workspace
-              </a>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.34, duration: 0.44, ease: 'easeOut' }}
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-                gap: 12
-              }}
-            >
-              <div className="card innerFeatureCard">
-                <p className="small" style={{ margin: 0 }}>
-                  <strong>Graphing, diagnosis, and follow-ups</strong>
-                </p>
-                <p className="small" style={{ marginTop: 8 }}>
-                  Built to keep the thread going after the first answer instead of breaking the
-                  learning flow.
-                </p>
-              </div>
-
-              <div className="card innerFeatureCard">
-                <p className="small" style={{ margin: 0 }}>
-                  <strong>3D-ready visual direction</strong>
-                </p>
-                <p className="small" style={{ marginTop: 8 }}>
-                  This hero is the first step toward a more cinematic, real-time visual layer.
-                </p>
-              </div>
-            </motion.div>
           </div>
 
           <motion.div
-            className="homeHeroPanel"
-            initial={{ opacity: 0, y: 10, scale: 0.995 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ delay: 0.18, duration: 0.56, ease: 'easeOut' }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.24, duration: 0.4, ease: 'easeOut' }}
+            className="card questionSurface"
+            style={{
+              display: 'grid',
+              gap: 12,
+              padding: 16,
+              alignSelf: 'stretch'
+            }}
           >
-            <HomeHeroScene />
+            <div style={{ display: 'grid', gap: 6 }}>
+              <p className="small" style={{ margin: 0 }}>
+                <strong>Core product flow</strong>
+              </p>
+              <p className="small" style={{ margin: 0 }}>
+                Ask, graph, follow up, revisit history, and keep the thread going without losing
+                context.
+              </p>
+            </div>
+
+            <div className="buttonRow">
+              <a className="btn" href="/tutor">
+                Students
+              </a>
+              <a className="btn secondary" href="/parents">
+                Parents
+              </a>
+            </div>
           </motion.div>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 14, scale: 0.995 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 0.18, duration: 0.56, ease: 'easeOut' }}
+          style={{
+            display: 'grid',
+            gap: 14
+          }}
+        >
+          <HomeHeroScene />
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+              gap: 12
+            }}
+          >
+            <div className="card innerFeatureCard">
+              <p className="small" style={{ margin: 0 }}>
+                <strong>Graphing, diagnosis, and follow-ups</strong>
+              </p>
+              <p className="small" style={{ marginTop: 8 }}>
+                Built to keep the learning flow going after the first answer instead of breaking it.
+              </p>
+            </div>
+
+            <div className="card innerFeatureCard">
+              <p className="small" style={{ margin: 0 }}>
+                <strong>Saved context that matters</strong>
+              </p>
+              <p className="small" style={{ marginTop: 8 }}>
+                Return to earlier sessions and continue the same thread more naturally.
+              </p>
+            </div>
+
+            <div className="card innerFeatureCard">
+              <p className="small" style={{ margin: 0 }}>
+                <strong>3D-ready visual direction</strong>
+              </p>
+              <p className="small" style={{ marginTop: 8 }}>
+                This is now a scene-led hero, so later real-time 3D can become the centerpiece
+                rather than a side demo.
+              </p>
+            </div>
+          </div>
+        </motion.div>
       </motion.section>
 
       <motion.section className="card spotlightCard" {...sectionReveal}>
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1.1fr) minmax(0, 0.9fr)',
+            gridTemplateColumns: 'minmax(0, 1.15fr) minmax(0, 0.85fr)',
             gap: 22,
             alignItems: 'start'
           }}
