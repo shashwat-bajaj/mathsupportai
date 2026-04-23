@@ -2,6 +2,7 @@
 
 import { motion } from 'motion/react';
 import BetaSignup from '@/components/BetaSignup';
+import HomeHeroScene from '@/components/HomeHeroScene';
 
 const sectionReveal = {
   initial: { opacity: 0, y: 18 },
@@ -35,7 +36,7 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 0.44, ease: 'easeOut' }}
             >
-              Math support that stays clear even after the first answer.
+              A math workspace designed to feel alive, clear, and easy to continue.
             </motion.h1>
 
             <motion.p
@@ -46,7 +47,8 @@ export default function HomePage() {
               style={{ maxWidth: 700 }}
             >
               Built for students and parents who need explanation, graphing, and follow-up flow in
-              one calmer workspace — not a one-shot response box.
+              one calmer system — with a visual language that can grow into real-time 3D instead of
+              starting from scratch later.
             </motion.p>
 
             <motion.div
@@ -75,19 +77,20 @@ export default function HomePage() {
             >
               <div className="card innerFeatureCard">
                 <p className="small" style={{ margin: 0 }}>
-                  <strong>Step-by-step clarity</strong>
+                  <strong>Graphing, diagnosis, and follow-ups</strong>
                 </p>
                 <p className="small" style={{ marginTop: 8 }}>
-                  Learn the method without losing the structure of the explanation.
+                  Built to keep the thread going after the first answer instead of breaking the
+                  learning flow.
                 </p>
               </div>
 
               <div className="card innerFeatureCard">
                 <p className="small" style={{ margin: 0 }}>
-                  <strong>Continuous session flow</strong>
+                  <strong>3D-ready visual direction</strong>
                 </p>
                 <p className="small" style={{ marginTop: 8 }}>
-                  Ask the next question naturally instead of restarting from zero each time.
+                  This hero is the first step toward a more cinematic, real-time visual layer.
                 </p>
               </div>
             </motion.div>
@@ -99,89 +102,7 @@ export default function HomePage() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ delay: 0.18, duration: 0.56, ease: 'easeOut' }}
           >
-            <div
-              className="homeDemoCard card"
-              style={{
-                minHeight: 430,
-                position: 'relative',
-                overflow: 'hidden'
-              }}
-            >
-              <div className="homeDemoHeader">
-                <span className="badge">Tutor preview</span>
-                <span className="small">One thread, multiple support modes</span>
-              </div>
-
-              <motion.div
-                className="homeDemoBubble homeDemoBubbleUser"
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.34, duration: 0.3, ease: 'easeOut' }}
-              >
-                <p className="small" style={{ margin: 0 }}>
-                  Solve x² − 5x + 6 = 0, graph it, and then show me a common mistake.
-                </p>
-              </motion.div>
-
-              <motion.div
-                className="homeDemoBubble homeDemoBubbleAi"
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.44, duration: 0.3, ease: 'easeOut' }}
-              >
-                <p className="small" style={{ margin: 0 }}>
-                  The same workspace can explain the method, render the graph, diagnose mistakes,
-                  and keep the follow-up connected to the original question.
-                </p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.52, duration: 0.32, ease: 'easeOut' }}
-                style={{
-                  display: 'grid',
-                  gap: 12,
-                  marginTop: 6
-                }}
-              >
-                <div className="card innerFeatureCard">
-                  <p className="small" style={{ margin: 0 }}>
-                    <strong>Auto by default</strong>
-                  </p>
-                  <p className="small" style={{ marginTop: 8 }}>
-                    Follows the wording of the request more naturally, without forcing the same
-                    teaching pattern every time.
-                  </p>
-                </div>
-
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-                    gap: 12
-                  }}
-                >
-                  <div className="card innerFeatureCard">
-                    <p className="small" style={{ margin: 0 }}>
-                      <strong>Graph-aware</strong>
-                    </p>
-                    <p className="small" style={{ marginTop: 8 }}>
-                      Moves between graphing and explanation more cleanly.
-                    </p>
-                  </div>
-
-                  <div className="card innerFeatureCard">
-                    <p className="small" style={{ margin: 0 }}>
-                      <strong>Saved context</strong>
-                    </p>
-                    <p className="small" style={{ marginTop: 8 }}>
-                      Revisit earlier sessions without losing the thread.
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
+            <HomeHeroScene />
           </motion.div>
         </div>
       </motion.section>
