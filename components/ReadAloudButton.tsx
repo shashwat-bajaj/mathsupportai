@@ -168,6 +168,8 @@ export default function ReadAloudButton({
       type="button"
       className="secondary readAloudButton"
       onClick={isSpeaking ? stopSpeech : startSpeech}
+      aria-pressed={isSpeaking}
+      aria-label={isSpeaking ? 'Stop reading aloud' : label}
     >
       {isSpeaking ? 'Stop Reading' : label}
     </button>

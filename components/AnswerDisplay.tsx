@@ -92,65 +92,94 @@ export default function AnswerDisplay({ text }: { text: string }) {
     }
   }
 
+  function resetToEnglish() {
+    setSelectedLanguage('English');
+    setCurrentLanguage('English');
+    setDisplayText(text);
+    setShowLanguagePicker(false);
+    setError('');
+    setLoading(false);
+  }
+
   return (
-    <div className="grid" style={{ gap: 12 }}>
-      <div className="buttonRow">
-        <ReadAloudButton
-          text={displayText}
-          language={currentLanguage}
-          label={currentLanguage === 'English' ? 'Read Aloud' : `Read Aloud (${currentLanguage})`}
-        />
-
-        <button
-          type="button"
-          className="secondary"
-          onClick={() => setShowLanguagePicker((prev) => !prev)}
+    <div className="grid" style={{ gap: 14 }}>
+      <div
+        className="card questionSurface"
+        style={{
+          padding: 14,
+          display: 'grid',
+          gap: 12
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            gap: 12,
+            alignItems: 'flex-start',
+            flexWrap: 'wrap'
+          }}
         >
-          {currentLanguage === 'English' ? 'Translate' : 'Change Language'}
-        </button>
+          <div style={{ display: 'grid', gap: 4 }}>
+            <p className="small" style={{ margin: 0 }}>
+              <strong>Answer tools</strong>
+            </p>
+            <p className="small" style={{ margin: 0 }}>
+              Read aloud or switch languages without leaving the current response.
+            </p>
+          </div>
 
-        {currentLanguage !== 'English' ? (
+          {currentLanguage !== 'English' ? (
+            <span className="badge">Showing: {currentLanguage}</span>
+          ) : null}
+        </div>
+
+        <div className="buttonRow">
+          <ReadAloudButton
+            text={displayText}
+            language={currentLanguage}
+            label={currentLanguage === 'English' ? 'Read Aloud' : `Read Aloud (${currentLanguage})`}
+          />
+
           <button
             type="button"
             className="secondary"
-            onClick={() => {
-              setSelectedLanguage('English');
-              setCurrentLanguage('English');
-              setDisplayText(text);
-              setShowLanguagePicker(false);
-              setError('');
-            }}
+            onClick={() => setShowLanguagePicker((prev) => !prev)}
           >
-            Back to English
+            {currentLanguage === 'English' ? 'Translate' : 'Change Language'}
           </button>
+
+          {currentLanguage !== 'English' ? (
+            <button type="button" className="secondary" onClick={resetToEnglish}>
+              Back to English
+            </button>
+          ) : null}
+        </div>
+
+        {showLanguagePicker ? (
+          <div className="languagePickerRow">
+            <select
+              value={selectedLanguage}
+              onChange={(e) => handleLanguageChange(e.target.value as Language)}
+              className="languageSelect"
+              disabled={loading}
+            >
+              {LANGUAGES.map((language) => (
+                <option key={language} value={language}>
+                  {language}
+                </option>
+              ))}
+            </select>
+          </div>
         ) : null}
 
-        {currentLanguage !== 'English' ? (
-          <span className="small">Showing: {currentLanguage}</span>
-        ) : null}
+        {loading ? <p className="small" style={{ margin: 0 }}>Translating...</p> : null}
+        {error ? <p className="small" style={{ margin: 0 }}>{error}</p> : null}
       </div>
 
-      {showLanguagePicker ? (
-        <div className="languagePickerRow">
-          <select
-            value={selectedLanguage}
-            onChange={(e) => handleLanguageChange(e.target.value as Language)}
-            className="languageSelect"
-            disabled={loading}
-          >
-            {LANGUAGES.map((language) => (
-              <option key={language} value={language}>
-                {language}
-              </option>
-            ))}
-          </select>
-        </div>
-      ) : null}
-
-      {loading ? <p className="small">Translating...</p> : null}
-      {error ? <p className="small">{error}</p> : null}
-
-      <RenderedContent content={displayText} />
+      <div style={{ display: 'grid', gap: 0 }}>
+        <RenderedContent content={displayText} />
+      </div>
     </div>
   );
 }

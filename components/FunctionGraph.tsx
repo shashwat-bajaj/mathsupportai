@@ -53,6 +53,30 @@ function zoomToFactor(factor: number) {
   return Math.min(Math.max(factor, 0.5), 3);
 }
 
+function StatPill({
+  label,
+  value
+}: {
+  label: string;
+  value: string;
+}) {
+  return (
+    <div
+      className="card questionSurface"
+      style={{
+        padding: 12,
+        display: 'grid',
+        gap: 4
+      }}
+    >
+      <p className="small" style={{ margin: 0 }}>
+        <strong>{label}</strong>
+      </p>
+      <p style={{ margin: 0 }}>{value}</p>
+    </div>
+  );
+}
+
 export default function FunctionGraph({ expression }: { expression: string }) {
   const [xMin, setXMin] = useState(DEFAULT_X_MIN);
   const [xMax, setXMax] = useState(DEFAULT_X_MAX);
@@ -143,18 +167,110 @@ export default function FunctionGraph({ expression }: { expression: string }) {
   if (!graph.ok) {
     return (
       <div className="card graphCard">
-        <h3 style={{ margin: 0 }}>Graph</h3>
-        <p className="small">{graph.error}</p>
+        <div style={{ display: 'grid', gap: 6 }}>
+          <h3 style={{ margin: 0 }}>Graph</h3>
+          <p className="small" style={{ margin: 0 }}>
+            The graph could not be rendered for this expression.
+          </p>
+        </div>
+        <div className="card questionSurface" style={{ padding: 14 }}>
+          <p className="small" style={{ margin: 0 }}>
+            {graph.error}
+          </p>
+        </div>
       </div>
     );
   }
 
-  if (!Number.isFinite(yMin) || !Number.isFinite(yMax) || yMin >= yMax) {
-    return (
-      <div className="card graphCard">
-        <div className="graphHeader">
+  const invalidYWindow = !Number.isFinite(yMin) || !Number.isFinite(yMax) || yMin >= yMax;
+
+  const width = 720;
+  const height = 410;
+  const padding = 36;
+
+  const plotWidth = width - padding * 2;
+  const plotHeight = height - padding * 2;
+
+  const mapX = (x: number) =>
+    padding + ((x - graph.xMin) / (graph.xMax - graph.xMin)) * plotWidth;
+
+  const mapY = (y: number) =>
+    padding + (1 - (y - yMin) / (yMax - yMin)) * plotHeight;
+
+  const path = invalidYWindow
+    ? ''
+    : graph.points
+        .map((point, index) => {
+          const command = index === 0 ? 'M' : 'L';
+          return `${command}${mapX(point.x).toFixed(2)},${mapY(point.y).toFixed(2)}`;
+        })
+        .join(' ');
+
+  const xAxisVisible = !invalidYWindow && yMin <= 0 && yMax >= 0;
+  const yAxisVisible = graph.xMin <= 0 && graph.xMax >= 0;
+
+  const xAxisY = xAxisVisible ? mapY(0) : null;
+  const yAxisX = yAxisVisible ? mapX(0) : null;
+
+  const xTicks = buildTicks(graph.xMin, graph.xMax, 6);
+  const yTicks = invalidYWindow ? [] : buildTicks(yMin, yMax, 6);
+
+  const clipId =
+    `graph-clip-${expression.replace(/[^a-z0-9]/gi, '').slice(0, 24) || 'plot'}`;
+  const xSpan = graph.xMax - graph.xMin;
+  const ySpan = invalidYWindow ? 0 : yMax - yMin;
+
+  return (
+    <div className="card graphCard" style={{ gap: 16 }}>
+      <div className="graphHeader">
+        <div style={{ display: 'grid', gap: 6 }}>
           <h3 style={{ margin: 0 }}>Graph</h3>
-          <span className="small">{graph.label}</span>
+          <p className="small" style={{ margin: 0 }}>
+            {graph.label}
+          </p>
+        </div>
+
+        <span className="badge">Zoom {Math.round(zoomLevel * 100)}%</span>
+      </div>
+
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+          gap: 12
+        }}
+      >
+        <StatPill
+          label="X range"
+          value={`${formatTick(graph.xMin, xSpan)} to ${formatTick(graph.xMax, xSpan)}`}
+        />
+        <StatPill
+          label="Y range"
+          value={
+            invalidYWindow
+              ? 'Adjust Y values'
+              : `${formatTick(yMin, ySpan)} to ${formatTick(yMax, ySpan)}`
+          }
+        />
+        <StatPill label="Expression" value={graph.label.replace(/^y\s*=\s*/i, '')} />
+      </div>
+
+      <div
+        className="card questionSurface"
+        style={{
+          padding: 16,
+          display: 'grid',
+          gap: 16
+        }}
+      >
+        <div style={{ display: 'grid', gap: 6 }}>
+          <p className="small" style={{ margin: 0 }}>
+            <strong>View controls</strong>
+          </p>
+          <p className="small" style={{ margin: 0 }}>
+            Adjust the visible range, zoom in or out, and refit the graph if the curve looks too
+            compressed.
+          </p>
         </div>
 
         <div
@@ -211,266 +327,184 @@ export default function FunctionGraph({ expression }: { expression: string }) {
           </div>
         </div>
 
+        <div style={{ display: 'grid', gap: 8 }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              gap: 12,
+              alignItems: 'center',
+              flexWrap: 'wrap'
+            }}
+          >
+            <label style={{ marginBottom: 0 }}>Zoom</label>
+            <span className="small">{Math.round(zoomLevel * 100)}%</span>
+          </div>
+
+          <input
+            type="range"
+            min="0.5"
+            max="3"
+            step="0.1"
+            value={zoomLevel}
+            onChange={(e) => applyZoom(Number(e.target.value))}
+          />
+        </div>
+
         <div className="buttonRow">
+          <button type="button" className="secondary" onClick={() => zoomBy(0.7)}>
+            Zoom In
+          </button>
+          <button type="button" className="secondary" onClick={() => zoomBy(1.4)}>
+            Zoom Out
+          </button>
+          <button type="button" className="secondary" onClick={fitY}>
+            Fit Y
+          </button>
           <button type="button" className="secondary" onClick={resetView}>
             Reset
           </button>
         </div>
 
-        <p className="small">Y min must be smaller than Y max.</p>
-      </div>
-    );
-  }
-
-  const width = 680;
-  const height = 380;
-  const padding = 34;
-
-  const plotWidth = width - padding * 2;
-  const plotHeight = height - padding * 2;
-
-  const mapX = (x: number) =>
-    padding + ((x - graph.xMin) / (graph.xMax - graph.xMin)) * plotWidth;
-
-  const mapY = (y: number) =>
-    padding + (1 - (y - yMin) / (yMax - yMin)) * plotHeight;
-
-  const path = graph.points
-    .map((point, index) => {
-      const command = index === 0 ? 'M' : 'L';
-      return `${command}${mapX(point.x).toFixed(2)},${mapY(point.y).toFixed(2)}`;
-    })
-    .join(' ');
-
-  const xAxisVisible = yMin <= 0 && yMax >= 0;
-  const yAxisVisible = graph.xMin <= 0 && graph.xMax >= 0;
-
-  const xAxisY = xAxisVisible ? mapY(0) : null;
-  const yAxisX = yAxisVisible ? mapX(0) : null;
-
-  const xTicks = buildTicks(graph.xMin, graph.xMax, 6);
-  const yTicks = buildTicks(yMin, yMax, 6);
-
-  const clipId = `graph-clip-${expression.replace(/[^a-z0-9]/gi, '').slice(0, 24) || 'plot'}`;
-  const xSpan = graph.xMax - graph.xMin;
-  const ySpan = yMax - yMin;
-
-  return (
-    <div className="card graphCard">
-      <div className="graphHeader">
-        <h3 style={{ margin: 0 }}>Graph</h3>
-        <span className="small">{graph.label}</span>
+        {invalidYWindow ? (
+          <p className="small" style={{ margin: 0 }}>
+            Y min must be smaller than Y max.
+          </p>
+        ) : null}
       </div>
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-          gap: 12
-        }}
-      >
-        <div>
-          <label>X min</label>
-          <input
-            type="number"
-            step="any"
-            value={xMin}
-            onChange={(e) => setXMin(Number(e.target.value))}
-          />
-        </div>
+      {!invalidYWindow ? (
+        <>
+          <div className="graphFrame">
+            <svg viewBox={`0 0 ${width} ${height}`} className="graphSvg" aria-label={graph.label}>
+              <defs>
+                <clipPath id={clipId}>
+                  <rect x={padding} y={padding} width={plotWidth} height={plotHeight} rx="12" />
+                </clipPath>
+              </defs>
 
-        <div>
-          <label>X max</label>
-          <input
-            type="number"
-            step="any"
-            value={xMax}
-            onChange={(e) => setXMax(Number(e.target.value))}
-          />
-        </div>
+              <rect
+                x={padding}
+                y={padding}
+                width={plotWidth}
+                height={plotHeight}
+                fill="none"
+                stroke="var(--border)"
+                rx="12"
+              />
 
-        <div>
-          <label>Y min</label>
-          <input
-            type="number"
-            step="any"
-            value={yMin}
-            onChange={(e) => {
-              setManualY(true);
-              setYMin(Number(e.target.value));
-            }}
-          />
-        </div>
+              {xTicks.map((tick) => {
+                const x = mapX(tick);
+                return (
+                  <g key={`x-grid-${tick}`}>
+                    <line
+                      x1={x}
+                      y1={padding}
+                      x2={x}
+                      y2={height - padding}
+                      stroke="var(--border)"
+                      opacity="0.4"
+                    />
+                    <text
+                      x={x}
+                      y={height - padding + 18}
+                      fontSize="11"
+                      textAnchor="middle"
+                      fill="var(--text-soft)"
+                    >
+                      {formatTick(tick, xSpan)}
+                    </text>
+                  </g>
+                );
+              })}
 
-        <div>
-          <label>Y max</label>
-          <input
-            type="number"
-            step="any"
-            value={yMax}
-            onChange={(e) => {
-              setManualY(true);
-              setYMax(Number(e.target.value));
-            }}
-          />
-        </div>
-      </div>
+              {yTicks.map((tick) => {
+                const y = mapY(tick);
+                return (
+                  <g key={`y-grid-${tick}`}>
+                    <line
+                      x1={padding}
+                      y1={y}
+                      x2={width - padding}
+                      y2={y}
+                      stroke="var(--border)"
+                      opacity="0.4"
+                    />
+                    <text
+                      x={padding - 8}
+                      y={y + 4}
+                      fontSize="11"
+                      textAnchor="end"
+                      fill="var(--text-soft)"
+                    >
+                      {formatTick(tick, ySpan)}
+                    </text>
+                  </g>
+                );
+              })}
 
-      <div style={{ display: 'grid', gap: 8 }}>
-        <label style={{ marginBottom: 0 }}>Zoom</label>
-        <input
-          type="range"
-          min="0.5"
-          max="3"
-          step="0.1"
-          value={zoomLevel}
-          onChange={(e) => applyZoom(Number(e.target.value))}
-        />
-      </div>
-
-      <div className="buttonRow">
-        <button type="button" className="secondary" onClick={() => zoomBy(0.7)}>
-          Zoom In
-        </button>
-        <button type="button" className="secondary" onClick={() => zoomBy(1.4)}>
-          Zoom Out
-        </button>
-        <button type="button" className="secondary" onClick={fitY}>
-          Fit Y
-        </button>
-        <button type="button" className="secondary" onClick={resetView}>
-          Reset
-        </button>
-      </div>
-
-      <div className="graphFrame">
-        <svg viewBox={`0 0 ${width} ${height}`} className="graphSvg" aria-label={graph.label}>
-          <defs>
-            <clipPath id={clipId}>
-              <rect x={padding} y={padding} width={plotWidth} height={plotHeight} rx="12" />
-            </clipPath>
-          </defs>
-
-          <rect
-            x={padding}
-            y={padding}
-            width={plotWidth}
-            height={plotHeight}
-            fill="none"
-            stroke="var(--border)"
-            rx="12"
-          />
-
-          {xTicks.map((tick) => {
-            const x = mapX(tick);
-            return (
-              <g key={`x-grid-${tick}`}>
-                <line
-                  x1={x}
-                  y1={padding}
-                  x2={x}
-                  y2={height - padding}
-                  stroke="var(--border)"
-                  opacity="0.45"
-                />
-                <text
-                  x={x}
-                  y={height - padding + 18}
-                  fontSize="11"
-                  textAnchor="middle"
-                  fill="var(--text-soft)"
-                >
-                  {formatTick(tick, xSpan)}
-                </text>
-              </g>
-            );
-          })}
-
-          {yTicks.map((tick) => {
-            const y = mapY(tick);
-            return (
-              <g key={`y-grid-${tick}`}>
+              {xAxisY !== null ? (
                 <line
                   x1={padding}
-                  y1={y}
+                  y1={xAxisY}
                   x2={width - padding}
-                  y2={y}
-                  stroke="var(--border)"
-                  opacity="0.45"
+                  y2={xAxisY}
+                  stroke="var(--text)"
+                  opacity="0.82"
+                  strokeWidth="1.5"
                 />
-                <text
-                  x={padding - 8}
-                  y={y + 4}
-                  fontSize="11"
-                  textAnchor="end"
-                  fill="var(--text-soft)"
-                >
-                  {formatTick(tick, ySpan)}
-                </text>
-              </g>
-            );
-          })}
+              ) : null}
 
-          {xAxisY !== null ? (
-            <line
-              x1={padding}
-              y1={xAxisY}
-              x2={width - padding}
-              y2={xAxisY}
-              stroke="var(--text)"
-              opacity="0.85"
-              strokeWidth="1.5"
-            />
-          ) : null}
+              {yAxisX !== null ? (
+                <line
+                  x1={yAxisX}
+                  y1={padding}
+                  x2={yAxisX}
+                  y2={height - padding}
+                  stroke="var(--text)"
+                  opacity="0.82"
+                  strokeWidth="1.5"
+                />
+              ) : null}
 
-          {yAxisX !== null ? (
-            <line
-              x1={yAxisX}
-              y1={padding}
-              x2={yAxisX}
-              y2={height - padding}
-              stroke="var(--text)"
-              opacity="0.85"
-              strokeWidth="1.5"
-            />
-          ) : null}
+              {path ? (
+                <path
+                  d={path}
+                  clipPath={`url(#${clipId})`}
+                  fill="none"
+                  stroke="var(--accent)"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              ) : null}
 
-          {path ? (
-            <path
-              d={path}
-              clipPath={`url(#${clipId})`}
-              fill="none"
-              stroke="var(--accent)"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          ) : null}
+              <text
+                x={width - padding + 6}
+                y={xAxisY !== null ? xAxisY - 6 : height - padding - 6}
+                fontSize="12"
+                fill="var(--text)"
+              >
+                x
+              </text>
 
-          <text
-            x={width - padding + 6}
-            y={xAxisY !== null ? xAxisY - 6 : height - padding - 6}
-            fontSize="12"
-            fill="var(--text)"
-          >
-            x
-          </text>
+              <text
+                x={yAxisX !== null ? yAxisX + 6 : padding + 6}
+                y={padding - 8}
+                fontSize="12"
+                fill="var(--text)"
+              >
+                y
+              </text>
+            </svg>
+          </div>
 
-          <text
-            x={yAxisX !== null ? yAxisX + 6 : padding + 6}
-            y={padding - 8}
-            fontSize="12"
-            fill="var(--text)"
-          >
-            y
-          </text>
-        </svg>
-      </div>
-
-      <p className="small">
-        Use the zoom slider or buttons to inspect the graph more closely, then use Fit Y or Reset
-        to return to a cleaner view.
-      </p>
+          <p className="small" style={{ margin: 0 }}>
+            Use the zoom controls to inspect the curve more closely, then use Fit Y or Reset to
+            return to a cleaner view.
+          </p>
+        </>
+      ) : null}
     </div>
   );
 }

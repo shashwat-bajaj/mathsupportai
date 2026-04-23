@@ -49,12 +49,12 @@ function ReadOnlyField({ value }: { value: string }) {
     <div
       style={{
         width: '100%',
-        padding: '12px',
-        borderRadius: '12px',
+        padding: '12px 14px',
+        borderRadius: '14px',
         border: '1px solid var(--border)',
         background: 'var(--input-bg)',
         color: 'var(--text)',
-        minHeight: 48,
+        minHeight: 50,
         display: 'flex',
         alignItems: 'center'
       }}
@@ -370,7 +370,7 @@ export default function MathTutor({
     }
   }
 
-  const responsiveTwoColStyle: React.CSSProperties = {
+  const splitFieldStyle = {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
     gap: 16
@@ -393,51 +393,176 @@ export default function MathTutor({
   });
 
   return (
-    <div className="grid" style={{ gap: 14 }}>
+    <div className="grid" style={{ gap: 16 }}>
       {(title || description) && (
-        <div className="card">
-          {title ? <h2>{title}</h2> : null}
-          {description ? <p className="small">{description}</p> : null}
-        </div>
+        <section className="card spotlightCard" style={{ display: 'grid', gap: 10 }}>
+          {title ? <h2 style={{ margin: 0 }}>{title}</h2> : null}
+          {description ? (
+            <p className="small" style={{ margin: 0, maxWidth: 820 }}>
+              {description}
+            </p>
+          ) : null}
+        </section>
       )}
 
-      {accountEmail ? (
-        <div className="card">
-          <p className="small">
-            Signed in as <strong>{accountEmail}</strong>. Tutor history will be saved to
-            your account automatically.
+      <section className="card" style={{ display: 'grid', gap: 14 }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'minmax(0, 1.2fr) minmax(220px, 0.8fr)',
+            gap: 16,
+            alignItems: 'start'
+          }}
+        >
+          <div style={{ display: 'grid', gap: 10 }}>
+            {accountEmail ? (
+              <p className="small" style={{ margin: 0 }}>
+                Signed in as <strong>{accountEmail}</strong>. Session history will be saved to your
+                account automatically.
+              </p>
+            ) : (
+              <div>
+                <label>Email (optional for beta history and usage tracking)</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="card questionSurface" style={{ padding: 14 }}>
+            <p className="small" style={{ margin: '0 0 6px' }}>
+              <strong>Session status</strong>
+            </p>
+            <p className="small" style={{ margin: 0 }}>
+              {conversationId
+                ? 'You are continuing an existing session.'
+                : 'Your next question will start a new session.'}
+            </p>
+          </div>
+        </div>
+
+        <div className="buttonRow">
+          <button className="secondary" onClick={startNewSession}>
+            New Session
+          </button>
+          <span className="small">
+            {conversationId
+              ? 'Continue this session with a natural follow-up.'
+              : 'Start fresh whenever you want to change direction.'}
+          </span>
+        </div>
+      </section>
+
+      <section className="card" style={{ display: 'grid', gap: 16 }}>
+        <div style={{ display: 'grid', gap: 6 }}>
+          <h3 style={{ margin: 0 }}>Tutor setup</h3>
+          <p className="small" style={{ margin: 0 }}>
+            Adjust the current help style before sending the next message.
           </p>
         </div>
-      ) : (
-        <div>
-          <label>Email (optional for beta history and usage tracking)</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-          />
-        </div>
-      )}
 
-      <div className="buttonRow">
-        <button className="secondary" onClick={startNewSession}>
-          New Session
-        </button>
-        {conversationId ? (
-          <span className="small">Continue this session with a follow-up question.</span>
-        ) : (
-          <span className="small">Your next question will start a new session.</span>
-        )}
-      </div>
+        {audience === 'parent' ? (
+          <>
+            <div style={splitFieldStyle}>
+              <div>
+                <label>Mode</label>
+                <ReadOnlyField value="Guided hints only" />
+              </div>
 
-      {audience === 'parent' ? (
-        <>
-          <div style={responsiveTwoColStyle}>
-            <div>
-              <label>Mode</label>
-              <ReadOnlyField value="Guided hints only" />
+              <div>
+                <label>Level</label>
+                <select
+                  value={gradeLevel}
+                  onChange={(e) => setGradeLevel(e.target.value as GradeLevel)}
+                >
+                  <option value="elementary">Elementary</option>
+                  <option value="middle-school">Middle school</option>
+                  <option value="high-school">High school</option>
+                  <option value="college">College</option>
+                </select>
+              </div>
             </div>
+
+            <div className="card innerFeatureCard" style={{ display: 'grid', gap: 16 }}>
+              <div style={{ display: 'grid', gap: 6 }}>
+                <h3 style={{ margin: 0 }}>Parent support options</h3>
+                <p className="small" style={{ margin: 0 }}>
+                  Shape the response around how you want to help the child learn.
+                </p>
+              </div>
+
+              <div>
+                <label>Support style</label>
+                <select
+                  value={parentHelpStyle}
+                  onChange={(e) => setParentHelpStyle(e.target.value as ParentHelpStyle)}
+                >
+                  <option value="explain-simply">Explain it simply</option>
+                  <option value="talking-points">Give me parent talking points</option>
+                  <option value="simple-example">Show a simple example</option>
+                  <option value="practice-questions">Create practice questions</option>
+                  <option value="likely-mistake">What mistake is my child likely making?</option>
+                </select>
+              </div>
+
+              <div style={splitFieldStyle}>
+                <div>
+                  <label>Topic (optional)</label>
+                  <input
+                    type="text"
+                    value={parentTopic}
+                    onChange={(e) => setParentTopic(e.target.value)}
+                    placeholder="Example: fractions, long division, algebra"
+                  />
+                </div>
+
+                <div>
+                  <label>Where the child is stuck (optional)</label>
+                  <input
+                    type="text"
+                    value={parentStuckPoint}
+                    onChange={(e) => setParentStuckPoint(e.target.value)}
+                    placeholder="Example: comparing fractions or carrying digits"
+                  />
+                </div>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div style={splitFieldStyle}>
+            {!lockedMode ? (
+              <div>
+                <label>Study mode (optional)</label>
+                <select value={mode} onChange={(e) => setMode(e.target.value as TutorMode)}>
+                  <option value="auto">Auto (follow my request)</option>
+                  <option value="teach">Teach me step by step</option>
+                  <option value="hint">Give hints only</option>
+                  <option value="diagnose">Diagnose my mistake</option>
+                  <option value="quiz">Turn this into practice questions</option>
+                </select>
+              </div>
+            ) : (
+              <div>
+                <label>Mode</label>
+                <ReadOnlyField
+                  value={
+                    lockedMode === 'auto'
+                      ? 'Auto'
+                      : lockedMode === 'hint'
+                        ? 'Guided hints only'
+                        : lockedMode === 'teach'
+                          ? 'Teach step by step'
+                          : lockedMode === 'diagnose'
+                            ? 'Diagnose mistake'
+                            : 'Quiz mode'
+                  }
+                />
+              </div>
+            )}
 
             <div>
               <label>Level</label>
@@ -452,138 +577,81 @@ export default function MathTutor({
               </select>
             </div>
           </div>
+        )}
+      </section>
 
-          <div className="card" style={{ display: 'grid', gap: 16 }}>
-            <h3 style={{ margin: 0 }}>Parent support options</h3>
+      <section className="card" style={{ display: 'grid', gap: 16 }}>
+        <div style={{ display: 'grid', gap: 6 }}>
+          <h3 style={{ margin: 0 }}>
+            {audience === 'parent' ? 'Question or teaching situation' : 'Question or your work'}
+          </h3>
+          <p className="small" style={{ margin: 0 }}>
+            {audience === 'parent'
+              ? 'Describe what the child is learning, where they are stuck, and how you want the explanation to feel.'
+              : 'Type a problem, paste your work, or ask to graph, quiz, or diagnose something in the same thread.'}
+          </p>
+        </div>
 
-            <div>
-              <label>Support style</label>
-              <select
-                value={parentHelpStyle}
-                onChange={(e) => setParentHelpStyle(e.target.value as ParentHelpStyle)}
-              >
-                <option value="explain-simply">Explain it simply</option>
-                <option value="talking-points">Give me parent talking points</option>
-                <option value="simple-example">Show a simple example</option>
-                <option value="practice-questions">Create practice questions</option>
-                <option value="likely-mistake">What mistake is my child likely making?</option>
-              </select>
-            </div>
+        <div>
+          <textarea
+            ref={questionRef}
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            onKeyDown={handleQuestionKeyDown}
+            placeholder={
+              placeholder ||
+              (audience === 'parent'
+                ? 'Describe what the child is learning, where they are stuck, and how much help you want.'
+                : 'Type a math problem, paste your work, or ask for a quiz on a topic. Ask explicitly to graph or plot if you want a graph shown.')
+            }
+          />
+          <p className="small" style={{ marginTop: 8, marginBottom: 0 }}>
+            Tip: press {shortcutLabel} + Enter to run.
+          </p>
+        </div>
 
-            <div style={responsiveTwoColStyle}>
-              <div>
-                <label>Topic (optional)</label>
-                <input
-                  type="text"
-                  value={parentTopic}
-                  onChange={(e) => setParentTopic(e.target.value)}
-                  placeholder="Example: fractions, long division, algebra"
-                />
-              </div>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'minmax(0, 1fr) auto',
+            gap: 12,
+            alignItems: 'center'
+          }}
+        >
+          <p className="small" style={{ margin: 0 }}>
+            Beta usage limits may apply during testing.
+          </p>
 
-              <div>
-                <label>Where the child is stuck (optional)</label>
-                <input
-                  type="text"
-                  value={parentStuckPoint}
-                  onChange={(e) => setParentStuckPoint(e.target.value)}
-                  placeholder="Example: comparing fractions or carrying digits"
-                />
-              </div>
-            </div>
-          </div>
-        </>
-      ) : (
-        <div style={responsiveTwoColStyle}>
-          {!lockedMode ? (
-            <div>
-              <label>Study mode (optional)</label>
-              <select value={mode} onChange={(e) => setMode(e.target.value as TutorMode)}>
-                <option value="auto">Auto (follow my request)</option>
-                <option value="teach">Teach me step by step</option>
-                <option value="hint">Give hints only</option>
-                <option value="diagnose">Diagnose my mistake</option>
-                <option value="quiz">Turn this into practice questions</option>
-              </select>
-            </div>
-          ) : (
-            <div>
-              <label>Mode</label>
-              <ReadOnlyField
-                value={
-                  lockedMode === 'auto'
-                    ? 'Auto'
-                    : lockedMode === 'hint'
-                      ? 'Guided hints only'
-                      : lockedMode === 'teach'
-                        ? 'Teach step by step'
-                        : lockedMode === 'diagnose'
-                          ? 'Diagnose mistake'
-                          : 'Quiz mode'
-                }
-              />
-            </div>
-          )}
+          <div className="buttonRow" style={{ justifyContent: 'flex-end' }}>
+            <button onClick={() => void submitQuestion()} disabled={loading || !question.trim()}>
+              {loading ? 'Thinking...' : conversationId ? 'Send Follow-up' : 'Get help'}
+            </button>
 
-          <div>
-            <label>Level</label>
-            <select
-              value={gradeLevel}
-              onChange={(e) => setGradeLevel(e.target.value as GradeLevel)}
-            >
-              <option value="elementary">Elementary</option>
-              <option value="middle-school">Middle school</option>
-              <option value="high-school">High school</option>
-              <option value="college">College</option>
-            </select>
+            {showRetryButton ? (
+              <button type="button" className="secondary" onClick={retryLastRequest}>
+                Retry Last Request
+              </button>
+            ) : null}
           </div>
         </div>
-      )}
+      </section>
 
-      <div>
-        <label>
-          {audience === 'parent' ? 'Question or teaching situation' : 'Question or your work'}
-        </label>
-        <textarea
-          ref={questionRef}
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          onKeyDown={handleQuestionKeyDown}
-          placeholder={
-            placeholder ||
-            (audience === 'parent'
-              ? 'Describe what the child is learning, where they are stuck, and how much help you want.'
-              : 'Type a math problem, paste your work, or ask for a quiz on a topic. Ask explicitly to graph or plot if you want a graph shown.')
-          }
-        />
-        <p className="small" style={{ marginTop: 8 }}>
-          Tip: press {shortcutLabel} + Enter to run.
-        </p>
-      </div>
+      <section className="card" style={{ display: 'grid', gap: 12 }}>
+        <div style={{ display: 'grid', gap: 6 }}>
+          <h3 style={{ margin: 0 }}>Tutor response</h3>
+          <p className="small" style={{ margin: 0 }}>
+            The answer, graph, and suggested next steps stay connected here.
+          </p>
+        </div>
 
-      <p className="small">
-        Free beta usage is currently limited to 20 tutor requests per 24 hours.
-      </p>
+        <div className="responseBox">
+          {answer ? <AnswerDisplay text={answer} /> : <p>Your tutor response will appear here.</p>}
+        </div>
 
-      <div className="buttonRow">
-        <button onClick={() => void submitQuestion()} disabled={loading || !question.trim()}>
-          {loading ? 'Thinking...' : conversationId ? 'Send Follow-up' : 'Get help'}
-        </button>
-
-        {showRetryButton ? (
-          <button type="button" className="secondary" onClick={retryLastRequest}>
-            Retry Last Request
-          </button>
+        {audience === 'student' && showGraphForCurrentTurn && activeGraphExpression ? (
+          <FunctionGraph expression={activeGraphExpression} />
         ) : null}
-      </div>
-
-      <div className="responseBox">
-        {answer ? <AnswerDisplay text={answer} /> : <p>Your tutor response will appear here.</p>}
-      </div>
-
-      {audience === 'student' && showGraphForCurrentTurn && activeGraphExpression ? (
-        <FunctionGraph expression={activeGraphExpression} />
-      ) : null}
+      </section>
 
       {showFollowUpSuggestions ? (
         <div className="card suggestionCard">
