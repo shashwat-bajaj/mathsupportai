@@ -14,7 +14,7 @@ type TranslationLanguage =
   | 'Chinese'
   | 'Russian';
 type GradeLevel = 'elementary' | 'middle-school' | 'high-school' | 'college';
-type TutorMode = 'teach' | 'hint' | 'diagnose' | 'quiz';
+type TutorMode = 'auto' | 'teach' | 'hint' | 'diagnose' | 'quiz';
 
 function resolveTheme(theme: ThemePreference) {
   if (theme === 'system') {
@@ -99,7 +99,7 @@ export default function SettingsForm({
 
   return (
     <div className="card">
-      <h2>Preferences</h2>
+      <h2 style={{ marginTop: 0 }}>Preferences</h2>
 
       <div className="grid" style={{ gap: 20 }}>
         <div className="grid cols-3">
@@ -136,7 +136,12 @@ export default function SettingsForm({
         </div>
 
         <div className="card">
-          <h3>Student Tutor Defaults</h3>
+          <h3 style={{ marginTop: 0 }}>Student Tutor Defaults</h3>
+          <p className="small" style={{ marginTop: 0 }}>
+            Auto mode follows the wording of the question more naturally, while the other modes
+            push the tutor toward a more specific teaching style.
+          </p>
+
           <div className="grid cols-3">
             <div>
               <label>Default learner level</label>
@@ -157,6 +162,7 @@ export default function SettingsForm({
                 value={studentTutorMode}
                 onChange={(e) => setStudentTutorMode(e.target.value as TutorMode)}
               >
+                <option value="auto">Auto (follow my request)</option>
                 <option value="teach">Teach me step by step</option>
                 <option value="hint">Give hints only</option>
                 <option value="diagnose">Diagnose my mistake</option>
@@ -167,7 +173,7 @@ export default function SettingsForm({
         </div>
 
         <div className="card">
-          <h3>Parent Tutor Defaults</h3>
+          <h3 style={{ marginTop: 0 }}>Parent Tutor Defaults</h3>
           <p className="small">
             Parent Tutor stays in guided hint mode by design, but you can choose the
             default learner level here.
@@ -195,7 +201,7 @@ export default function SettingsForm({
           </button>
         </div>
 
-        <p className="small">{status}</p>
+        {status ? <p className="small">{status}</p> : null}
       </div>
     </div>
   );

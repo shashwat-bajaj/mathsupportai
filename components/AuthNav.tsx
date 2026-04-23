@@ -7,8 +7,16 @@ export default async function AuthNav() {
   } = await supabase.auth.getUser();
 
   if (user) {
-    return <a href="/account">Account</a>;
+    return (
+      <a href="/account" aria-label="Open your account">
+        Account
+      </a>
+    );
   }
 
-  return <a href="/login">Login</a>;
+  return (
+    <a href="/login" aria-label="Log in to your account">
+      Log in
+    </a>
+  );
 }

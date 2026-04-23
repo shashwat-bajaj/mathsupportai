@@ -22,6 +22,10 @@ const ALLOWED_IDENTIFIERS = new Set([
   'e'
 ]);
 
+function containsStandaloneX(text: string) {
+  return /(^|[^a-z])x([^a-z]|$)/i.test(text);
+}
+
 export function normalizeGraphExpression(input: string) {
   let expr = input.trim();
 
@@ -29,13 +33,39 @@ export function normalizeGraphExpression(input: string) {
   expr = expr.replace(/^f\s*\(\s*x\s*\)\s*=\s*/i, '');
   expr = expr.replace(/^y\s*=\s*/i, '');
   expr = expr.replace(/^=\s*/, '');
-  expr = expr.replace(/^["'`]+|["'`]+$/g, '');
+  expr = expr.replace(/^["'`$]+|["'`$]+$/g, '');
+  expr = expr.replace(/\\left/g, '');
+  expr = expr.replace(/\\right/g, '');
+  expr = expr.replace(/\s+/g, ' ');
 
   return expr.trim();
 }
 
 export function isExplicitGraphRequest(input: string) {
-  return /\b(graph|plot|draw|show\s+the\s+graph|show\s+the\s+plot|sketch)\b/i.test(input);
+  return /\b(graph|grpah|plot|draw|show\s+the\s+graph|show\s+the\s+plot|sketch)\b/i.test(
+    input
+  );
+}
+
+export function isGraphReferenceRequest(input: string) {
+  return /\b(graph|grpah|plot|sketch|curve)\b/i.test(input);
+}
+
+export function isGraphOnlyDisplayRequest(input: string) {
+  const text = input.trim();
+
+  const hasGraphWord =
+    /\b(graph|grpah|plot|draw|sketch|show\s+the\s+graph|show\s+the\s+plot)\b/i.test(text);
+
+  const asksForExplanation =
+    /\b(explain|describe|what does|how does|why does|meaning|interpret)\b/i.test(text);
+
+  const otherStrongIntent =
+    /\b(solve|factor|simplify|differentiate|derivative|integrate|integral|diagnose|quiz|hint|teach)\b/i.test(
+      text
+    );
+
+  return hasGraphWord && !asksForExplanation && !otherStrongIntent;
 }
 
 function cleanExtractedExpression(input: string) {
@@ -43,74 +73,134 @@ function cleanExtractedExpression(input: string) {
 
   candidate = candidate.split('\n')[0].trim();
   candidate = candidate.replace(/[.?!]+$/, '').trim();
-  candidate = candidate.replace(/^["'`]+|["'`]+$/g, '');
+  candidate = candidate.replace(/^["'`$]+|["'`$]+$/g, '');
   candidate = candidate.replace(/\s{2,}/g, ' ');
 
   return normalizeGraphExpression(candidate);
 }
 
 function looksGraphable(candidate: string) {
-  return (
-    /x/i.test(candidate) ||
-    /\b(sin|cos|tan|sqrt|log|ln|exp)\b/i.test(candidate)
-  );
+  const cleaned = normalizeGraphExpression(candidate);
+
+  return containsStandaloneX(cleaned) || /\b(sin|cos|tan|sqrt|log|ln|exp)\b/i.test(cleaned);
 }
 
 function stripTrailingGraphWords(candidate: string) {
   return candidate
     .replace(/\b(and\s+)?graph(?:\s+the\s+function)?\b.*$/i, '')
+    .replace(/\b(and\s+)?grpah(?:\s+the\s+function)?\b.*$/i, '')
     .replace(/\b(and\s+)?plot(?:\s+the\s+function)?\b.*$/i, '')
     .replace(/\b(and\s+)?draw(?:\s+the\s+function)?\b.*$/i, '')
+    .replace(/\b(and\s+)?sketch(?:\s+the\s+function)?\b.*$/i, '')
     .trim();
+}
+
+function stripLeadingEnglishWords(candidate: string) {
+  return candidate
+    .replace(/^(solve|graph|grpah|plot|draw|sketch|find|show|consider|given)\s+/i, '')
+    .replace(/^(the|function|equation)\s+/i, '')
+    .trim();
+}
+
+function maybeReturnGraphable(candidate: string) {
+  let cleaned = stripLeadingEnglishWords(
+    cleanExtractedExpression(stripTrailingGraphWords(candidate))
+  );
+
+  const equalZeroMatch = cleaned.match(/^(.+?)\s*=\s*0$/i);
+  if (equalZeroMatch?.[1]) {
+    const leftSide = normalizeGraphExpression(equalZeroMatch[1].trim());
+    if (looksGraphable(leftSide)) {
+      cleaned = leftSide;
+    }
+  }
+
+  if (cleaned.includes('=')) {
+    return '';
+  }
+
+  return looksGraphable(cleaned) ? cleaned : '';
+}
+
+function isPureMathishExpression(text: string) {
+  const cleaned = normalizeGraphExpression(text);
+
+  if (!cleaned || cleaned.length > 80 || /\n/.test(cleaned)) return false;
+
+  return /^[a-z0-9().+\-*/^\s=]+$/i.test(cleaned) && looksGraphable(cleaned);
+}
+
+export function extractRememberedGraphExpression(input: string) {
+  const text = input.trim();
+  if (!text) return '';
+
+  const explicit = extractGraphExpressionFromPrompt(text);
+  if (explicit) return explicit;
+
+  if (isPureMathishExpression(text)) {
+    return maybeReturnGraphable(text);
+  }
+
+  const equationMatch = text.match(/(?:y\s*=|f\s*\(\s*x\s*\)\s*=)\s*([^\n]+)/i);
+  if (equationMatch?.[1]) {
+    const candidate = maybeReturnGraphable(equationMatch[1]);
+    if (candidate) return candidate;
+  }
+
+  const equalZeroMatch = text.match(
+    /([a-z0-9().+\-*/^\s]*(?:x|sin|cos|tan|sqrt|log|ln|exp)[a-z0-9().+\-*/^\s]*)\s*=\s*0\b/i
+  );
+  if (equalZeroMatch?.[1]) {
+    const candidate = maybeReturnGraphable(equalZeroMatch[1]);
+    if (candidate) return candidate;
+  }
+
+  return '';
 }
 
 export function extractGraphExpressionFromPrompt(input: string) {
   const text = input.trim();
 
-  // 1. Standard y= or f(x)= forms
+  if (!text) return '';
+
   const equationMatch = text.match(/(?:y\s*=|f\s*\(\s*x\s*\)\s*=)\s*([^\n]+)/i);
   if (equationMatch?.[1]) {
-    return cleanExtractedExpression(stripTrailingGraphWords(equationMatch[1]));
+    const candidate = maybeReturnGraphable(equationMatch[1]);
+    if (candidate) return candidate;
   }
 
-  // 2. Prompts like "Solve x^2 - 5x + 6 = 0 and graph the function"
   const solveAndGraphMatch = text.match(
-    /\bsolve\s+(.+?)\s*=\s*0\b.*\b(graph|plot|draw|sketch)\b/i
+    /\bsolve\s+(.+?)\s*=\s*0\b.*\b(graph|grpah|plot|draw|sketch)\b/i
   );
   if (solveAndGraphMatch?.[1]) {
-    const candidate = cleanExtractedExpression(solveAndGraphMatch[1]);
-    if (looksGraphable(candidate)) return candidate;
+    const candidate = maybeReturnGraphable(solveAndGraphMatch[1]);
+    if (candidate) return candidate;
   }
 
-  // 3. General explicit graph requests
   if (!isExplicitGraphRequest(text)) return '';
 
-  // 4. "graph x^2 - 5x + 6", "plot sin(x)", etc.
   const graphOfMatch = text.match(
-    /\b(?:graph|plot|draw|sketch|show(?:\s+the)?\s+(?:graph|plot)?)\b(?:\s+of)?\s+([^\n]+)/i
+    /\b(?:graph|grpah|plot|draw|sketch|show(?:\s+the)?\s+(?:graph|plot)?)\b(?:\s+of)?\s+([^\n]+)/i
   );
   if (graphOfMatch?.[1]) {
-    const candidate = cleanExtractedExpression(stripTrailingGraphWords(graphOfMatch[1]));
-    if (looksGraphable(candidate)) return candidate;
+    const candidate = maybeReturnGraphable(graphOfMatch[1]);
+    if (candidate) return candidate;
   }
 
-  // 5. Fallback: if the prompt has something like "... x^2 - 5x + 6 = 0 ..."
-  // and also explicitly asks to graph, use the left-hand side before = 0
-  const equalZeroMatch = text.match(/([a-z0-9().+\-*/^\s]*x[a-z0-9().+\-*/^\s]*)\s*=\s*0/i);
+  const equalZeroMatch = text.match(
+    /([a-z0-9().+\-*/^\s]*(?:x|sin|cos|tan|sqrt|log|ln|exp)[a-z0-9().+\-*/^\s]*)\s*=\s*0/i
+  );
   if (equalZeroMatch?.[1]) {
-    const candidate = cleanExtractedExpression(equalZeroMatch[1]);
-    if (looksGraphable(candidate)) return candidate;
+    const candidate = maybeReturnGraphable(equalZeroMatch[1]);
+    if (candidate) return candidate;
   }
 
-  // 6. Final fallback: grab the first math-like chunk with x
-  const mathishMatch = text.match(/([a-z0-9().+\-*/^\s]*x[a-z0-9().+\-*/^\s]*)/i);
+  const mathishMatch = text.match(
+    /([a-z0-9().+\-*/^\s]*(?:x|sin|cos|tan|sqrt|log|ln|exp)[a-z0-9().+\-*/^\s]*)/i
+  );
   if (mathishMatch?.[1]) {
-    let candidate = cleanExtractedExpression(mathishMatch[1]);
-
-    // Remove leading English verbs if they slipped in
-    candidate = candidate.replace(/^(solve|graph|plot|draw|sketch)\s+/i, '').trim();
-
-    if (looksGraphable(candidate)) return candidate;
+    const candidate = maybeReturnGraphable(mathishMatch[1]);
+    if (candidate) return candidate;
   }
 
   return '';
@@ -133,9 +223,11 @@ export function compileGraphExpression(input: string) {
   let expr = normalized.toLowerCase().replace(/\s+/g, '');
 
   expr = expr.replace(/(\d)(x)/g, '$1*$2');
+  expr = expr.replace(/(\d)([a-z])/g, '$1*$2');
   expr = expr.replace(/(\d)\(/g, '$1*(');
   expr = expr.replace(/(x)\(/g, '$1*(');
   expr = expr.replace(/\)(\d|x)/g, ')*$1');
+  expr = expr.replace(/\)([a-z])/g, ')*$1');
   expr = expr.replace(/\^/g, '**');
 
   expr = expr.replace(/\bpi\b/g, 'Math.PI');

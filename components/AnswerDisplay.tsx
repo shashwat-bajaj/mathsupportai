@@ -97,6 +97,7 @@ export default function AnswerDisplay({ text }: { text: string }) {
       <div className="buttonRow">
         <ReadAloudButton
           text={displayText}
+          language={currentLanguage}
           label={currentLanguage === 'English' ? 'Read Aloud' : `Read Aloud (${currentLanguage})`}
         />
 
@@ -107,6 +108,22 @@ export default function AnswerDisplay({ text }: { text: string }) {
         >
           {currentLanguage === 'English' ? 'Translate' : 'Change Language'}
         </button>
+
+        {currentLanguage !== 'English' ? (
+          <button
+            type="button"
+            className="secondary"
+            onClick={() => {
+              setSelectedLanguage('English');
+              setCurrentLanguage('English');
+              setDisplayText(text);
+              setShowLanguagePicker(false);
+              setError('');
+            }}
+          >
+            Back to English
+          </button>
+        ) : null}
 
         {currentLanguage !== 'English' ? (
           <span className="small">Showing: {currentLanguage}</span>

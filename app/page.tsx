@@ -1,104 +1,285 @@
+'use client';
+
+import { motion } from 'motion/react';
 import BetaSignup from '@/components/BetaSignup';
-import ActionCard from '@/components/ActionCard';
+
+const sectionReveal = {
+  initial: { opacity: 0, y: 18 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, amount: 0.2 },
+  transition: { duration: 0.5, ease: 'easeOut' as const }
+};
 
 export default function HomePage() {
   return (
-    <div className="grid" style={{ gap: 32 }}>
-      <section className="hero heroCard">
-        <span className="badge">Free beta now live</span>
-        <h1>Your Personal AI Math Tutor</h1>
-        <p className="heroSubtext">
-          Math support that helps people understand, not just copy answers.
-        </p>
-        <p>
-          MathSupport AI helps students, parents, and tutors work through math with guided explanations,
-          hint-based support, mistake diagnosis, and practice workflows built for actual learning.
-        </p>
+    <div className="grid" style={{ gap: 28 }}>
+      <motion.section
+        className="hero heroCard homeHeroShell"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.58, ease: 'easeOut' }}
+      >
+        <div className="homeHeroGrid">
+          <div className="homeHeroContent">
+            <motion.span
+              className="badge"
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.03, duration: 0.28, ease: 'easeOut' }}
+            >
+              Free beta now live
+            </motion.span>
 
-        <div className="buttonRow">
-          <a className="btn" href="/tutor">Open Tutor for Students</a>
-          <a className="btn secondary" href="/parents">Open Tutor for Parents</a>
-        </div>
-      </section>
+            <motion.h1
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.44, ease: 'easeOut' }}
+            >
+              Math support that stays clear even after the first answer.
+            </motion.h1>
 
-      <section className="grid cols-3">
-        <div className="card featureCard">
-          <h3>For students</h3>
-          <p className="small">
-            Get step-by-step explanations, hints, diagnosis mode, and practice questions for algebra,
-            calculus, and general math support.
-          </p>
-        </div>
+            <motion.p
+              className="heroSubtext"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.18, duration: 0.42, ease: 'easeOut' }}
+              style={{ maxWidth: 700 }}
+            >
+              Built for students and parents who need explanation, graphing, and follow-up flow in
+              one calmer workspace — not a one-shot response box.
+            </motion.p>
 
-        <div className="card featureCard">
-          <h3>For parents</h3>
-          <p className="small">
-            Use the guided support version to help a child learn without jumping straight to the full answer.
-          </p>
-        </div>
-
-        <div className="card featureCard">
-          <h3>Built for clarity</h3>
-          <p className="small">
-            This beta is focused on making math feel clearer, more structured, and easier to work through.
-          </p>
-        </div>
-      </section>
-
-      <section className="grid cols-3">
-        <div className="card featureCard">
-          <h3>Step-by-step teaching</h3>
-          <p className="small">
-            Learn the method, not just the endpoint.
-          </p>
-        </div>
-
-        <div className="card featureCard">
-          <h3>Mistake diagnosis</h3>
-          <p className="small">
-            Paste your own work and see where the reasoning likely went wrong.
-          </p>
-        </div>
-
-        <div className="card featureCard">
-          <h3>Private learning history</h3>
-          <p className="small">
-            Sign in to keep track of your sessions and continue learning over time.
-          </p>
-        </div>
-      </section>
-
-      <BetaSignup />
-
-      <section className="card spotlightCard">
-        <h2>Choose your experience</h2>
-
-        <div className="grid cols-3">
-          <ActionCard
-            title="Tutor for Students"
-            description="Best for solving problems, checking your understanding, and practicing topics directly."
-            action={
+            <motion.div
+              className="buttonRow"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.26, duration: 0.4, ease: 'easeOut' }}
+            >
               <a className="btn" href="/tutor">
-                Open Tutor for Students
+                Open Student Workspace
               </a>
-            }
-          />
+              <a className="btn secondary" href="/parents">
+                Open Parent Workspace
+              </a>
+            </motion.div>
 
-          <ActionCard
-            title="Tutor for Parents"
-            description="Best for adults who want help explaining a concept clearly without over-relying on final answers."
-            action={
-              <a className="btn" href="/parents">
-                Open Tutor for Parents
-              </a>
-            }
-          />
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.34, duration: 0.44, ease: 'easeOut' }}
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+                gap: 12
+              }}
+            >
+              <div className="card innerFeatureCard">
+                <p className="small" style={{ margin: 0 }}>
+                  <strong>Step-by-step clarity</strong>
+                </p>
+                <p className="small" style={{ marginTop: 8 }}>
+                  Learn the method without losing the structure of the explanation.
+                </p>
+              </div>
+
+              <div className="card innerFeatureCard">
+                <p className="small" style={{ margin: 0 }}>
+                  <strong>Continuous session flow</strong>
+                </p>
+                <p className="small" style={{ marginTop: 8 }}>
+                  Ask the next question naturally instead of restarting from zero each time.
+                </p>
+              </div>
+            </motion.div>
+          </div>
+
+          <motion.div
+            className="homeHeroPanel"
+            initial={{ opacity: 0, y: 10, scale: 0.995 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: 0.18, duration: 0.56, ease: 'easeOut' }}
+          >
+            <div
+              className="homeDemoCard card"
+              style={{
+                minHeight: 430,
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+            >
+              <div className="homeDemoHeader">
+                <span className="badge">Tutor preview</span>
+                <span className="small">One thread, multiple support modes</span>
+              </div>
+
+              <motion.div
+                className="homeDemoBubble homeDemoBubbleUser"
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.34, duration: 0.3, ease: 'easeOut' }}
+              >
+                <p className="small" style={{ margin: 0 }}>
+                  Solve x² − 5x + 6 = 0, graph it, and then show me a common mistake.
+                </p>
+              </motion.div>
+
+              <motion.div
+                className="homeDemoBubble homeDemoBubbleAi"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.44, duration: 0.3, ease: 'easeOut' }}
+              >
+                <p className="small" style={{ margin: 0 }}>
+                  The same workspace can explain the method, render the graph, diagnose mistakes,
+                  and keep the follow-up connected to the original question.
+                </p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.52, duration: 0.32, ease: 'easeOut' }}
+                style={{
+                  display: 'grid',
+                  gap: 12,
+                  marginTop: 6
+                }}
+              >
+                <div className="card innerFeatureCard">
+                  <p className="small" style={{ margin: 0 }}>
+                    <strong>Auto by default</strong>
+                  </p>
+                  <p className="small" style={{ marginTop: 8 }}>
+                    Follows the wording of the request more naturally, without forcing the same
+                    teaching pattern every time.
+                  </p>
+                </div>
+
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+                    gap: 12
+                  }}
+                >
+                  <div className="card innerFeatureCard">
+                    <p className="small" style={{ margin: 0 }}>
+                      <strong>Graph-aware</strong>
+                    </p>
+                    <p className="small" style={{ marginTop: 8 }}>
+                      Moves between graphing and explanation more cleanly.
+                    </p>
+                  </div>
+
+                  <div className="card innerFeatureCard">
+                    <p className="small" style={{ margin: 0 }}>
+                      <strong>Saved context</strong>
+                    </p>
+                    <p className="small" style={{ marginTop: 8 }}>
+                      Revisit earlier sessions without losing the thread.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </motion.section>
+
+      <motion.section className="card spotlightCard" {...sectionReveal}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'minmax(0, 1.1fr) minmax(0, 0.9fr)',
+            gap: 22,
+            alignItems: 'start'
+          }}
+        >
+          <div style={{ display: 'grid', gap: 8 }}>
+            <span className="badge">What makes it different</span>
+            <h2 style={{ margin: 0 }}>More structured than a generic chat box, but still easy to use.</h2>
+            <p className="small" style={{ margin: 0, maxWidth: 760 }}>
+              MathSupport AI is being built as a learning workspace with graph context, guided
+              follow-ups, saved history, and more deliberate continuity across sessions.
+            </p>
+          </div>
+
+          <div className="grid" style={{ gap: 12 }}>
+            <div className="card innerFeatureCard">
+              <h3 style={{ marginTop: 0, marginBottom: 8 }}>Students</h3>
+              <p className="small" style={{ margin: 0 }}>
+                Solve problems, check understanding, graph functions, and keep the same thread
+                going instead of restarting every time.
+              </p>
+            </div>
+
+            <div className="card innerFeatureCard">
+              <h3 style={{ marginTop: 0, marginBottom: 8 }}>Parents</h3>
+              <p className="small" style={{ margin: 0 }}>
+                Get child-friendly explanations, examples, talking points, and likely-mistake
+                guidance without defaulting straight to the final answer.
+              </p>
+            </div>
+          </div>
+        </div>
+      </motion.section>
+
+      <motion.section className="grid" {...sectionReveal} style={{ gap: 18 }}>
+        <div style={{ display: 'grid', gap: 8 }}>
+          <span className="badge">Choose your workspace</span>
+          <h2 style={{ margin: 0 }}>Two entry points, one core system underneath.</h2>
+          <p className="small" style={{ margin: 0, maxWidth: 820 }}>
+            Each workspace starts from a different need, but both are built to make math easier to
+            continue, not just easier to answer once.
+          </p>
         </div>
 
-        <p className="small" style={{ marginTop: 14 }}>
-          Signed-in users can revisit and manage saved sessions from History.
-        </p>
-      </section>
+        <div
+          className="grid"
+          style={{
+            gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
+            gap: 18
+          }}
+        >
+          <motion.div className="card featureCard" whileHover={{ y: -4 }}>
+            <div style={{ display: 'grid', gap: 14 }}>
+              <span className="badge">For students</span>
+              <h3 style={{ margin: 0 }}>Student Workspace</h3>
+              <p className="small" style={{ margin: 0 }}>
+                Best for direct problem solving, understanding the method, diagnosing mistakes,
+                graphing functions, and working through follow-ups in one continuous flow.
+              </p>
+
+              <div className="buttonRow" style={{ marginTop: 4 }}>
+                <a className="btn" href="/tutor">
+                  Open Student Workspace
+                </a>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div className="card featureCard" whileHover={{ y: -4 }}>
+            <div style={{ display: 'grid', gap: 14 }}>
+              <span className="badge">For parents</span>
+              <h3 style={{ margin: 0 }}>Parent Workspace</h3>
+              <p className="small" style={{ margin: 0 }}>
+                Best for adults helping a child learn more clearly through simpler explanation,
+                examples, talking points, and guided support.
+              </p>
+
+              <div className="buttonRow" style={{ marginTop: 4 }}>
+                <a className="btn secondary" href="/parents">
+                  Open Parent Workspace
+                </a>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </motion.section>
+
+      <motion.div {...sectionReveal}>
+        <BetaSignup />
+      </motion.div>
     </div>
   );
 }

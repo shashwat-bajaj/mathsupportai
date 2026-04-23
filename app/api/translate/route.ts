@@ -15,15 +15,59 @@ const ALLOWED_LANGUAGES = new Set([
   'Russian'
 ]);
 
+function getUserFacingTranslationError(error: any) {
+  const message = String(error?.message || '');
+  const status =
+    error?.status ||
+    error?.code ||
+    error?.error?.code ||
+    error?.cause?.status ||
+    null;
+
+  if (
+    status === 503 ||
+    /503/.test(message) ||
+    /UNAVAILABLE/i.test(message) ||
+    /high demand/i.test(message) ||
+    /temporar/i.test(message)
+  ) {
+    return {
+      message: 'Translation is temporarily busy right now. Please try again in a moment.',
+      status: 503
+    };
+  }
+
+  if (
+    status === 429 ||
+    /429/.test(message) ||
+    /rate limit/i.test(message) ||
+    /quota/i.test(message) ||
+    /too many requests/i.test(message)
+  ) {
+    return {
+      message: 'Translation is receiving too many requests right now. Please try again shortly.',
+      status: 429
+    };
+  }
+
+  return {
+    message: 'Translation failed.',
+    status: 500
+  };
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { text, language } = await request.json();
 
-    if (!text || typeof text !== 'string') {
+    const sourceText = typeof text === 'string' ? text.trim() : '';
+    const targetLanguage = typeof language === 'string' ? language.trim() : '';
+
+    if (!sourceText) {
       return NextResponse.json({ error: 'Text is required.' }, { status: 400 });
     }
 
-    if (!language || typeof language !== 'string' || !ALLOWED_LANGUAGES.has(language)) {
+    if (!targetLanguage || !ALLOWED_LANGUAGES.has(targetLanguage)) {
       return NextResponse.json({ error: 'Invalid language selection.' }, { status: 400 });
     }
 
@@ -35,20 +79,24 @@ export async function POST(request: NextRequest) {
     }
 
     const prompt = `
-You are translating a math explanation into ${language}.
+You are translating a math explanation into ${targetLanguage}.
 
 Rules:
-- Translate the explanation into ${language}.
-- Preserve markdown structure.
-- Preserve headings, bullets, and numbering.
+- Translate the natural-language explanation into ${targetLanguage}.
+- Preserve markdown structure exactly where possible.
+- Preserve headings, bullets, numbering, and spacing.
 - Do NOT translate mathematical equations.
 - Do NOT alter LaTeX expressions.
-- Do NOT remove or simplify steps.
-- Keep the meaning accurate and clear.
-- Return only the translated content.
+- Do NOT alter content inside $...$ or $$...$$.
+- Do NOT alter code blocks or inline code.
+- Keep math notation, symbols, variables, and expressions unchanged.
+- Keep the meaning accurate, natural, and clear in ${targetLanguage}.
+- Return only the translated content and nothing else.
 
 Content to translate:
-${text}
+<<<BEGIN_CONTENT>>>
+${sourceText}
+<<<END_CONTENT>>>
 `;
 
     const response = await ai.models.generateContent({
@@ -56,13 +104,19 @@ ${text}
       contents: prompt
     });
 
-    const translated = response.text || '';
+    const translated = response.text?.trim() || '';
+
+    if (!translated) {
+      return NextResponse.json({ error: 'Translation failed.' }, { status: 500 });
+    }
 
     return NextResponse.json({ translated });
   } catch (error: any) {
+    const userFacing = getUserFacingTranslationError(error);
+
     return NextResponse.json(
-      { error: error?.message || 'Translation failed.' },
-      { status: 500 }
+      { error: userFacing.message },
+      { status: userFacing.status }
     );
   }
 }

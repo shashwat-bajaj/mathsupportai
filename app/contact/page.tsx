@@ -36,14 +36,51 @@ export default function ContactPage() {
 
   return (
     <div className="grid" style={{ gap: 24 }}>
-      <section className="card">
-        <h1>Contact</h1>
-        <p className="small">
-          Use this form to share feedback, report bugs, request features, or ask about the beta.
-        </p>
+      <section className="card spotlightCard" style={{ display: 'grid', gap: 14 }}>
+        <span className="badge">Contact</span>
+
+        <div style={{ display: 'grid', gap: 10 }}>
+          <h1 style={{ margin: 0 }}>Send feedback, report issues, or ask about the beta.</h1>
+          <p className="small" style={{ margin: 0, maxWidth: 820 }}>
+            Use this page to share bugs, confusing moments, feature requests, product ideas, or
+            anything that would make MathSupport AI more useful for students and parents.
+          </p>
+        </div>
       </section>
 
-      <section className="card">
+      <section className="grid cols-3">
+        <div className="card innerFeatureCard">
+          <h3 style={{ marginTop: 0 }}>Product feedback</h3>
+          <p className="small" style={{ marginBottom: 0 }}>
+            Share what feels clear, what feels awkward, and what you would want improved first.
+          </p>
+        </div>
+
+        <div className="card innerFeatureCard">
+          <h3 style={{ marginTop: 0 }}>Bug reports</h3>
+          <p className="small" style={{ marginBottom: 0 }}>
+            Report broken flows, confusing tutor behavior, graph issues, or anything that does not
+            work as expected.
+          </p>
+        </div>
+
+        <div className="card innerFeatureCard">
+          <h3 style={{ marginTop: 0 }}>Feature requests</h3>
+          <p className="small" style={{ marginBottom: 0 }}>
+            Suggest workflows, tools, UI changes, or study features that would make the product
+            more useful over time.
+          </p>
+        </div>
+      </section>
+
+      <section className="card" style={{ display: 'grid', gap: 16 }}>
+        <div style={{ display: 'grid', gap: 8 }}>
+          <h2 style={{ margin: 0 }}>Message form</h2>
+          <p className="small" style={{ margin: 0 }}>
+            The more specific the message, the easier it is to improve the product meaningfully.
+          </p>
+        </div>
+
         <div className="grid" style={{ gap: 12 }}>
           <div>
             <label>Name (optional)</label>
@@ -69,7 +106,7 @@ export default function ContactPage() {
             <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="Tell us what you liked, what confused you, or what you want built next."
+              placeholder="Tell us what you liked, what confused you, what broke, or what you want built next."
             />
           </div>
 
@@ -79,7 +116,7 @@ export default function ContactPage() {
             </button>
           </div>
 
-          <p className="small">{status}</p>
+          {status ? <p className="small">{status}</p> : null}
         </div>
       </section>
     </div>

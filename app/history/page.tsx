@@ -5,6 +5,32 @@ import ConversationThread from '@/components/ConversationThread';
 
 export const dynamic = 'force-dynamic';
 
+type ConversationRecord = {
+  id: string;
+  title: string | null;
+  audience: string;
+  created_at: string;
+  updated_at: string;
+};
+
+type TurnPreviewRecord = {
+  conversation_id: string;
+  prompt: string;
+  turn_index: number | null;
+  created_at: string;
+};
+
+type TurnRecord = {
+  id: string;
+  conversation_id: string;
+  turn_index: number | null;
+  mode: string;
+  level: string;
+  prompt: string;
+  response: string;
+  created_at: string;
+};
+
 function formatDate(value: string) {
   try {
     return new Date(value).toLocaleString();
@@ -15,7 +41,8 @@ function formatDate(value: string) {
 
 function makePreview(text: string, max = 110) {
   if (!text) return '';
-  return text.length > max ? `${text.slice(0, max)}...` : text;
+  const cleaned = text.replace(/\s+/g, ' ').trim();
+  return cleaned.length > max ? `${cleaned.slice(0, max)}...` : cleaned;
 }
 
 export default async function HistoryPage({
@@ -34,10 +61,11 @@ export default async function HistoryPage({
 
   const supabase = createAdminSupabase();
 
-  let conversations: any[] = [];
-  let turns: any[] = [];
+  let conversations: ConversationRecord[] = [];
+  let turns: TurnRecord[] = [];
   let errorMessage = '';
   let historyMode: 'account' | 'email' | 'none' = 'none';
+  const firstPromptByConversation: Record<string, string> = {};
 
   if (user?.id) {
     historyMode = 'account';
@@ -52,7 +80,7 @@ export default async function HistoryPage({
     if (error) {
       errorMessage = error.message;
     } else {
-      conversations = data || [];
+      conversations = (data || []) as ConversationRecord[];
     }
   } else if (fallbackEmail) {
     historyMode = 'email';
@@ -67,7 +95,28 @@ export default async function HistoryPage({
     if (error) {
       errorMessage = error.message;
     } else {
-      conversations = data || [];
+      conversations = (data || []) as ConversationRecord[];
+    }
+  }
+
+  if (!errorMessage && conversations.length > 0) {
+    const conversationIds = conversations.map((conversation) => conversation.id);
+
+    const { data: firstTurns, error: firstTurnsError } = await supabase
+      .from('learner_sessions')
+      .select('conversation_id, prompt, turn_index, created_at')
+      .in('conversation_id', conversationIds)
+      .eq('turn_index', 1)
+      .order('created_at', { ascending: true });
+
+    if (firstTurnsError) {
+      errorMessage = firstTurnsError.message;
+    } else {
+      for (const turn of (firstTurns || []) as TurnPreviewRecord[]) {
+        if (!firstPromptByConversation[turn.conversation_id]) {
+          firstPromptByConversation[turn.conversation_id] = turn.prompt || '';
+        }
+      }
     }
   }
 
@@ -76,7 +125,7 @@ export default async function HistoryPage({
     conversations[0] ||
     null;
 
-  if (selectedConversation) {
+  if (selectedConversation && !errorMessage) {
     const { data, error } = await supabase
       .from('learner_sessions')
       .select(
@@ -89,26 +138,43 @@ export default async function HistoryPage({
     if (error) {
       errorMessage = error.message;
     } else {
-      turns = data || [];
+      turns = (data || []) as TurnRecord[];
     }
   }
 
   return (
     <div className="grid" style={{ gap: 24 }}>
-      <section className="card">
-        <h1>History</h1>
-        {user ? (
-          <p className="small">
-            Signed in as <strong>{user.email}</strong>. These are your private account-linked conversations.
-          </p>
-        ) : (
-          <p className="small">
-            You are not signed in yet. You can still use the legacy beta email lookup below, but accounts are now the preferred way to keep private history.
-          </p>
-        )}
+      <section className="card spotlightCard" style={{ display: 'grid', gap: 14 }}>
+        <span className="badge">History</span>
 
-        {!user && (
-          <form method="GET" className="grid" style={{ gap: 12, marginTop: 12 }}>
+        <div style={{ display: 'grid', gap: 10 }}>
+          <h1 style={{ margin: 0 }}>Revisit earlier sessions without losing the thread.</h1>
+          {user ? (
+            <p className="small" style={{ margin: 0, maxWidth: 820 }}>
+              Signed in as <strong>{user.email}</strong>. These are your private account-linked
+              conversations, saved so you can return to earlier work and continue naturally.
+            </p>
+          ) : (
+            <p className="small" style={{ margin: 0, maxWidth: 820 }}>
+              You are not signed in yet. You can still use the legacy beta email lookup below, but
+              account-linked history is now the preferred way to keep sessions private and easier to
+              manage.
+            </p>
+          )}
+        </div>
+      </section>
+
+      {!user ? (
+        <section className="card" style={{ display: 'grid', gap: 14 }}>
+          <div style={{ display: 'grid', gap: 8 }}>
+            <h2 style={{ margin: 0 }}>Load older beta history</h2>
+            <p className="small" style={{ margin: 0 }}>
+              Use the email lookup only for earlier beta conversations that were not attached to an
+              account yet.
+            </p>
+          </div>
+
+          <form method="GET" className="grid" style={{ gap: 12 }}>
             <div>
               <label>Email</label>
               <input
@@ -118,6 +184,7 @@ export default async function HistoryPage({
                 placeholder="you@example.com"
               />
             </div>
+
             <div className="buttonRow">
               <button type="submit">Load legacy email history</button>
               <a className="btn secondary" href="/login">
@@ -125,34 +192,53 @@ export default async function HistoryPage({
               </a>
             </div>
           </form>
-        )}
-      </section>
+        </section>
+      ) : null}
 
       {historyMode === 'none' ? (
         <section className="card">
-          <p className="small">
-            Sign in to view private history, or use the email lookup form for older beta conversations.
+          <p className="small" style={{ margin: 0 }}>
+            Sign in to view private history, or use the email lookup form for older beta
+            conversations.
           </p>
         </section>
       ) : errorMessage ? (
         <section className="card">
-          <p className="small">Error loading history: {errorMessage}</p>
+          <p className="small" style={{ margin: 0 }}>
+            Error loading history: {errorMessage}
+          </p>
         </section>
       ) : conversations.length === 0 ? (
         <section className="card">
-          <p className="small">No saved conversations were found for this history view.</p>
+          <p className="small" style={{ margin: 0 }}>
+            No saved conversations were found for this history view.
+          </p>
         </section>
       ) : (
         <section className="twoPane">
-          <div className="card">
-            <h2>Saved conversations</h2>
+          <div className="card" style={{ display: 'grid', gap: 14 }}>
+            <div style={{ display: 'grid', gap: 6 }}>
+              <h2 style={{ margin: 0 }}>Saved conversations</h2>
+              <p className="small" style={{ margin: 0 }}>
+                {conversations.length} saved {conversations.length === 1 ? 'conversation' : 'conversations'}
+                {historyMode === 'account' ? ' in your account.' : ' found from email lookup.'}
+              </p>
+            </div>
+
             <div className="sessionList">
               {conversations.map((conversation) => {
                 const isActive = selectedConversation?.id === conversation.id;
+                const firstPrompt =
+                  firstPromptByConversation[conversation.id] ||
+                  conversation.title ||
+                  'Untitled conversation';
+
                 const href =
                   historyMode === 'account'
                     ? `/history?conversation=${conversation.id}`
-                    : `/history?email=${encodeURIComponent(fallbackEmail)}&conversation=${conversation.id}`;
+                    : `/history?email=${encodeURIComponent(
+                        fallbackEmail
+                      )}&conversation=${conversation.id}`;
 
                 return (
                   <div
@@ -161,13 +247,12 @@ export default async function HistoryPage({
                     style={{ display: 'grid', gap: 8 }}
                   >
                     <a href={href}>
-                      <p className="small">
-                        <strong>{conversation.title || 'Untitled conversation'}</strong>
+                      <p className="small" style={{ margin: '0 0 6px' }}>
+                        <strong>{makePreview(firstPrompt)}</strong>
                       </p>
-                      <p className="small">
+                      <p className="small" style={{ margin: 0 }}>
                         {conversation.audience} • Updated {formatDate(conversation.updated_at)}
                       </p>
-                      <p>{makePreview(conversation.title || 'New conversation')}</p>
                     </a>
 
                     {historyMode === 'account' ? (
@@ -185,9 +270,15 @@ export default async function HistoryPage({
             </div>
           </div>
 
-          <div className="card">
+          <div className="card" style={{ display: 'grid', gap: 14 }}>
             <div className="buttonRow" style={{ justifyContent: 'space-between' }}>
-              <h2 style={{ margin: 0 }}>Conversation thread</h2>
+              <div style={{ display: 'grid', gap: 4 }}>
+                <h2 style={{ margin: 0 }}>Conversation thread</h2>
+                <p className="small" style={{ margin: 0 }}>
+                  View the full question-and-answer flow for the selected session.
+                </p>
+              </div>
+
               {historyMode === 'account' && selectedConversation ? (
                 <DeleteConversationButton
                   conversationId={selectedConversation.id}
@@ -197,23 +288,21 @@ export default async function HistoryPage({
             </div>
 
             {selectedConversation ? (
-              <div style={{ marginTop: 16 }}>
-                <ConversationThread
-                  title={selectedConversation.title}
-                  audience={selectedConversation.audience}
-                  createdAt={selectedConversation.created_at}
-                  updatedAt={selectedConversation.updated_at}
-                  turns={turns}
-                  showDeleteTurnControls={historyMode === 'account'}
-                  redirectHref={
-                    historyMode === 'account'
-                      ? `/history?conversation=${selectedConversation.id}`
-                      : undefined
-                  }
-                />
-              </div>
+              <ConversationThread
+                title={selectedConversation.title}
+                audience={selectedConversation.audience}
+                createdAt={selectedConversation.created_at}
+                updatedAt={selectedConversation.updated_at}
+                turns={turns}
+                showDeleteTurnControls={historyMode === 'account'}
+                redirectHref={
+                  historyMode === 'account'
+                    ? `/history?conversation=${selectedConversation.id}`
+                    : undefined
+                }
+              />
             ) : (
-              <p className="small" style={{ marginTop: 16 }}>
+              <p className="small" style={{ margin: 0 }}>
                 Select a conversation to view it.
               </p>
             )}
