@@ -17,50 +17,66 @@ export default async function SettingsPage() {
   const preferences = user.user_metadata?.preferences || {};
 
   return (
-    <div className="grid" style={{ gap: 24, maxWidth: 920 }}>
-      <section className="card spotlightCard" style={{ display: 'grid', gap: 14 }}>
-        <span className="badge">Settings</span>
-
-        <div style={{ display: 'grid', gap: 10 }}>
+    <div className="grid" style={{ gap: 30, maxWidth: 980 }}>
+      <section
+        style={{
+          display: 'grid',
+          gap: 18,
+          paddingTop: 6
+        }}
+      >
+        <div style={{ display: 'grid', gap: 10, maxWidth: 900 }}>
+          <span className="badge">Settings</span>
           <h1 style={{ margin: 0 }}>Adjust the product to fit how you learn and study.</h1>
           <p className="small" style={{ margin: 0, maxWidth: 820 }}>
-            Manage your display preferences, translation defaults, and tutor behavior for both
-            Student and Parent experiences. These settings help keep the workspace more consistent
-            from one session to the next.
+            Manage display preferences, translation defaults, and tutor behavior for both Student
+            and Parent experiences. These settings help keep the workspace more consistent from one
+            session to the next.
           </p>
+        </div>
+
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: 18,
+            paddingTop: 14,
+            borderTop: '1px solid var(--border)'
+          }}
+        >
+          <div style={{ display: 'grid', gap: 6 }}>
+            <p className="small" style={{ margin: 0 }}>
+              <strong>Display preferences</strong>
+            </p>
+            <p className="small" style={{ margin: 0 }}>
+              Theme behavior and translation defaults for a more comfortable interface.
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gap: 6 }}>
+            <p className="small" style={{ margin: 0 }}>
+              <strong>Student defaults</strong>
+            </p>
+            <p className="small" style={{ margin: 0 }}>
+              Set the starting level and tutor mode before new student sessions begin.
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gap: 6 }}>
+            <p className="small" style={{ margin: 0 }}>
+              <strong>Parent defaults</strong>
+            </p>
+            <p className="small" style={{ margin: 0 }}>
+              Keep the parent workspace better aligned with the child’s level from the start.
+            </p>
+          </div>
         </div>
       </section>
 
-      <section className="grid cols-3">
-        <div className="card innerFeatureCard">
-          <h3 style={{ marginTop: 0 }}>Display preferences</h3>
-          <p className="small" style={{ marginBottom: 0 }}>
-            Control theme behavior and language defaults so the interface feels more comfortable to
-            use over time.
-          </p>
-        </div>
-
-        <div className="card innerFeatureCard">
-          <h3 style={{ marginTop: 0 }}>Student defaults</h3>
-          <p className="small" style={{ marginBottom: 0 }}>
-            Set the starting level and tutor mode used in the student workspace before each new
-            session begins.
-          </p>
-        </div>
-
-        <div className="card innerFeatureCard">
-          <h3 style={{ marginTop: 0 }}>Parent defaults</h3>
-          <p className="small" style={{ marginBottom: 0 }}>
-            Keep the parent workspace better aligned with the child’s level so explanations feel
-            more usable right away.
-          </p>
-        </div>
-      </section>
-
-      <section className="card" style={{ display: 'grid', gap: 16 }}>
+      <section className="card" style={{ display: 'grid', gap: 18 }}>
         <div style={{ display: 'grid', gap: 8 }}>
           <h2 style={{ margin: 0 }}>Preference controls</h2>
-          <p className="small" style={{ margin: 0 }}>
+          <p className="small" style={{ margin: 0, maxWidth: 760 }}>
             Changes saved here shape the default experience, while still letting you adjust things
             inside a session whenever needed.
           </p>

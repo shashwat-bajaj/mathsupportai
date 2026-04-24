@@ -45,6 +45,11 @@ function makePreview(text: string, max = 110) {
   return cleaned.length > max ? `${cleaned.slice(0, max)}...` : cleaned;
 }
 
+function audienceLabel(value: string) {
+  if (!value) return 'Unknown';
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
 export default async function HistoryPage({
   searchParams
 }: {
@@ -128,9 +133,7 @@ export default async function HistoryPage({
   if (selectedConversation && !errorMessage) {
     const { data, error } = await supabase
       .from('learner_sessions')
-      .select(
-        'id, conversation_id, turn_index, mode, level, prompt, response, created_at'
-      )
+      .select('id, conversation_id, turn_index, mode, level, prompt, response, created_at')
       .eq('conversation_id', selectedConversation.id)
       .order('turn_index', { ascending: true })
       .order('created_at', { ascending: true });
@@ -143,11 +146,16 @@ export default async function HistoryPage({
   }
 
   return (
-    <div className="grid" style={{ gap: 24 }}>
-      <section className="card spotlightCard" style={{ display: 'grid', gap: 14 }}>
-        <span className="badge">History</span>
-
-        <div style={{ display: 'grid', gap: 10 }}>
+    <div className="grid" style={{ gap: 30 }}>
+      <section
+        style={{
+          display: 'grid',
+          gap: 18,
+          paddingTop: 6
+        }}
+      >
+        <div style={{ display: 'grid', gap: 10, maxWidth: 900 }}>
+          <span className="badge">History</span>
           <h1 style={{ margin: 0 }}>Revisit earlier sessions without losing the thread.</h1>
           {user ? (
             <p className="small" style={{ margin: 0, maxWidth: 820 }}>
@@ -156,25 +164,73 @@ export default async function HistoryPage({
             </p>
           ) : (
             <p className="small" style={{ margin: 0, maxWidth: 820 }}>
-              You are not signed in yet. You can still use the legacy beta email lookup below, but
-              account-linked history is now the preferred way to keep sessions private and easier to
-              manage.
+              You are not signed in yet. You can still use the older beta email lookup below, but
+              account-linked history is now the cleaner and more private way to manage sessions.
             </p>
           )}
+        </div>
+
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: 18,
+            paddingTop: 14,
+            borderTop: '1px solid var(--border)'
+          }}
+        >
+          <div style={{ display: 'grid', gap: 6 }}>
+            <p className="small" style={{ margin: 0 }}>
+              <strong>History mode</strong>
+            </p>
+            <p className="small" style={{ margin: 0 }}>
+              {historyMode === 'account'
+                ? 'Account-linked history'
+                : historyMode === 'email'
+                  ? 'Legacy email lookup'
+                  : 'No history loaded yet'}
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gap: 6 }}>
+            <p className="small" style={{ margin: 0 }}>
+              <strong>Saved conversations</strong>
+            </p>
+            <p className="small" style={{ margin: 0 }}>
+              {conversations.length} available in this view.
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gap: 6 }}>
+            <p className="small" style={{ margin: 0 }}>
+              <strong>Best for</strong>
+            </p>
+            <p className="small" style={{ margin: 0 }}>
+              Continuing earlier work, checking older answers, and reopening graph-linked threads.
+            </p>
+          </div>
         </div>
       </section>
 
       {!user ? (
-        <section className="card" style={{ display: 'grid', gap: 14 }}>
+        <section className="card" style={{ display: 'grid', gap: 18 }}>
           <div style={{ display: 'grid', gap: 8 }}>
             <h2 style={{ margin: 0 }}>Load older beta history</h2>
-            <p className="small" style={{ margin: 0 }}>
-              Use the email lookup only for earlier beta conversations that were not attached to an
+            <p className="small" style={{ margin: 0, maxWidth: 760 }}>
+              Use email lookup only for earlier beta conversations that were not attached to an
               account yet.
             </p>
           </div>
 
-          <form method="GET" className="grid" style={{ gap: 12 }}>
+          <form
+            method="GET"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'minmax(0, 1fr) auto',
+              gap: 14,
+              alignItems: 'end'
+            }}
+          >
             <div>
               <label>Email</label>
               <input
@@ -185,7 +241,7 @@ export default async function HistoryPage({
               />
             </div>
 
-            <div className="buttonRow">
+            <div className="buttonRow" style={{ justifyContent: 'flex-end' }}>
               <button type="submit">Load legacy email history</button>
               <a className="btn secondary" href="/login">
                 Log in instead
@@ -215,9 +271,24 @@ export default async function HistoryPage({
           </p>
         </section>
       ) : (
-        <section className="twoPane">
-          <div className="card" style={{ display: 'grid', gap: 14 }}>
-            <div style={{ display: 'grid', gap: 6 }}>
+        <section className="twoPane" style={{ alignItems: 'start' }}>
+          <aside
+            style={{
+              position: 'sticky',
+              top: 96,
+              alignSelf: 'start',
+              display: 'grid',
+              gap: 16
+            }}
+          >
+            <div
+              style={{
+                display: 'grid',
+                gap: 8,
+                paddingBottom: 14,
+                borderBottom: '1px solid var(--border)'
+              }}
+            >
               <h2 style={{ margin: 0 }}>Saved conversations</h2>
               <p className="small" style={{ margin: 0 }}>
                 {conversations.length} saved {conversations.length === 1 ? 'conversation' : 'conversations'}
@@ -241,17 +312,13 @@ export default async function HistoryPage({
                       )}&conversation=${conversation.id}`;
 
                 return (
-                  <div
-                    key={conversation.id}
-                    className={`sessionItem ${isActive ? 'active' : ''}`}
-                    style={{ display: 'grid', gap: 8 }}
-                  >
-                    <a href={href}>
+                  <div key={conversation.id} className={`sessionItem ${isActive ? 'active' : ''}`}>
+                    <a href={href} style={{ display: 'block' }}>
                       <p className="small" style={{ margin: '0 0 6px' }}>
                         <strong>{makePreview(firstPrompt)}</strong>
                       </p>
                       <p className="small" style={{ margin: 0 }}>
-                        {conversation.audience} • Updated {formatDate(conversation.updated_at)}
+                        {audienceLabel(conversation.audience)} • Updated {formatDate(conversation.updated_at)}
                       </p>
                     </a>
 
@@ -268,24 +335,41 @@ export default async function HistoryPage({
                 );
               })}
             </div>
-          </div>
+          </aside>
 
-          <div className="card" style={{ display: 'grid', gap: 14 }}>
-            <div className="buttonRow" style={{ justifyContent: 'space-between' }}>
-              <div style={{ display: 'grid', gap: 4 }}>
-                <h2 style={{ margin: 0 }}>Conversation thread</h2>
-                <p className="small" style={{ margin: 0 }}>
-                  View the full question-and-answer flow for the selected session.
-                </p>
+          <main style={{ display: 'grid', gap: 20, minWidth: 0 }}>
+            <section
+              style={{
+                display: 'grid',
+                gap: 14,
+                paddingBottom: 16,
+                borderBottom: '1px solid var(--border)'
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  gap: 14,
+                  alignItems: 'flex-start',
+                  flexWrap: 'wrap'
+                }}
+              >
+                <div style={{ display: 'grid', gap: 4 }}>
+                  <h2 style={{ margin: 0 }}>Conversation thread</h2>
+                  <p className="small" style={{ margin: 0 }}>
+                    View the full question-and-answer flow for the selected session.
+                  </p>
+                </div>
+
+                {historyMode === 'account' && selectedConversation ? (
+                  <DeleteConversationButton
+                    conversationId={selectedConversation.id}
+                    redirectHref="/history"
+                  />
+                ) : null}
               </div>
-
-              {historyMode === 'account' && selectedConversation ? (
-                <DeleteConversationButton
-                  conversationId={selectedConversation.id}
-                  redirectHref="/history"
-                />
-              ) : null}
-            </div>
+            </section>
 
             {selectedConversation ? (
               <ConversationThread
@@ -306,7 +390,7 @@ export default async function HistoryPage({
                 Select a conversation to view it.
               </p>
             )}
-          </div>
+          </main>
         </section>
       )}
     </div>
