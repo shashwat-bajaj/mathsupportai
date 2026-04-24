@@ -2,7 +2,6 @@
 
 import { motion } from 'motion/react';
 import BetaSignup from '@/components/BetaSignup';
-import HomeHeroScene from '@/components/HomeHeroScene';
 
 const sectionReveal = {
   initial: { opacity: 0, y: 16 },
@@ -13,151 +12,173 @@ const sectionReveal = {
 
 export default function HomePage() {
   return (
-    <div className="grid" style={{ gap: 44 }}>
-      <motion.section
-        initial={{ opacity: 0, y: 14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.56, ease: 'easeOut' }}
-        style={{
-          position: 'relative',
-          minHeight: 'calc(100vh - 92px)',
-          marginLeft: 'calc(50% - 50vw)',
-          marginRight: 'calc(50% - 50vw)',
-          overflow: 'hidden'
-        }}
-      >
-        <div style={{ position: 'absolute', inset: 0 }}>
-          <HomeHeroScene />
-        </div>
+    <div className="grid" style={{ gap: 48 }}>
+      <section className="landingHero">
+        <div className="landingHeroInner">
+          <div className="landingHeroGrid">
+            <div className="heroCopy">
+              <motion.span
+                className="badge"
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.04, duration: 0.28, ease: 'easeOut' }}
+              >
+                Free beta now live
+              </motion.span>
 
-        <div
-          style={{
-            position: 'relative',
-            zIndex: 2,
-            maxWidth: 1180,
-            margin: '0 auto',
-            minHeight: 'calc(100vh - 92px)',
-            display: 'grid',
-            alignItems: 'center',
-            padding: 'clamp(88px, 14vh, 144px) 24px 42px'
-          }}
-        >
-          <div
-            style={{
-              display: 'grid',
-              gap: 20,
-              maxWidth: 640
-            }}
-          >
-            <motion.span
-              className="badge"
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.04, duration: 0.28, ease: 'easeOut' }}
-            >
-              Free beta now live
-            </motion.span>
+              <motion.h1
+                className="heroTitle"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.42, ease: 'easeOut' }}
+              >
+                Math help that stays clear after the first answer.
+              </motion.h1>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.4, ease: 'easeOut' }}
-              style={{
-                margin: 0,
-                maxWidth: 620
-              }}
-            >
-              Math help that stays clear after the first answer.
-            </motion.h1>
+              <motion.p
+                className="heroSubtext"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.18, duration: 0.4, ease: 'easeOut' }}
+              >
+                For students and parents who want explanation, graphing, and follow-up flow in one
+                calmer workspace.
+              </motion.p>
 
-            <motion.p
-              className="heroSubtext"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.18, duration: 0.4, ease: 'easeOut' }}
-              style={{
-                margin: 0,
-                maxWidth: 560
-              }}
-            >
-              For students and parents who want explanation, graphing, and follow-up flow in one
-              calmer workspace.
-            </motion.p>
+              <motion.div
+                className="buttonRow"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.24, duration: 0.38, ease: 'easeOut' }}
+              >
+                <a className="btn" href="/tutor">
+                  Open Student Workspace
+                </a>
+                <a className="btn secondary" href="/parents">
+                  Open Parent Workspace
+                </a>
+              </motion.div>
+
+              <motion.div
+                className="heroProof"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.32, duration: 0.38, ease: 'easeOut' }}
+              >
+                <div className="proofItem">
+                  <strong>Graphing</strong>
+                  <span className="small">
+                    Plot functions and keep the visual tied to the same thread.
+                  </span>
+                </div>
+
+                <div className="proofItem">
+                  <strong>Follow-ups</strong>
+                  <span className="small">
+                    Ask the next question without losing the context.
+                  </span>
+                </div>
+
+                <div className="proofItem">
+                  <strong>Accessibility</strong>
+                  <span className="small">
+                    Read aloud, translation, and saved defaults in one place.
+                  </span>
+                </div>
+              </motion.div>
+            </div>
 
             <motion.div
-              className="buttonRow"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.24, duration: 0.38, ease: 'easeOut' }}
+              className="heroVisual"
+              initial={{ opacity: 0, y: 20, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.16, duration: 0.6, ease: 'easeOut' }}
             >
-              <a className="btn" href="/tutor">
-                Open Student Workspace
-              </a>
-              <a className="btn secondary" href="/parents">
-                Open Parent Workspace
-              </a>
+              <div className="windowShell">
+                <div className="windowBar">
+                  <div className="windowDots">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                  <span className="small">MathSupport AI workspace</span>
+                </div>
+
+                <div className="previewStack">
+                  <div className="previewPanel previewChat">
+                    <div className="previewPrompt small">
+                      Solve x² − 5x + 6 = 0, graph it, and then show me a common mistake.
+                    </div>
+
+                    <div className="previewResponse small">
+                      The same workspace can explain the method, show the graph, diagnose the
+                      mistake, and keep the follow-up connected to the original question.
+                    </div>
+                  </div>
+
+                  <div className="previewGrid">
+                    <div className="previewGraphCard">
+                      <div className="previewAxisX" />
+                      <div className="previewAxisY" />
+                      <div className="previewLine" />
+                      <div className="previewDot one" />
+                      <div className="previewDot two" />
+                      <div className="previewDot three" />
+                    </div>
+
+                    <div className="previewMiniCard">
+                      <span className="badge">Current thread</span>
+                      <p className="small" style={{ margin: 0 }}>
+                        Graphing, guided follow-ups, saved sessions, and cleaner continuity across
+                        the whole study flow.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="previewPanel">
+                    <div
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+                        gap: 12
+                      }}
+                    >
+                      <div>
+                        <p className="small" style={{ margin: '0 0 4px' }}>
+                          <strong>Students</strong>
+                        </p>
+                        <p className="small" style={{ margin: 0 }}>
+                          Solve, graph, diagnose, and continue.
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="small" style={{ margin: '0 0 4px' }}>
+                          <strong>Parents</strong>
+                        </p>
+                        <p className="small" style={{ margin: 0 }}>
+                          Simpler explanation and talking points.
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="small" style={{ margin: '0 0 4px' }}>
+                          <strong>History</strong>
+                        </p>
+                        <p className="small" style={{ margin: 0 }}>
+                          Revisit earlier sessions without losing the thread.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           </div>
         </div>
+      </section>
 
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.32, duration: 0.4, ease: 'easeOut' }}
-          style={{
-            position: 'relative',
-            zIndex: 2,
-            maxWidth: 1180,
-            margin: '0 auto',
-            padding: '0 24px 28px'
-          }}
-        >
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-              gap: 16,
-              borderTop: '1px solid var(--border)',
-              paddingTop: 18
-            }}
-          >
-            <div style={{ display: 'grid', gap: 6 }}>
-              <p className="small" style={{ margin: 0 }}>
-                <strong>Graphing</strong>
-              </p>
-              <p className="small" style={{ margin: 0 }}>
-                Plot functions and keep the visual tied to the same thread.
-              </p>
-            </div>
-
-            <div style={{ display: 'grid', gap: 6 }}>
-              <p className="small" style={{ margin: 0 }}>
-                <strong>Follow-ups</strong>
-              </p>
-              <p className="small" style={{ margin: 0 }}>
-                Ask the next question without losing the context.
-              </p>
-            </div>
-
-            <div style={{ display: 'grid', gap: 6 }}>
-              <p className="small" style={{ margin: 0 }}>
-                <strong>Accessibility</strong>
-              </p>
-              <p className="small" style={{ margin: 0 }}>
-                Read aloud, translation, and saved defaults in one place.
-              </p>
-            </div>
-          </div>
-        </motion.div>
-      </motion.section>
-
-      <motion.section
-        {...sectionReveal}
-        style={{
-          display: 'grid',
-          gap: 22
-        }}
-      >
+      <motion.section {...sectionReveal} className="grid" style={{ gap: 22 }}>
         <div style={{ display: 'grid', gap: 8, maxWidth: 760 }}>
           <span className="badge">How it fits</span>
           <h2 style={{ margin: 0 }}>One system, two ways in.</h2>
@@ -168,16 +189,8 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: 28,
-            paddingTop: 8,
-            borderTop: '1px solid var(--border)'
-          }}
-        >
-          <div style={{ display: 'grid', gap: 16, minWidth: 0 }}>
+        <div className="sectionSplit">
+          <div className="sectionCell">
             <span className="badge">Students</span>
             <h3 style={{ margin: 0 }}>Work through the math, then keep going.</h3>
             <p className="small" style={{ margin: 0, maxWidth: 520 }}>
@@ -192,7 +205,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gap: 16, minWidth: 0 }}>
+          <div className="sectionCell">
             <span className="badge">Parents</span>
             <h3 style={{ margin: 0 }}>Support a child more clearly.</h3>
             <p className="small" style={{ margin: 0, maxWidth: 520 }}>

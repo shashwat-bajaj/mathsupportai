@@ -249,11 +249,7 @@ export default async function TutorPage({
                   'Untitled conversation';
 
                 return (
-                  <div
-                    key={conversation.id}
-                    className={`sessionItem ${isActive ? 'active' : ''}`}
-                    style={{ display: 'grid', gap: 8 }}
-                  >
+                  <div key={conversation.id} className={`sessionItem ${isActive ? 'active' : ''}`}>
                     <a href={`/tutor?conversation=${conversation.id}`} style={{ display: 'block' }}>
                       <p className="small" style={{ margin: '0 0 6px' }}>
                         <strong>{makePreview(firstPrompt)}</strong>

@@ -389,11 +389,11 @@ export default function MathTutor({
     }
   }
 
-  const splitFieldStyle: React.CSSProperties = {
+  const splitFieldStyle = {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
     gap: 16
-  };
+  } as const;
 
   const showRetryButton =
     !loading && !!answer && isRetryableTutorMessage(answer) && !!lastRequestPayload;

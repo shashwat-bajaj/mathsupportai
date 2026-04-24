@@ -40,7 +40,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <div
             style={{
               width: '100%',
-              maxWidth: 1180,
+              maxWidth: 1240,
               margin: '0 auto',
               display: 'grid',
               gap: 14
@@ -57,23 +57,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             >
               <BrandMark />
 
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 12,
-                  flexWrap: 'wrap'
-                }}
-              >
-                <nav className="mainNav" aria-label="Primary navigation">
-                  {primaryLinks.map((link) => (
-                    <a key={link.href} href={link.href}>
-                      {link.label}
-                    </a>
-                  ))}
-                  <AuthNav />
-                </nav>
-              </div>
+              <nav className="mainNav" aria-label="Primary navigation">
+                {primaryLinks.map((link) => (
+                  <a key={link.href} href={link.href}>
+                    {link.label}
+                  </a>
+                ))}
+                <AuthNav />
+              </nav>
             </div>
 
             <div
@@ -85,12 +76,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 flexWrap: 'wrap'
               }}
             >
-              <div
-                className="buttonRow"
-                style={{
-                  gap: 8
-                }}
-              >
+              <div className="buttonRow" style={{ gap: 8 }}>
                 {utilityLinks.map((link) => (
                   <a
                     key={link.href}
@@ -103,7 +89,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                       padding: '0 12px',
                       borderRadius: 999,
                       border: '1px solid var(--border)',
-                      background: 'color-mix(in srgb, var(--surface-soft) 88%, transparent)'
+                      background: 'color-mix(in srgb, var(--surface-soft) 84%, transparent)'
                     }}
                   >
                     {link.label}
