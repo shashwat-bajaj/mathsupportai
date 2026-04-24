@@ -13,37 +13,35 @@ export default function ActionCard({
     <div
       className="card"
       style={{
-        display: 'flex',
-        flexDirection: 'column',
+        display: 'grid',
+        gridTemplateRows: 'auto 1fr auto',
+        gap: 14,
         height: '100%',
-        gap: 10
+        minHeight: 220
       }}
     >
+      <div style={{ display: 'grid', gap: 8 }}>
+        <span className="badge">Action</span>
+        <h3 style={{ margin: 0 }}>{title}</h3>
+      </div>
+
       <div
+        className="small"
         style={{
-          display: 'grid',
-          gap: 8
+          margin: 0,
+          lineHeight: 1.6,
+          maxWidth: 460
         }}
       >
-        <h3 style={{ margin: 0 }}>{title}</h3>
-
-        <div
-          className="small"
-          style={{
-            margin: 0,
-            minHeight: '2.8em',
-            lineHeight: 1.4
-          }}
-        >
-          {description}
-        </div>
+        {description}
       </div>
 
       <div
         className="buttonRow"
         style={{
           marginTop: 'auto',
-          paddingTop: 4
+          paddingTop: 10,
+          borderTop: '1px solid var(--border)'
         }}
       >
         {action}

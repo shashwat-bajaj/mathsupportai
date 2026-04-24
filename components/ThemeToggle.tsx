@@ -86,31 +86,36 @@ export default function ThemeToggle() {
     void savePreferenceToSupabase(nextPreference);
   }
 
+  const options: Array<{ value: ThemePreference; label: string }> = [
+    { value: 'system', label: 'System' },
+    { value: 'light', label: 'Light' },
+    { value: 'dark', label: 'Dark' }
+  ];
+
   return (
-    <div className="themeSwitcher" role="group" aria-label="Theme selection">
-      <button
-        type="button"
-        onClick={() => setThemePreference('system')}
-        className={preference === 'system' ? 'themeOption active' : 'themeOption'}
-      >
-        System
-      </button>
+    <div
+      style={{
+        display: 'grid',
+        gap: 8
+      }}
+    >
+      <p className="small" style={{ margin: 0 }}>
+        <strong>Theme</strong>
+      </p>
 
-      <button
-        type="button"
-        onClick={() => setThemePreference('light')}
-        className={preference === 'light' ? 'themeOption active' : 'themeOption'}
-      >
-        Light
-      </button>
-
-      <button
-        type="button"
-        onClick={() => setThemePreference('dark')}
-        className={preference === 'dark' ? 'themeOption active' : 'themeOption'}
-      >
-        Dark
-      </button>
+      <div className="themeSwitcher" role="group" aria-label="Theme selection">
+        {options.map((option) => (
+          <button
+            key={option.value}
+            type="button"
+            onClick={() => setThemePreference(option.value)}
+            className={preference === option.value ? 'themeOption active' : 'themeOption'}
+            aria-pressed={preference === option.value}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

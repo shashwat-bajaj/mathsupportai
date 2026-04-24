@@ -15,6 +15,8 @@ export default function DeleteTurnButton({
   const [loading, setLoading] = useState(false);
 
   async function handleDelete() {
+    if (loading) return;
+
     setLoading(true);
 
     try {
@@ -45,7 +47,10 @@ export default function DeleteTurnButton({
         type="button"
         className="secondary"
         onClick={() => setConfirming(true)}
-        style={{ padding: '8px 10px' }}
+        style={{
+          padding: '8px 10px',
+          minHeight: 34
+        }}
       >
         Delete Follow-up
       </button>
@@ -53,24 +58,45 @@ export default function DeleteTurnButton({
   }
 
   return (
-    <div className="buttonRow">
-      <span className="small">Delete this follow-up?</span>
-      <button
-        type="button"
-        className="secondary"
-        onClick={() => setConfirming(false)}
-        style={{ padding: '8px 10px' }}
-      >
-        Cancel
-      </button>
-      <button
-        type="button"
-        onClick={handleDelete}
-        disabled={loading}
-        style={{ padding: '8px 10px' }}
-      >
-        {loading ? 'Deleting...' : 'Delete permanently'}
-      </button>
+    <div
+      style={{
+        display: 'grid',
+        gap: 10,
+        padding: 12,
+        borderRadius: 16,
+        border: '1px solid var(--border)',
+        background: 'color-mix(in srgb, var(--surface-soft) 86%, transparent)'
+      }}
+    >
+      <p className="small" style={{ margin: 0 }}>
+        Delete this follow-up from the thread?
+      </p>
+
+      <div className="buttonRow">
+        <button
+          type="button"
+          className="secondary"
+          onClick={() => setConfirming(false)}
+          style={{ padding: '8px 10px', minHeight: 34 }}
+        >
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          onClick={handleDelete}
+          disabled={loading}
+          style={{
+            padding: '8px 10px',
+            minHeight: 34,
+            background:
+              'linear-gradient(135deg, rgba(210,72,87,0.92), rgba(175,36,57,0.98))',
+            boxShadow: '0 10px 22px rgba(175,36,57,0.18)'
+          }}
+        >
+          {loading ? 'Deleting...' : 'Delete permanently'}
+        </button>
+      </div>
     </div>
   );
 }

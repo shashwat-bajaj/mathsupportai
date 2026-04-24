@@ -16,7 +16,11 @@ export default function DeleteConversationButton({
   const [confirming, setConfirming] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const compactPadding = compact ? '8px 10px' : '10px 12px';
+
   async function handleDelete() {
+    if (loading) return;
+
     setLoading(true);
 
     try {
@@ -47,7 +51,10 @@ export default function DeleteConversationButton({
         type="button"
         className="secondary"
         onClick={() => setConfirming(true)}
-        style={{ padding: compact ? '8px 10px' : '10px 12px' }}
+        style={{
+          padding: compactPadding,
+          minHeight: compact ? 34 : 38
+        }}
       >
         Delete
       </button>
@@ -55,24 +62,46 @@ export default function DeleteConversationButton({
   }
 
   return (
-    <div className="buttonRow">
-      <span className="small">Confirm delete?</span>
-      <button
-        type="button"
-        className="secondary"
-        onClick={() => setConfirming(false)}
-        style={{ padding: compact ? '8px 10px' : '10px 12px' }}
-      >
-        Cancel
-      </button>
-      <button
-        type="button"
-        onClick={handleDelete}
-        disabled={loading}
-        style={{ padding: compact ? '8px 10px' : '10px 12px' }}
-      >
-        {loading ? 'Deleting...' : 'Delete permanently'}
-      </button>
+    <div
+      style={{
+        display: 'grid',
+        gap: 10,
+        width: '100%',
+        padding: compact ? 0 : 12,
+        borderRadius: compact ? 0 : 16,
+        border: compact ? 'none' : '1px solid var(--border)',
+        background: compact ? 'transparent' : 'color-mix(in srgb, var(--surface-soft) 86%, transparent)'
+      }}
+    >
+      <p className="small" style={{ margin: 0 }}>
+        Confirm permanent deletion of this conversation?
+      </p>
+
+      <div className="buttonRow">
+        <button
+          type="button"
+          className="secondary"
+          onClick={() => setConfirming(false)}
+          style={{ padding: compactPadding, minHeight: compact ? 34 : 38 }}
+        >
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          onClick={handleDelete}
+          disabled={loading}
+          style={{
+            padding: compactPadding,
+            minHeight: compact ? 34 : 38,
+            background:
+              'linear-gradient(135deg, rgba(210,72,87,0.92), rgba(175,36,57,0.98))',
+            boxShadow: '0 10px 22px rgba(175,36,57,0.18)'
+          }}
+        >
+          {loading ? 'Deleting...' : 'Delete permanently'}
+        </button>
+      </div>
     </div>
   );
 }
