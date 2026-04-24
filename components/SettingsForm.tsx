@@ -17,6 +17,8 @@ type GradeLevel = 'elementary' | 'middle-school' | 'high-school' | 'college';
 type TutorMode = 'auto' | 'teach' | 'hint' | 'diagnose' | 'quiz';
 
 function resolveTheme(theme: ThemePreference) {
+  if (typeof window === 'undefined') return theme === 'light' ? 'light' : 'dark';
+
   if (theme === 'system') {
     return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
   }
@@ -53,9 +55,13 @@ export default function SettingsForm({
     useState<GradeLevel>(initialParentGradeLevel);
 
   const [status, setStatus] = useState('');
+  const [loading, setLoading] = useState(false);
 
   async function saveSettings() {
+    if (loading) return;
+
     setStatus('Saving settings...');
+    setLoading(true);
 
     const {
       data: { user }
@@ -63,6 +69,7 @@ export default function SettingsForm({
 
     if (!user) {
       setStatus('You must be logged in.');
+      setLoading(false);
       return;
     }
 
@@ -88,6 +95,7 @@ export default function SettingsForm({
 
     if (error) {
       setStatus(error.message);
+      setLoading(false);
       return;
     }
 
@@ -95,14 +103,34 @@ export default function SettingsForm({
     document.documentElement.setAttribute('data-theme', resolveTheme(themePreference));
 
     setStatus('Settings saved.');
+    setLoading(false);
   }
 
   return (
-    <div className="card">
-      <h2 style={{ marginTop: 0 }}>Preferences</h2>
+    <div style={{ display: 'grid', gap: 24 }}>
+      <section
+        style={{
+          display: 'grid',
+          gap: 16,
+          paddingBottom: 18,
+          borderBottom: '1px solid var(--border)'
+        }}
+      >
+        <div style={{ display: 'grid', gap: 8 }}>
+          <h3 style={{ margin: 0 }}>Display and language</h3>
+          <p className="small" style={{ margin: 0 }}>
+            Choose how the product looks by default and what translation language should be ready
+            when you need it.
+          </p>
+        </div>
 
-      <div className="grid" style={{ gap: 20 }}>
-        <div className="grid cols-3">
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: 16
+          }}
+        >
           <div>
             <label>Theme preference</label>
             <select
@@ -134,74 +162,119 @@ export default function SettingsForm({
             </select>
           </div>
         </div>
+      </section>
 
-        <div className="card">
-          <h3 style={{ marginTop: 0 }}>Student Tutor Defaults</h3>
-          <p className="small" style={{ marginTop: 0 }}>
+      <section
+        style={{
+          display: 'grid',
+          gap: 16,
+          paddingBottom: 18,
+          borderBottom: '1px solid var(--border)'
+        }}
+      >
+        <div style={{ display: 'grid', gap: 8 }}>
+          <h3 style={{ margin: 0 }}>Student tutor defaults</h3>
+          <p className="small" style={{ margin: 0 }}>
             Auto mode follows the wording of the question more naturally, while the other modes
             push the tutor toward a more specific teaching style.
           </p>
-
-          <div className="grid cols-3">
-            <div>
-              <label>Default learner level</label>
-              <select
-                value={studentGradeLevel}
-                onChange={(e) => setStudentGradeLevel(e.target.value as GradeLevel)}
-              >
-                <option value="elementary">Elementary</option>
-                <option value="middle-school">Middle school</option>
-                <option value="high-school">High school</option>
-                <option value="college">College</option>
-              </select>
-            </div>
-
-            <div>
-              <label>Default tutor mode</label>
-              <select
-                value={studentTutorMode}
-                onChange={(e) => setStudentTutorMode(e.target.value as TutorMode)}
-              >
-                <option value="auto">Auto (follow my request)</option>
-                <option value="teach">Teach me step by step</option>
-                <option value="hint">Give hints only</option>
-                <option value="diagnose">Diagnose my mistake</option>
-                <option value="quiz">Turn this into practice questions</option>
-              </select>
-            </div>
-          </div>
         </div>
 
-        <div className="card">
-          <h3 style={{ marginTop: 0 }}>Parent Tutor Defaults</h3>
-          <p className="small">
-            Parent Tutor stays in guided hint mode by design, but you can choose the
-            default learner level here.
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: 16
+          }}
+        >
+          <div>
+            <label>Default learner level</label>
+            <select
+              value={studentGradeLevel}
+              onChange={(e) => setStudentGradeLevel(e.target.value as GradeLevel)}
+            >
+              <option value="elementary">Elementary</option>
+              <option value="middle-school">Middle school</option>
+              <option value="high-school">High school</option>
+              <option value="college">College</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Default tutor mode</label>
+            <select
+              value={studentTutorMode}
+              onChange={(e) => setStudentTutorMode(e.target.value as TutorMode)}
+            >
+              <option value="auto">Auto (follow my request)</option>
+              <option value="teach">Teach me step by step</option>
+              <option value="hint">Give hints only</option>
+              <option value="diagnose">Diagnose my mistake</option>
+              <option value="quiz">Turn this into practice questions</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section
+        style={{
+          display: 'grid',
+          gap: 16
+        }}
+      >
+        <div style={{ display: 'grid', gap: 8 }}>
+          <h3 style={{ margin: 0 }}>Parent tutor defaults</h3>
+          <p className="small" style={{ margin: 0 }}>
+            Parent Tutor stays in guided hint mode by design, but you can choose the default
+            learner level here.
           </p>
-
-          <div className="grid cols-3">
-            <div>
-              <label>Default learner level</label>
-              <select
-                value={parentGradeLevel}
-                onChange={(e) => setParentGradeLevel(e.target.value as GradeLevel)}
-              >
-                <option value="elementary">Elementary</option>
-                <option value="middle-school">Middle school</option>
-                <option value="high-school">High school</option>
-                <option value="college">College</option>
-              </select>
-            </div>
-          </div>
         </div>
 
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: 16
+          }}
+        >
+          <div>
+            <label>Default learner level</label>
+            <select
+              value={parentGradeLevel}
+              onChange={(e) => setParentGradeLevel(e.target.value as GradeLevel)}
+            >
+              <option value="elementary">Elementary</option>
+              <option value="middle-school">Middle school</option>
+              <option value="high-school">High school</option>
+              <option value="college">College</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <div
+        style={{
+          display: 'grid',
+          gap: 12,
+          paddingTop: 18,
+          borderTop: '1px solid var(--border)'
+        }}
+      >
         <div className="buttonRow">
-          <button type="button" onClick={saveSettings}>
-            Save Settings
+          <button type="button" onClick={saveSettings} disabled={loading}>
+            {loading ? 'Saving...' : 'Save Settings'}
           </button>
         </div>
 
-        {status ? <p className="small">{status}</p> : null}
+        {status ? (
+          <p className="small" style={{ margin: 0 }}>
+            {status}
+          </p>
+        ) : (
+          <p className="small" style={{ margin: 0 }}>
+            Saved changes affect your default experience, but you can still adjust things inside a session.
+          </p>
+        )}
       </div>
     </div>
   );
