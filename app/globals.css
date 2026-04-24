@@ -25,7 +25,7 @@ html[data-theme='dark'] {
   --border: rgba(166, 180, 214, 0.12);
   --border-strong: rgba(190, 200, 226, 0.22);
 
-  --topbar: rgba(8, 11, 22, 0.72);
+  --topbar: rgba(8, 11, 22, 0.92);
 
   --shadow-soft: 0 14px 28px rgba(0, 0, 0, 0.12);
   --shadow-panel: 0 26px 62px rgba(2, 6, 23, 0.22);
@@ -62,7 +62,7 @@ html[data-theme='light'] {
   --border: rgba(94, 112, 146, 0.12);
   --border-strong: rgba(84, 101, 134, 0.18);
 
-  --topbar: rgba(251, 252, 255, 0.78);
+  --topbar: rgba(251, 252, 255, 0.94);
 
   --shadow-soft: 0 10px 24px rgba(30, 50, 90, 0.06);
   --shadow-panel: 0 20px 44px rgba(25, 45, 86, 0.08);
@@ -130,15 +130,42 @@ a {
   top: 0;
   z-index: 50;
   background: var(--topbar);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
+}
+
+.headerShell {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  gap: 12px;
+}
+
+.headerBrand {
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.headerNavWrap {
+  min-width: 0;
+  overflow: hidden;
 }
 
 .mainNav {
   display: flex;
   gap: 8px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mainNav::-webkit-scrollbar {
+  display: none;
 }
 
 .mainNav a {
@@ -148,6 +175,8 @@ a {
   padding: 0 13px;
   border-radius: 999px;
   color: var(--text-soft);
+  white-space: nowrap;
+  flex-shrink: 0;
   transition:
     color 0.2s var(--ease-premium),
     background 0.2s var(--ease-premium),
@@ -421,9 +450,10 @@ pre {
 
 .landingHero {
   position: relative;
-  min-height: calc(100vh - 94px);
+  min-height: calc(100vh - 82px);
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
+  margin-top: 0;
   overflow: hidden;
   border-bottom: 1px solid var(--border);
 }
@@ -435,7 +465,12 @@ pre {
   background:
     radial-gradient(circle at 18% 22%, rgba(134, 104, 255, 0.2), transparent 24%),
     radial-gradient(circle at 78% 20%, rgba(124, 202, 255, 0.12), transparent 24%),
-    linear-gradient(180deg, rgba(7, 10, 20, 0.28), rgba(8, 13, 24, 0.02) 40%, rgba(8, 13, 24, 0.22) 100%);
+    linear-gradient(
+      180deg,
+      rgba(7, 10, 20, 0.28),
+      rgba(8, 13, 24, 0.02) 40%,
+      rgba(8, 13, 24, 0.22) 100%
+    );
   pointer-events: none;
 }
 
@@ -457,10 +492,11 @@ pre {
   z-index: 2;
   max-width: 1240px;
   margin: 0 auto;
-  min-height: calc(100vh - 94px);
+  min-height: calc(100vh - 82px);
   display: grid;
   align-items: center;
-  padding: clamp(88px, 14vh, 144px) 24px 48px;
+  box-sizing: border-box;
+  padding: clamp(40px, 6.5vh, 72px) 24px 30px;
 }
 
 .landingHeroGrid {
@@ -523,7 +559,11 @@ pre {
   border-radius: 30px;
   border: 1px solid var(--border);
   background:
-    linear-gradient(180deg, color-mix(in srgb, var(--panel-strong) 96%, transparent), var(--panel-strong)),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--panel-strong) 96%, transparent),
+      var(--panel-strong)
+    ),
     linear-gradient(135deg, rgba(255, 255, 255, 0.018), transparent 44%);
   box-shadow: var(--shadow-float);
   padding: 18px;
@@ -726,7 +766,11 @@ pre {
 .sessionItem.active {
   border-color: color-mix(in srgb, var(--accent) 80%, white 20%);
   background:
-    linear-gradient(180deg, color-mix(in srgb, var(--surface-soft) 92%, transparent), var(--surface-soft)),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface-soft) 92%, transparent),
+      var(--surface-soft)
+    ),
     radial-gradient(circle at top left, var(--accent-soft), transparent 32%);
 }
 
@@ -896,6 +940,12 @@ pre {
 
 /* Responsive */
 
+@media (max-width: 1180px) {
+  .brandSubtitle {
+    display: none;
+  }
+}
+
 @media (max-width: 1080px) {
   .landingHeroGrid {
     grid-template-columns: 1fr;
@@ -915,25 +965,11 @@ pre {
   .twoPane {
     grid-template-columns: 1fr;
   }
-
-  .topbar {
-    align-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  .mainNav {
-    gap: 10px;
-    width: 100%;
-  }
 }
 
 @media (max-width: 900px) {
   .container {
     padding: 20px 18px;
-  }
-
-  .brandSubtitle {
-    display: none;
   }
 
   .heroTitle {
@@ -945,21 +981,17 @@ pre {
   }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 760px) {
   .topbar {
-    padding: 16px 18px;
+    padding: 16px 18px 14px;
   }
 
   .mainNav {
-    gap: 8px 10px;
-    font-size: 0.95rem;
+    padding-bottom: 2px;
   }
+}
 
-  .mainNav a {
-    min-height: 38px;
-    padding: 0 12px;
-  }
-
+@media (max-width: 700px) {
   .card {
     padding: 16px;
   }

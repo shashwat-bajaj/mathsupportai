@@ -12,8 +12,13 @@ const sectionReveal = {
 
 export default function HomePage() {
   return (
-    <div className="grid" style={{ gap: 48 }}>
-      <section className="landingHero">
+    <div className="grid" style={{ gap: 40 }}>
+      <motion.section
+        className="landingHero"
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.56, ease: 'easeOut' }}
+      >
         <div className="landingHeroInner">
           <div className="landingHeroGrid">
             <div className="heroCopy">
@@ -30,7 +35,7 @@ export default function HomePage() {
                 className="heroTitle"
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1, duration: 0.42, ease: 'easeOut' }}
+                transition={{ delay: 0.1, duration: 0.4, ease: 'easeOut' }}
               >
                 Math help that stays clear after the first answer.
               </motion.h1>
@@ -63,36 +68,36 @@ export default function HomePage() {
                 className="heroProof"
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.32, duration: 0.38, ease: 'easeOut' }}
+                transition={{ delay: 0.3, duration: 0.36, ease: 'easeOut' }}
               >
                 <div className="proofItem">
-                  <strong>Graphing</strong>
-                  <span className="small">
-                    Plot functions and keep the visual tied to the same thread.
-                  </span>
+                  <strong>Graph-aware</strong>
+                  <p className="small" style={{ margin: 0 }}>
+                    Move from explanation to graphing without breaking the thread.
+                  </p>
                 </div>
 
                 <div className="proofItem">
-                  <strong>Follow-ups</strong>
-                  <span className="small">
-                    Ask the next question without losing the context.
-                  </span>
+                  <strong>Session continuity</strong>
+                  <p className="small" style={{ margin: 0 }}>
+                    Return to older work and continue naturally.
+                  </p>
                 </div>
 
                 <div className="proofItem">
-                  <strong>Accessibility</strong>
-                  <span className="small">
-                    Read aloud, translation, and saved defaults in one place.
-                  </span>
+                  <strong>Parent support</strong>
+                  <p className="small" style={{ margin: 0 }}>
+                    Simpler explanation flows for helping a child learn.
+                  </p>
                 </div>
               </motion.div>
             </div>
 
             <motion.div
               className="heroVisual"
-              initial={{ opacity: 0, y: 20, scale: 0.98 }}
+              initial={{ opacity: 0, y: 10, scale: 0.995 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ delay: 0.16, duration: 0.6, ease: 'easeOut' }}
+              transition={{ delay: 0.18, duration: 0.56, ease: 'easeOut' }}
             >
               <div className="windowShell">
                 <div className="windowBar">
@@ -101,18 +106,22 @@ export default function HomePage() {
                     <span />
                     <span />
                   </div>
-                  <span className="small">MathSupport AI workspace</span>
+                  <span className="small">Tutor preview</span>
                 </div>
 
                 <div className="previewStack">
                   <div className="previewPanel previewChat">
-                    <div className="previewPrompt small">
-                      Solve x² − 5x + 6 = 0, graph it, and then show me a common mistake.
+                    <div className="previewPrompt">
+                      <p className="small" style={{ margin: 0 }}>
+                        Solve x² − 5x + 6 = 0, graph it, and show me one common mistake.
+                      </p>
                     </div>
 
-                    <div className="previewResponse small">
-                      The same workspace can explain the method, show the graph, diagnose the
-                      mistake, and keep the follow-up connected to the original question.
+                    <div className="previewResponse">
+                      <p className="small" style={{ margin: 0 }}>
+                        The same workspace can explain the method, render the graph, diagnose the
+                        mistake, and keep the next question connected.
+                      </p>
                     </div>
                   </div>
 
@@ -127,48 +136,10 @@ export default function HomePage() {
                     </div>
 
                     <div className="previewMiniCard">
-                      <span className="badge">Current thread</span>
+                      <span className="badge">Session tools</span>
                       <p className="small" style={{ margin: 0 }}>
-                        Graphing, guided follow-ups, saved sessions, and cleaner continuity across
-                        the whole study flow.
+                        Graphing, guided follow-ups, saved sessions, read aloud, and translation.
                       </p>
-                    </div>
-                  </div>
-
-                  <div className="previewPanel">
-                    <div
-                      style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-                        gap: 12
-                      }}
-                    >
-                      <div>
-                        <p className="small" style={{ margin: '0 0 4px' }}>
-                          <strong>Students</strong>
-                        </p>
-                        <p className="small" style={{ margin: 0 }}>
-                          Solve, graph, diagnose, and continue.
-                        </p>
-                      </div>
-
-                      <div>
-                        <p className="small" style={{ margin: '0 0 4px' }}>
-                          <strong>Parents</strong>
-                        </p>
-                        <p className="small" style={{ margin: 0 }}>
-                          Simpler explanation and talking points.
-                        </p>
-                      </div>
-
-                      <div>
-                        <p className="small" style={{ margin: '0 0 4px' }}>
-                          <strong>History</strong>
-                        </p>
-                        <p className="small" style={{ margin: 0 }}>
-                          Revisit earlier sessions without losing the thread.
-                        </p>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -176,16 +147,16 @@ export default function HomePage() {
             </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      <motion.section {...sectionReveal} className="grid" style={{ gap: 22 }}>
-        <div style={{ display: 'grid', gap: 8, maxWidth: 760 }}>
-          <span className="badge">How it fits</span>
+      <motion.section {...sectionReveal} style={{ display: 'grid', gap: 22 }}>
+        <div style={{ display: 'grid', gap: 8 }}>
+          <span className="badge">How it’s used</span>
           <h2 style={{ margin: 0 }}>One system, two ways in.</h2>
-          <p className="small" style={{ margin: 0 }}>
+          <p className="small" style={{ margin: 0, maxWidth: 1120 }}>
             Students can solve, graph, diagnose, and continue the same thread. Parents can get
-            simpler explanations, examples, and guided support without jumping straight to the
-            final answer.
+            simpler explanations, examples, and guided support without jumping straight to the final
+            answer.
           </p>
         </div>
 
@@ -193,11 +164,10 @@ export default function HomePage() {
           <div className="sectionCell">
             <span className="badge">Students</span>
             <h3 style={{ margin: 0 }}>Work through the math, then keep going.</h3>
-            <p className="small" style={{ margin: 0, maxWidth: 520 }}>
+            <p className="small" style={{ margin: 0, maxWidth: 640 }}>
               Best for direct solving, understanding the method, graphing functions, diagnosing
               mistakes, and asking the next question without restarting the whole flow.
             </p>
-
             <div className="buttonRow">
               <a className="btn" href="/tutor">
                 Go to Students
@@ -208,11 +178,10 @@ export default function HomePage() {
           <div className="sectionCell">
             <span className="badge">Parents</span>
             <h3 style={{ margin: 0 }}>Support a child more clearly.</h3>
-            <p className="small" style={{ margin: 0, maxWidth: 520 }}>
+            <p className="small" style={{ margin: 0, maxWidth: 640 }}>
               Best for simpler explanations, parent talking points, child-friendly examples, and
               guided help that supports learning instead of replacing it.
             </p>
-
             <div className="buttonRow">
               <a className="btn secondary" href="/parents">
                 Go to Parents

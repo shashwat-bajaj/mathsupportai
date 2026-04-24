@@ -20,86 +20,91 @@ const primaryLinks = [
   { href: '/contact', label: 'Contact' }
 ];
 
-const utilityLinks = [
-  { href: '/pricing', label: 'Free Beta' },
-  { href: '/settings', label: 'Settings' }
-];
-
-const legalLinks = [
+const footerLinks = [
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
+  { href: '/pricing', label: 'Pricing' },
+  { href: '/settings', label: 'Settings' },
   { href: '/privacy', label: 'Privacy Policy' },
   { href: '/terms', label: 'Terms of Use' }
 ];
 
+const themeBootstrapScript = `
+(function () {
+  try {
+    var saved = localStorage.getItem('mathsupport-theme') || 'system';
+    var resolved =
+      saved === 'system'
+        ? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+        : saved;
+
+    document.documentElement.setAttribute('data-theme', resolved);
+    document.documentElement.style.colorScheme = resolved;
+    document.body && document.body.setAttribute('data-theme', resolved);
+  } catch (e) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.documentElement.style.colorScheme = 'dark';
+    document.body && document.body.setAttribute('data-theme', 'dark');
+  }
+})();
+`;
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" data-theme="dark">
+    <html lang="en" data-theme="dark" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
+      </head>
+
       <body>
         <header className="topbar">
-          <div
-            style={{
-              width: '100%',
-              maxWidth: 1240,
-              margin: '0 auto',
-              display: 'grid',
-              gap: 14
-            }}
-          >
+          <div className="headerShell">
             <div
+              className="headerMainRow"
               style={{
-                display: 'flex',
-                justifyContent: 'space-between',
+                display: 'grid',
+                gridTemplateColumns: 'auto minmax(0, 1fr)',
                 alignItems: 'center',
-                gap: 18,
-                flexWrap: 'wrap'
+                gap: 28
               }}
             >
-              <BrandMark />
-
-              <nav className="mainNav" aria-label="Primary navigation">
-                {primaryLinks.map((link) => (
-                  <a key={link.href} href={link.href}>
-                    {link.label}
-                  </a>
-                ))}
-                <AuthNav />
-              </nav>
-            </div>
-
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                gap: 12,
-                flexWrap: 'wrap'
-              }}
-            >
-              <div className="buttonRow" style={{ gap: 8 }}>
-                {utilityLinks.map((link) => (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    className="small"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      minHeight: 34,
-                      padding: '0 12px',
-                      borderRadius: 999,
-                      border: '1px solid var(--border)',
-                      background: 'color-mix(in srgb, var(--surface-soft) 84%, transparent)'
-                    }}
-                  >
-                    {link.label}
-                  </a>
-                ))}
+              <div
+                className="headerBrand"
+                style={{
+                  minWidth: 0,
+                  flexShrink: 0
+                }}
+              >
+                <BrandMark />
               </div>
 
-              <p className="small" style={{ margin: 0 }}>
-                AI math support for students and parents.
-              </p>
+              <div
+                className="headerNavWrap"
+                style={{
+                  minWidth: 0,
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  paddingLeft: 12
+                }}
+              >
+                <nav
+                  className="mainNav"
+                  aria-label="Primary navigation"
+                  style={{
+                    justifyContent: 'flex-end',
+                    marginLeft: 'auto',
+                    width: 'auto',
+                    maxWidth: '100%'
+                  }}
+                >
+                  {primaryLinks.map((link) => (
+                    <a key={link.href} href={link.href}>
+                      {link.label}
+                    </a>
+                  ))}
+                  <AuthNav />
+                </nav>
+              </div>
             </div>
           </div>
         </header>
@@ -107,7 +112,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <main
           className="container"
           style={{
-            paddingTop: 24,
+            paddingTop: 0,
             paddingBottom: 22
           }}
         >
@@ -162,7 +167,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               }}
             >
               <div className="buttonRow" style={{ gap: 14 }}>
-                {legalLinks.map((link) => (
+                {footerLinks.map((link) => (
                   <a key={link.href} href={link.href} className="small">
                     {link.label}
                   </a>
