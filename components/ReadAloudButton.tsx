@@ -53,7 +53,6 @@ function getLanguageCode(language: SupportedLanguage) {
 function getLanguagePrefixes(language: SupportedLanguage) {
   const code = getLanguageCode(language).toLowerCase();
   const base = code.split('-')[0];
-
   return [code, base];
 }
 
@@ -170,6 +169,10 @@ export default function ReadAloudButton({
       onClick={isSpeaking ? stopSpeech : startSpeech}
       aria-pressed={isSpeaking}
       aria-label={isSpeaking ? 'Stop reading aloud' : label}
+      style={{
+        minWidth: 132,
+        justifyContent: 'center'
+      }}
     >
       {isSpeaking ? 'Stop Reading' : label}
     </button>

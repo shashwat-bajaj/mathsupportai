@@ -62,9 +62,11 @@ function StatPill({
 }) {
   return (
     <div
-      className="card questionSurface"
+      className="questionSurface"
       style={{
-        padding: 12,
+        padding: 14,
+        borderRadius: 18,
+        border: '1px solid var(--border)',
         display: 'grid',
         gap: 4
       }}
@@ -173,7 +175,15 @@ export default function FunctionGraph({ expression }: { expression: string }) {
             The graph could not be rendered for this expression.
           </p>
         </div>
-        <div className="card questionSurface" style={{ padding: 14 }}>
+
+        <div
+          className="questionSurface"
+          style={{
+            padding: 14,
+            borderRadius: 18,
+            border: '1px solid var(--border)'
+          }}
+        >
           <p className="small" style={{ margin: 0 }}>
             {graph.error}
           </p>
@@ -215,13 +225,12 @@ export default function FunctionGraph({ expression }: { expression: string }) {
   const xTicks = buildTicks(graph.xMin, graph.xMax, 6);
   const yTicks = invalidYWindow ? [] : buildTicks(yMin, yMax, 6);
 
-  const clipId =
-    `graph-clip-${expression.replace(/[^a-z0-9]/gi, '').slice(0, 24) || 'plot'}`;
+  const clipId = `graph-clip-${expression.replace(/[^a-z0-9]/gi, '').slice(0, 24) || 'plot'}`;
   const xSpan = graph.xMax - graph.xMin;
   const ySpan = invalidYWindow ? 0 : yMax - yMin;
 
   return (
-    <div className="card graphCard" style={{ gap: 16 }}>
+    <div className="card graphCard" style={{ gap: 18 }}>
       <div className="graphHeader">
         <div style={{ display: 'grid', gap: 6 }}>
           <h3 style={{ margin: 0 }}>Graph</h3>
@@ -256,9 +265,11 @@ export default function FunctionGraph({ expression }: { expression: string }) {
       </div>
 
       <div
-        className="card questionSurface"
+        className="questionSurface"
         style={{
           padding: 16,
+          borderRadius: 20,
+          border: '1px solid var(--border)',
           display: 'grid',
           gap: 16
         }}
