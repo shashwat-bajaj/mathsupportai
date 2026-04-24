@@ -49,7 +49,7 @@ export default function AnswerDisplay({ text }: { text: string }) {
       }
     }
 
-    loadPreference();
+    void loadPreference();
   }, [text]);
 
   async function handleLanguageChange(nextLanguage: Language) {
@@ -104,11 +104,11 @@ export default function AnswerDisplay({ text }: { text: string }) {
   return (
     <div className="grid" style={{ gap: 14 }}>
       <div
-        className="card questionSurface"
         style={{
-          padding: 14,
           display: 'grid',
-          gap: 12
+          gap: 12,
+          paddingBottom: 14,
+          borderBottom: '1px solid var(--border)'
         }}
       >
         <div
@@ -173,8 +173,17 @@ export default function AnswerDisplay({ text }: { text: string }) {
           </div>
         ) : null}
 
-        {loading ? <p className="small" style={{ margin: 0 }}>Translating...</p> : null}
-        {error ? <p className="small" style={{ margin: 0 }}>{error}</p> : null}
+        {loading ? (
+          <p className="small" style={{ margin: 0 }}>
+            Translating...
+          </p>
+        ) : null}
+
+        {error ? (
+          <p className="small" style={{ margin: 0 }}>
+            {error}
+          </p>
+        ) : null}
       </div>
 
       <div style={{ display: 'grid', gap: 0 }}>

@@ -68,9 +68,16 @@ export default function ConversationThread({
   let lastKnownGraphExpression = '';
 
   return (
-    <div className="grid" style={{ gap: 18 }}>
-      <div className="card threadHeader" style={{ display: 'grid', gap: 14 }}>
-        <div style={{ display: 'grid', gap: 8 }}>
+    <div className="grid" style={{ gap: 22 }}>
+      <section
+        style={{
+          display: 'grid',
+          gap: 16,
+          paddingBottom: 18,
+          borderBottom: '1px solid var(--border)'
+        }}
+      >
+        <div style={{ display: 'grid', gap: 8, maxWidth: 820 }}>
           <h3 style={{ margin: 0 }}>{title || 'Untitled conversation'}</h3>
           <p className="small" style={{ margin: 0 }}>
             Full session thread with saved questions, tutor responses, and graph context where
@@ -79,36 +86,36 @@ export default function ConversationThread({
         </div>
 
         <div
-          className="grid"
           style={{
+            display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-            gap: 12
+            gap: 18
           }}
         >
-          <div className="card questionSurface" style={{ padding: 14 }}>
-            <p className="small" style={{ margin: '0 0 4px' }}>
+          <div style={{ display: 'grid', gap: 4 }}>
+            <p className="small" style={{ margin: 0 }}>
               <strong>Audience</strong>
             </p>
             <p style={{ margin: 0 }}>{formatAudienceLabel(audience)}</p>
           </div>
 
-          <div className="card questionSurface" style={{ padding: 14 }}>
-            <p className="small" style={{ margin: '0 0 4px' }}>
+          <div style={{ display: 'grid', gap: 4 }}>
+            <p className="small" style={{ margin: 0 }}>
               <strong>Started</strong>
             </p>
             <p style={{ margin: 0 }}>{formatDate(createdAt)}</p>
           </div>
 
-          <div className="card questionSurface" style={{ padding: 14 }}>
-            <p className="small" style={{ margin: '0 0 4px' }}>
+          <div style={{ display: 'grid', gap: 4 }}>
+            <p className="small" style={{ margin: 0 }}>
               <strong>Last updated</strong>
             </p>
             <p style={{ margin: 0 }}>{formatDate(updatedAt)}</p>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="threadTurns">
+      <div className="threadTurns" style={{ gap: 22 }}>
         {turns.map((turn, index) => {
           const rememberedCandidate =
             audience === 'student' ? extractRememberedGraphExpression(turn.prompt) : '';
@@ -126,43 +133,80 @@ export default function ConversationThread({
               : '';
 
           return (
-            <div key={turn.id} className="card turnCard" style={{ display: 'grid', gap: 14 }}>
-              <div className="turnLabelRow">
-                <div style={{ display: 'grid', gap: 8 }}>
-                  <span className="turnLabel">{formatTurnLabel(index)}</span>
-                  <p className="small" style={{ margin: 0 }}>
-                    {formatModeLabel(turn.mode)} • {turn.level} • {formatDate(turn.created_at)}
-                  </p>
-                </div>
+            <section
+              key={turn.id}
+              className="card turnCard"
+              style={{
+                display: 'grid',
+                gap: 16,
+                position: 'relative'
+              }}
+            >
+              <div
+                style={{
+                  display: 'grid',
+                  gap: 12,
+                  paddingBottom: 14,
+                  borderBottom: '1px solid var(--border)'
+                }}
+              >
+                <div
+                  className="turnLabelRow"
+                  style={{
+                    marginBottom: 0,
+                    alignItems: 'center'
+                  }}
+                >
+                  <div style={{ display: 'grid', gap: 8 }}>
+                    <span className="turnLabel">{formatTurnLabel(index)}</span>
+                    <p className="small" style={{ margin: 0 }}>
+                      {formatModeLabel(turn.mode)} • {turn.level} • {formatDate(turn.created_at)}
+                    </p>
+                  </div>
 
-                {showDeleteTurnControls && index > 0 && redirectHref ? (
-                  <DeleteTurnButton turnId={turn.id} redirectHref={redirectHref} />
-                ) : null}
+                  {showDeleteTurnControls && index > 0 && redirectHref ? (
+                    <DeleteTurnButton turnId={turn.id} redirectHref={redirectHref} />
+                  ) : null}
+                </div>
               </div>
 
-              <div className="grid" style={{ gap: 12 }}>
-                <div>
-                  <h3 style={{ marginTop: 0, marginBottom: 10 }}>Question</h3>
-                  <div className="card questionSurface">
+              <div className="grid" style={{ gap: 16 }}>
+                <div style={{ display: 'grid', gap: 10 }}>
+                  <h3 style={{ margin: 0, fontSize: '1.02rem' }}>Question</h3>
+                  <div
+                    className="questionSurface"
+                    style={{
+                      padding: 16,
+                      borderRadius: 20,
+                      border: '1px solid var(--border)'
+                    }}
+                  >
                     <div className="question-block">{turn.prompt}</div>
                   </div>
                 </div>
 
-                <div>
-                  <h3 style={{ marginTop: 0, marginBottom: 10 }}>Answer</h3>
-                  <div className="card answerSurface">
+                <div style={{ display: 'grid', gap: 10 }}>
+                  <h3 style={{ margin: 0, fontSize: '1.02rem' }}>Answer</h3>
+                  <div
+                    className="answerSurface"
+                    style={{
+                      padding: 16,
+                      borderRadius: 20,
+                      border: '1px solid var(--border)'
+                    }}
+                  >
                     <AnswerDisplay text={turn.response} />
                   </div>
                 </div>
 
                 {graphExpression ? (
-                  <div>
-                    <h3 style={{ marginTop: 0, marginBottom: 10 }}>Graph</h3>
+                  <div style={{ display: 'grid', gap: 10 }}>
+                    <h3 style={{ margin: 0, fontSize: '1.02rem' }}>Graph</h3>
                     <FunctionGraph expression={graphExpression} />
                   </div>
                 ) : null}
               </div>
-            </div>
+            </section>
           );
         })}
       </div>

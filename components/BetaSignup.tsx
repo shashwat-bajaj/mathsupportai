@@ -7,8 +7,12 @@ export default function BetaSignup() {
   const [email, setEmail] = useState('');
   const [goal, setGoal] = useState('');
   const [status, setStatus] = useState('');
+  const [loading, setLoading] = useState(false);
 
   async function submitSignup() {
+    if (!email.trim() || loading) return;
+
+    setLoading(true);
     setStatus('Saving...');
 
     try {
@@ -31,53 +35,131 @@ export default function BetaSignup() {
       setGoal('');
     } catch {
       setStatus('Something went wrong while saving your beta signup.');
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <div className="card">
-      <h2>Join the beta</h2>
-      <p className="small">
-        Leave your details so we can track early interest and shape the product around real learners.
-      </p>
+    <section
+      className="card"
+      style={{
+        display: 'grid',
+        gap: 24,
+        overflow: 'hidden'
+      }}
+    >
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'minmax(0, 0.9fr) minmax(320px, 1.1fr)',
+          gap: 24,
+          alignItems: 'start'
+        }}
+      >
+        <div style={{ display: 'grid', gap: 12 }}>
+          <span className="badge">Join the beta</span>
 
-      <div className="grid" style={{ gap: 12 }}>
-        <div>
-          <label>Name (optional)</label>
-          <input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Your name"
-          />
+          <div style={{ display: 'grid', gap: 10 }}>
+            <h2 style={{ margin: 0 }}>Help shape the product while it is still being refined.</h2>
+            <p className="small" style={{ margin: 0, maxWidth: 520 }}>
+              Leave your details so we can track early interest, understand real study needs, and
+              improve the product around actual learners and families.
+            </p>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gap: 14,
+              paddingTop: 14,
+              borderTop: '1px solid var(--border)'
+            }}
+          >
+            <div style={{ display: 'grid', gap: 5 }}>
+              <strong style={{ fontSize: '0.98rem' }}>Built for real use</strong>
+              <p className="small" style={{ margin: 0 }}>
+                Algebra, calculus, revision, homework support, parent guidance, and clearer
+                follow-up flow.
+              </p>
+            </div>
+
+            <div style={{ display: 'grid', gap: 5 }}>
+              <strong style={{ fontSize: '0.98rem' }}>Early access focus</strong>
+              <p className="small" style={{ margin: 0 }}>
+                Tutor quality, graphing, saved sessions, parent support, and cleaner interaction
+                design.
+              </p>
+            </div>
+          </div>
         </div>
 
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-          />
-        </div>
+        <div
+          style={{
+            display: 'grid',
+            gap: 14,
+            padding: 18,
+            borderRadius: 24,
+            border: '1px solid var(--border)',
+            background: 'color-mix(in srgb, var(--surface-soft) 90%, transparent)'
+          }}
+        >
+          <div style={{ display: 'grid', gap: 12 }}>
+            <div>
+              <label>Name (optional)</label>
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Your name"
+              />
+            </div>
 
-        <div>
-          <label>What do you want help with? (optional)</label>
-          <textarea
-            value={goal}
-            onChange={(e) => setGoal(e.target.value)}
-            placeholder="Examples: algebra homework, SAT prep, calculus revision, learning step-by-step"
-          />
-        </div>
+            <div>
+              <label>Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+              />
+            </div>
 
-        <div className="buttonRow">
-          <button onClick={submitSignup} disabled={!email.trim()}>
-            Join beta
-          </button>
-        </div>
+            <div>
+              <label>What do you want help with? (optional)</label>
+              <textarea
+                value={goal}
+                onChange={(e) => setGoal(e.target.value)}
+                placeholder="Examples: algebra homework, SAT prep, calculus revision, learning step-by-step"
+              />
+            </div>
+          </div>
 
-        <p className="small">{status}</p>
+          <div
+            style={{
+              display: 'grid',
+              gap: 10,
+              paddingTop: 10,
+              borderTop: '1px solid var(--border)'
+            }}
+          >
+            <div className="buttonRow">
+              <button onClick={submitSignup} disabled={!email.trim() || loading}>
+                {loading ? 'Saving...' : 'Join beta'}
+              </button>
+            </div>
+
+            {status ? (
+              <p className="small" style={{ margin: 0 }}>
+                {status}
+              </p>
+            ) : (
+              <p className="small" style={{ margin: 0 }}>
+                We only use this to manage beta interest and product feedback.
+              </p>
+            )}
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
