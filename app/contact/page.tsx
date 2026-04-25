@@ -1,19 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+import Reveal from '@/components/Reveal';
 
 export default function ContactPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [status, setStatus] = useState('');
-  const [loading, setLoading] = useState(false);
 
   async function submitContact() {
-    if (!email.trim() || !message.trim() || loading) return;
-
     setStatus('Sending...');
-    setLoading(true);
 
     try {
       const res = await fetch('/api/contact', {
@@ -26,7 +23,6 @@ export default function ContactPage() {
 
       if (!res.ok) {
         setStatus(data.error || 'Could not send message.');
-        setLoading(false);
         return;
       }
 
@@ -36,143 +32,62 @@ export default function ContactPage() {
       setMessage('');
     } catch {
       setStatus('Something went wrong while sending your message.');
-    } finally {
-      setLoading(false);
     }
   }
 
   return (
-    <div className="grid" style={{ gap: 30 }}>
-      <section
-        style={{
-          display: 'grid',
-          gap: 18,
-          paddingTop: 6
-        }}
-      >
-        <div style={{ display: 'grid', gap: 10, maxWidth: 900 }}>
+    <div className="grid" style={{ gap: 24 }}>
+      <Reveal delay={0.02}>
+        <section className="card spotlightCard" style={{ display: 'grid', gap: 14 }}>
           <span className="badge">Contact</span>
-          <h1 style={{ margin: 0 }}>Send feedback, report issues, or ask about the beta.</h1>
-          <p className="small" style={{ margin: 0, maxWidth: 820 }}>
-            Use this page to share bugs, confusing moments, feature requests, product ideas, or
-            anything that would make MathSupport AI more useful for students and parents.
-          </p>
-        </div>
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: 18,
-            paddingTop: 14,
-            borderTop: '1px solid var(--border)'
-          }}
-        >
-          <div style={{ display: 'grid', gap: 6 }}>
-            <p className="small" style={{ margin: 0 }}>
-              <strong>Product feedback</strong>
+          <div style={{ display: 'grid', gap: 10 }}>
+            <h1 style={{ margin: 0 }}>Send feedback, report issues, or ask about the beta.</h1>
+            <p className="small" style={{ margin: 0, maxWidth: 820 }}>
+              Use this page to share bugs, confusing moments, feature requests, product ideas, or
+              anything that would make MathSupport AI more useful for students and parents.
             </p>
-            <p className="small" style={{ margin: 0 }}>
-              Share what feels clear, awkward, useful, or worth improving first.
+          </div>
+        </section>
+      </Reveal>
+
+      <Reveal delay={0.08}>
+        <section className="grid cols-3">
+          <div className="card innerFeatureCard">
+            <h3 style={{ marginTop: 0 }}>Product feedback</h3>
+            <p className="small" style={{ marginBottom: 0 }}>
+              Share what feels clear, what feels awkward, and what you would want improved first.
             </p>
           </div>
 
-          <div style={{ display: 'grid', gap: 6 }}>
-            <p className="small" style={{ margin: 0 }}>
-              <strong>Bug reports</strong>
-            </p>
-            <p className="small" style={{ margin: 0 }}>
-              Report broken flows, confusing tutor behavior, graph issues, or anything unexpected.
-            </p>
-          </div>
-
-          <div style={{ display: 'grid', gap: 6 }}>
-            <p className="small" style={{ margin: 0 }}>
-              <strong>Feature requests</strong>
-            </p>
-            <p className="small" style={{ margin: 0 }}>
-              Suggest workflows, UI changes, or study features that would make the product stronger.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'minmax(320px, 0.92fr) minmax(320px, 1.08fr)',
-          gap: 24
-        }}
-      >
-        <div className="card" style={{ display: 'grid', gap: 18 }}>
-          <span className="badge">What to send</span>
-
-          <div style={{ display: 'grid', gap: 8 }}>
-            <h2 style={{ margin: 0 }}>The more specific the message, the more useful it is.</h2>
-            <p className="small" style={{ margin: 0 }}>
-              A short, concrete description makes it easier to improve the product meaningfully.
+          <div className="card innerFeatureCard">
+            <h3 style={{ marginTop: 0 }}>Bug reports</h3>
+            <p className="small" style={{ marginBottom: 0 }}>
+              Report broken flows, confusing tutor behavior, graph issues, or anything that does not
+              work as expected.
             </p>
           </div>
 
-          <div
-            style={{
-              display: 'grid',
-              gap: 14,
-              paddingTop: 14,
-              borderTop: '1px solid var(--border)'
-            }}
-          >
-            <div
-              className="questionSurface"
-              style={{
-                padding: 16,
-                borderRadius: 20,
-                border: '1px solid var(--border)'
-              }}
-            >
-              <p className="small" style={{ margin: '0 0 6px' }}>
-                <strong>Useful examples</strong>
-              </p>
-              <p className="small" style={{ margin: 0 }}>
-                “The graph looked wrong for this equation.” “The tutor explanation felt too advanced.”
-                “I want a cleaner practice mode.”
-              </p>
-            </div>
-
-            <div
-              className="questionSurface"
-              style={{
-                padding: 16,
-                borderRadius: 20,
-                border: '1px solid var(--border)'
-              }}
-            >
-              <p className="small" style={{ margin: '0 0 6px' }}>
-                <strong>Best feedback</strong>
-              </p>
-              <p className="small" style={{ margin: 0 }}>
-                Include what you were trying to do, what happened instead, and what you expected.
-              </p>
-            </div>
+          <div className="card innerFeatureCard">
+            <h3 style={{ marginTop: 0 }}>Feature requests</h3>
+            <p className="small" style={{ marginBottom: 0 }}>
+              Suggest workflows, tools, UI changes, or study features that would make the product
+              more useful over time.
+            </p>
           </div>
-        </div>
+        </section>
+      </Reveal>
 
-        <div className="card" style={{ display: 'grid', gap: 18 }}>
+      <Reveal delay={0.14}>
+        <section className="card" style={{ display: 'grid', gap: 16 }}>
           <div style={{ display: 'grid', gap: 8 }}>
             <h2 style={{ margin: 0 }}>Message form</h2>
             <p className="small" style={{ margin: 0 }}>
-              Send product feedback, bug reports, or ideas for what should be built next.
+              The more specific the message, the easier it is to improve the product meaningfully.
             </p>
           </div>
 
-          <div
-            style={{
-              display: 'grid',
-              gap: 16,
-              paddingTop: 14,
-              borderTop: '1px solid var(--border)'
-            }}
-          >
+          <div className="grid" style={{ gap: 12 }}>
             <div>
               <label>Name (optional)</label>
               <input
@@ -202,22 +117,15 @@ export default function ContactPage() {
             </div>
 
             <div className="buttonRow">
-              <button
-                onClick={submitContact}
-                disabled={!email.trim() || !message.trim() || loading}
-              >
-                {loading ? 'Sending...' : 'Send message'}
+              <button onClick={submitContact} disabled={!email.trim() || !message.trim()}>
+                Send message
               </button>
             </div>
 
-            {status ? (
-              <p className="small" style={{ margin: 0 }}>
-                {status}
-              </p>
-            ) : null}
+            {status ? <p className="small">{status}</p> : null}
           </div>
-        </div>
-      </section>
+        </section>
+      </Reveal>
     </div>
   );
 }
