@@ -46,6 +46,8 @@ function formatDate(value: string) {
   }
 }
 
+const parentWorkspaceHref = '/math/parents';
+
 export default async function ParentsPage({
   searchParams
 }: {
@@ -215,7 +217,7 @@ export default async function ParentsPage({
             </div>
 
             <div className="buttonRow">
-              <a className="btn secondary" href="/parents">
+              <a className="btn secondary" href={parentWorkspaceHref}>
                 New Session
               </a>
             </div>
@@ -241,7 +243,10 @@ export default async function ParentsPage({
                       className={`sessionItem ${isActive ? 'active' : ''}`}
                       style={{ display: 'grid', gap: 8 }}
                     >
-                      <a href={`/parents?conversation=${conversation.id}`} style={{ display: 'block' }}>
+                      <a
+                        href={`${parentWorkspaceHref}?conversation=${conversation.id}`}
+                        style={{ display: 'block' }}
+                      >
                         <p className="small" style={{ margin: '0 0 6px' }}>
                           <strong>{makePreview(firstPrompt)}</strong>
                         </p>
@@ -253,7 +258,7 @@ export default async function ParentsPage({
                       <div className="buttonRow">
                         <DeleteConversationButton
                           conversationId={conversation.id}
-                          redirectHref="/parents"
+                          redirectHref={parentWorkspaceHref}
                           compact
                         />
                       </div>
@@ -271,7 +276,7 @@ export default async function ParentsPage({
               audience="parent"
               lockedMode="hint"
               initialConversationId={selectedConversation?.id || null}
-              newSessionHref="/parents"
+              newSessionHref={parentWorkspaceHref}
               title="Tutor Support for Parents"
               description="Use this version when you want parent-friendly guidance, simpler explanation, talking points, examples, and practice prompts without jumping straight to the full solution."
               placeholder="Example: My child is learning long division and gets confused after the first subtraction step. How can I explain it clearly?"
@@ -289,7 +294,7 @@ export default async function ParentsPage({
 
                   <DeleteConversationButton
                     conversationId={selectedConversation.id}
-                    redirectHref="/parents"
+                    redirectHref={parentWorkspaceHref}
                   />
                 </div>
 
@@ -300,7 +305,7 @@ export default async function ParentsPage({
                   updatedAt={selectedConversation.updated_at}
                   turns={turns}
                   showDeleteTurnControls
-                  redirectHref={`/parents?conversation=${selectedConversation.id}`}
+                  redirectHref={`${parentWorkspaceHref}?conversation=${selectedConversation.id}`}
                 />
               </section>
             ) : null}
