@@ -1,3 +1,5 @@
-import ParentsPage from "../../parents/page";
+import ParentWorkspacePage from '@/components/workspaces/ParentWorkspacePage';
 
-export default ParentsPage;
+export const dynamic = 'force-dynamic';
+
+export default ParentWorkspacePage;
