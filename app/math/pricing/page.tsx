@@ -1,3 +1,3 @@
-import PricingPage from "../../pricing/page";
+import PricingPageContent from '@/components/pages/PricingPageContent';
 
-export default PricingPage;
+export default PricingPageContent;
