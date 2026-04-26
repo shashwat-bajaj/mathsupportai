@@ -98,10 +98,10 @@ export default function AboutPage() {
           </div>
 
           <div className="buttonRow">
-            <a className="btn" href="/tutor">
+            <a className="btn" href="/math/tutor">
               Open Student Workspace
             </a>
-            <a className="btn secondary" href="/parents">
+            <a className="btn secondary" href="/math/parents">
               Open Parent Workspace
             </a>
           </div>
