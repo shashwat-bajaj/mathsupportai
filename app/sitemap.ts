@@ -6,6 +6,7 @@ export default function sitemap() {
     { url: `${base}/math`, lastModified: new Date() },
     { url: `${base}/math/tutor`, lastModified: new Date() },
     { url: `${base}/math/parents`, lastModified: new Date() },
+    { url: `${base}/math/history`, lastModified: new Date() },
     { url: `${base}/math/pricing`, lastModified: new Date() },
     { url: `${base}/login`, lastModified: new Date() }
   ];
