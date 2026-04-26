@@ -46,6 +46,8 @@ function formatDate(value: string) {
   }
 }
 
+const studentWorkspaceHref = '/math/tutor';
+
 export default async function TutorPage({
   searchParams
 }: {
@@ -208,7 +210,7 @@ export default async function TutorPage({
             </div>
 
             <div className="buttonRow">
-              <a className="btn secondary" href="/tutor">
+              <a className="btn secondary" href={studentWorkspaceHref}>
                 New Session
               </a>
             </div>
@@ -234,7 +236,10 @@ export default async function TutorPage({
                       className={`sessionItem ${isActive ? 'active' : ''}`}
                       style={{ display: 'grid', gap: 8 }}
                     >
-                      <a href={`/tutor?conversation=${conversation.id}`} style={{ display: 'block' }}>
+                      <a
+                        href={`${studentWorkspaceHref}?conversation=${conversation.id}`}
+                        style={{ display: 'block' }}
+                      >
                         <p className="small" style={{ margin: '0 0 6px' }}>
                           <strong>{makePreview(firstPrompt)}</strong>
                         </p>
@@ -246,7 +251,7 @@ export default async function TutorPage({
                       <div className="buttonRow">
                         <DeleteConversationButton
                           conversationId={conversation.id}
-                          redirectHref="/tutor"
+                          redirectHref={studentWorkspaceHref}
                           compact
                         />
                       </div>
@@ -263,7 +268,7 @@ export default async function TutorPage({
             <MathTutor
               audience="student"
               initialConversationId={selectedConversation?.id || null}
-              newSessionHref="/tutor"
+              newSessionHref={studentWorkspaceHref}
               title="Tutor Support for Students"
               description="Ask a new question or continue an earlier student session with follow-up questions, graph requests, and guided explanation."
             />
@@ -280,7 +285,7 @@ export default async function TutorPage({
 
                   <DeleteConversationButton
                     conversationId={selectedConversation.id}
-                    redirectHref="/tutor"
+                    redirectHref={studentWorkspaceHref}
                   />
                 </div>
 
@@ -291,7 +296,7 @@ export default async function TutorPage({
                   updatedAt={selectedConversation.updated_at}
                   turns={turns}
                   showDeleteTurnControls
-                  redirectHref={`/tutor?conversation=${selectedConversation.id}`}
+                  redirectHref={`${studentWorkspaceHref}?conversation=${selectedConversation.id}`}
                 />
               </section>
             ) : null}
