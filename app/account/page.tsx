@@ -66,7 +66,7 @@ export default async function AccountPage() {
             title="Private history"
             description="View sessions attached to your account and continue older tutor threads more naturally."
             action={
-              <a className="btn secondary" href="/history">
+              <a className="btn secondary" href="/math/history">
                 Open History
               </a>
             }

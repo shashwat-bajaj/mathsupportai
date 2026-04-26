@@ -17,7 +17,7 @@ const primaryLinks = [
   { href: '/', label: 'Home' },
   { href: '/math/tutor', label: 'Students' },
   { href: '/math/parents', label: 'Parents' },
-  { href: '/history', label: 'History' },
+  { href: '/math/history', label: 'History' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' }
 ];
