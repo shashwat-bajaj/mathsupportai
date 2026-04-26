@@ -1,3 +1,11 @@
-import HistoryPage from "../../history/page";
+import HistoryPageContent from '@/components/workspaces/HistoryPageContent';
 
-export default HistoryPage;
+export const dynamic = 'force-dynamic';
+
+export default function MathHistoryPage({
+  searchParams
+}: {
+  searchParams: Promise<{ email?: string; conversation?: string }>;
+}) {
+  return <HistoryPageContent searchParams={searchParams} historyHref="/math/history" />;
+}
