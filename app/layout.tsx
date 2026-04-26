@@ -15,8 +15,8 @@ export const metadata = {
 
 const primaryLinks = [
   { href: '/', label: 'Home' },
-  { href: '/tutor', label: 'Students' },
-  { href: '/parents', label: 'Parents' },
+  { href: '/math/tutor', label: 'Students' },
+  { href: '/math/parents', label: 'Parents' },
   { href: '/history', label: 'History' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' }
@@ -25,7 +25,7 @@ const primaryLinks = [
 const footerLinks = [
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
-  { href: '/pricing', label: 'Pricing' },
+  { href: '/math/pricing', label: 'Pricing' },
   { href: '/settings', label: 'Settings' },
   { href: '/privacy', label: 'Privacy Policy' },
   { href: '/terms', label: 'Terms of Use' }

@@ -49,10 +49,10 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.24, duration: 0.38, ease: 'easeOut' }}
             >
-              <a className="btn" href="/tutor">
+              <a className="btn" href="/math/tutor">
                 Open Student Workspace
               </a>
-              <a className="btn secondary" href="/parents">
+              <a className="btn secondary" href="/math/parents">
                 Open Parent Workspace
               </a>
             </motion.div>
@@ -162,7 +162,7 @@ export default function HomePage() {
                 mistakes, and asking the next question without restarting the whole flow.
               </p>
               <div className="buttonRow">
-                <a className="btn" href="/tutor">
+                <a className="btn" href="/math/tutor">
                   Go to Students
                 </a>
               </div>
@@ -176,7 +176,7 @@ export default function HomePage() {
                 guided help that supports learning instead of replacing it.
               </p>
               <div className="buttonRow">
-                <a className="btn secondary" href="/parents">
+                <a className="btn secondary" href="/math/parents">
                   Go to Parents
                 </a>
               </div>
