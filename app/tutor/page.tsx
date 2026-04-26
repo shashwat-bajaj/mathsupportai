@@ -1,5 +1,27 @@
-import StudentWorkspacePage from '@/components/workspaces/StudentWorkspacePage';
+import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 
-export default StudentWorkspacePage;
+function buildQueryString(params: Record<string, string | string[] | undefined>) {
+  const query = new URLSearchParams();
+
+  for (const [key, value] of Object.entries(params)) {
+    if (Array.isArray(value)) {
+      value.forEach((item) => query.append(key, item));
+    } else if (value) {
+      query.set(key, value);
+    }
+  }
+
+  const queryString = query.toString();
+  return queryString ? `?${queryString}` : '';
+}
+
+export default async function TutorPage({
+  searchParams
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const params = await searchParams;
+  redirect(`/math/tutor${buildQueryString(params)}`);
+}

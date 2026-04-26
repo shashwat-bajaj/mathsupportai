@@ -1,3 +1,5 @@
-import TutorPage from "../../tutor/page";
+import StudentWorkspacePage from '@/components/workspaces/StudentWorkspacePage';
 
-export default TutorPage;
+export const dynamic = 'force-dynamic';
+
+export default StudentWorkspacePage;
