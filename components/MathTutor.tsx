@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import AnswerDisplay from '@/components/AnswerDisplay';
 import FunctionGraph from '@/components/FunctionGraph';
 import { createClient } from '@/lib/supabase/client';
-import type { SubjectKey } from '@/lib/subjects';
+import { getSubjectConfig, subjects, type SubjectConfig, type SubjectKey } from '@/lib/subjects';
 import {
   extractRememberedGraphExpression,
   isGraphOnlyDisplayRequest,
@@ -96,13 +96,60 @@ function isErrorLikeMessage(message: string) {
   return /failed|error|went wrong|try again/i.test(message);
 }
 
+function getDefaultQuestion({
+  audience,
+  subject
+}: {
+  audience: 'student' | 'parent';
+  subject: SubjectConfig;
+}) {
+  if (audience === 'parent') {
+    if (subject.key === 'math') {
+      return 'My child is learning fractions. How can I explain why 1/2 is larger than 1/4 without just giving the answer?';
+    }
+
+    return `My child is learning ${subject.name.toLowerCase()}. How can I explain the topic clearly without just giving them the answer?`;
+  }
+
+  if (subject.key === 'math') {
+    return 'Solve x^2 - 5x + 6 = 0 and explain each step.';
+  }
+
+  return subject.tutor.examplePrompts[0] || `Help me understand a ${subject.name} topic.`;
+}
+
+function getQuestionPlaceholder({
+  audience,
+  subject,
+  customPlaceholder
+}: {
+  audience: 'student' | 'parent';
+  subject: SubjectConfig;
+  customPlaceholder?: string;
+}) {
+  if (customPlaceholder) {
+    return customPlaceholder;
+  }
+
+  if (audience === 'parent') {
+    return `Describe what the child is learning in ${subject.name.toLowerCase()}, where they are stuck, and how much help you want.`;
+  }
+
+  if (subject.key === 'math') {
+    return 'Type a math problem, paste your work, or ask for a quiz on a topic. Ask explicitly to graph or plot if you want a graph shown.';
+  }
+
+  return subject.tutor.placeholder;
+}
+
 function getFollowUpSuggestions(args: {
   audience: 'student' | 'parent';
   mode: TutorMode;
+  subject: SubjectConfig;
   showGraphForCurrentTurn: boolean;
   activeGraphExpression: string;
 }) {
-  const { audience, mode, showGraphForCurrentTurn, activeGraphExpression } = args;
+  const { audience, mode, subject, showGraphForCurrentTurn, activeGraphExpression } = args;
 
   if (audience === 'parent') {
     return [
@@ -113,7 +160,7 @@ function getFollowUpSuggestions(args: {
     ];
   }
 
-  if (showGraphForCurrentTurn && activeGraphExpression) {
+  if (subject.features.graphing && showGraphForCurrentTurn && activeGraphExpression) {
     return [
       'Explain the graph please.',
       'What are the x-intercepts?',
@@ -149,6 +196,15 @@ function getFollowUpSuggestions(args: {
     ];
   }
 
+  if (subject.key !== 'math') {
+    return [
+      'Explain that more simply.',
+      'Give me one hint only.',
+      'Show a common mistake.',
+      `Turn this into ${subject.name.toLowerCase()} practice questions.`
+    ];
+  }
+
   return [
     'Explain that more simply.',
     'Give me one hint only.',
@@ -170,16 +226,16 @@ export default function MathTutor({
   const router = useRouter();
   const questionRef = useRef<HTMLTextAreaElement | null>(null);
 
+  const subjectConfig = useMemo(() => getSubjectConfig(subject) || subjects.math, [subject]);
+  const graphingEnabled = subjectConfig.features.graphing;
+
   const [email, setEmail] = useState('');
   const [accountEmail, setAccountEmail] = useState('');
   const [shortcutLabel, setShortcutLabel] = useState('Ctrl');
 
   const defaultQuestion = useMemo(
-    () =>
-      audience === 'parent'
-        ? 'My child is learning fractions. How can I explain why 1/2 is larger than 1/4 without just giving the answer?'
-        : 'Solve x^2 - 5x + 6 = 0 and explain each step.',
-    [audience]
+    () => getDefaultQuestion({ audience, subject: subjectConfig }),
+    [audience, subjectConfig]
   );
 
   const [conversationId, setConversationId] = useState<string | null>(initialConversationId);
@@ -287,7 +343,7 @@ export default function MathTutor({
     if (!questionText) return null;
 
     return {
-      subject,
+      subject: subjectConfig.key,
       question: questionText,
       gradeLevel,
       mode,
@@ -305,13 +361,17 @@ export default function MathTutor({
     if (!basePayload || loading) return;
 
     const requestedGraphContext =
-      basePayload.audience === 'student' && isGraphReferenceRequest(basePayload.question);
+      graphingEnabled &&
+      basePayload.audience === 'student' &&
+      isGraphReferenceRequest(basePayload.question);
 
     const graphOnlyDisplayRequest =
-      basePayload.audience === 'student' && isGraphOnlyDisplayRequest(basePayload.question);
+      graphingEnabled &&
+      basePayload.audience === 'student' &&
+      isGraphOnlyDisplayRequest(basePayload.question);
 
     const rememberedCandidate =
-      basePayload.audience === 'student'
+      graphingEnabled && basePayload.audience === 'student'
         ? extractRememberedGraphExpression(basePayload.question)
         : '';
 
@@ -351,7 +411,7 @@ export default function MathTutor({
         setConversationId(data.conversationId);
       }
 
-      if (basePayload.audience === 'student') {
+      if (graphingEnabled && basePayload.audience === 'student') {
         if (rememberedCandidate) {
           setRememberedGraphExpression(rememberedCandidate);
         }
@@ -363,6 +423,8 @@ export default function MathTutor({
         } else {
           setShowGraphForCurrentTurn(false);
         }
+      } else {
+        setShowGraphForCurrentTurn(false);
       }
 
       if (!overridePayload || question.trim() === basePayload.question.trim()) {
@@ -412,8 +474,15 @@ export default function MathTutor({
   const followUpSuggestions = getFollowUpSuggestions({
     audience,
     mode,
+    subject: subjectConfig,
     showGraphForCurrentTurn,
     activeGraphExpression
+  });
+
+  const questionPlaceholder = getQuestionPlaceholder({
+    audience,
+    subject: subjectConfig,
+    customPlaceholder: placeholder
   });
 
   return (
@@ -545,7 +614,7 @@ export default function MathTutor({
                       type="text"
                       value={parentTopic}
                       onChange={(e) => setParentTopic(e.target.value)}
-                      placeholder="Example: fractions, long division, algebra"
+                      placeholder={`Example: ${subjectConfig.name.toLowerCase()} topic, concept, or skill`}
                     />
                   </div>
 
@@ -555,7 +624,7 @@ export default function MathTutor({
                       type="text"
                       value={parentStuckPoint}
                       onChange={(e) => setParentStuckPoint(e.target.value)}
-                      placeholder="Example: comparing fractions or carrying digits"
+                      placeholder="Example: comparing ideas, setting up the first step, or remembering key terms"
                     />
                   </div>
                 </div>
@@ -621,8 +690,8 @@ export default function MathTutor({
             title={audience === 'parent' ? 'Question or teaching situation' : 'Question or your work'}
             description={
               audience === 'parent'
-                ? 'Describe what the child is learning, where they are stuck, and how you want the explanation to feel.'
-                : 'Type a problem, paste your work, or ask to graph, quiz, or diagnose something in the same thread.'
+                ? `Describe what the child is learning in ${subjectConfig.name.toLowerCase()}, where they are stuck, and how you want the explanation to feel.`
+                : `Type a ${subjectConfig.name.toLowerCase()} question, paste your work, or ask for a quiz, explanation, or diagnosis in the same thread.`
             }
           />
 
@@ -632,12 +701,7 @@ export default function MathTutor({
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               onKeyDown={handleQuestionKeyDown}
-              placeholder={
-                placeholder ||
-                (audience === 'parent'
-                  ? 'Describe what the child is learning, where they are stuck, and how much help you want.'
-                  : 'Type a math problem, paste your work, or ask for a quiz on a topic. Ask explicitly to graph or plot if you want a graph shown.')
-              }
+              placeholder={questionPlaceholder}
             />
             <p className="small" style={{ marginTop: 8, marginBottom: 0 }}>
               Tip: press {shortcutLabel} + Enter to run.
@@ -674,14 +738,14 @@ export default function MathTutor({
       <section className="card" style={{ display: 'grid', gap: 14 }}>
         <SectionTitle
           title="Tutor response"
-          description="The answer, graph, and suggested next steps stay connected here."
+          description="The answer and suggested next steps stay connected here."
         />
 
         <div className="responseBox">
           {answer ? <AnswerDisplay text={answer} /> : <p>Your tutor response will appear here.</p>}
         </div>
 
-        {audience === 'student' && showGraphForCurrentTurn && activeGraphExpression ? (
+        {graphingEnabled && audience === 'student' && showGraphForCurrentTurn && activeGraphExpression ? (
           <FunctionGraph expression={activeGraphExpression} />
         ) : null}
       </section>
