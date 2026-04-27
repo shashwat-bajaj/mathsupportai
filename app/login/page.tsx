@@ -82,7 +82,7 @@ export default function LoginPage() {
             <h1 style={{ margin: 0 }}>
               {mode === 'login'
                 ? 'Return to your learning workspace.'
-                : 'Create your MathSupport AI account.'}
+                : 'Create your Solvyq account.'}
             </h1>
             <p className="small" style={{ margin: 0, maxWidth: 720 }}>
               Use email and password or continue with Google. Signing in lets you save sessions,
