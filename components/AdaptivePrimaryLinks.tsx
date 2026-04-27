@@ -11,7 +11,7 @@ const solvyqLinks = [
 ];
 
 const mathProductLinks = [
-  { href: '/', label: 'Home' },
+  { href: '/math', label: 'Home' },
   { href: '/math/tutor', label: 'Students' },
   { href: '/math/parents', label: 'Parents' },
   { href: '/math/history', label: 'History' },
