@@ -1,3 +1,7 @@
-import AccountPage from "../../account/page";
+import { redirect } from 'next/navigation';
 
-export default AccountPage;
+export const dynamic = 'force-dynamic';
+
+export default function MathAccountPage() {
+  redirect('/account');
+}

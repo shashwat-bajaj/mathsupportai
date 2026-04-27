@@ -1,3 +1,7 @@
-import SettingsPage from "../../settings/page";
+import { redirect } from 'next/navigation';
 
-export default SettingsPage;
+export const dynamic = 'force-dynamic';
+
+export default function MathSettingsPage() {
+  redirect('/settings');
+}
