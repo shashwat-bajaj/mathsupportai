@@ -242,7 +242,7 @@ export default async function HistoryPageContent({
               className="historyLookupForm"
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'minmax(220px, 420px) auto',
+                gridTemplateColumns: 'minmax(220px, 420px) max-content',
                 gap: 12,
                 alignItems: 'end',
                 justifyContent: 'start',
@@ -305,14 +305,13 @@ export default async function HistoryPageContent({
           style={{
             display: 'grid',
             gridTemplateColumns: '340px minmax(0, 1fr)',
-            columnGap: 26,
-            rowGap: 26,
+            gap: 26,
             alignItems: 'start',
             width: '100%'
           }}
         >
           <aside
-            className="card historySessionsPanel"
+            className="card historyPanel"
             style={{
               display: 'grid',
               gap: 14,
@@ -376,7 +375,7 @@ export default async function HistoryPageContent({
           </aside>
 
           <main
-            className="card historyThreadPanel"
+            className="card historyPanel"
             style={{
               display: 'grid',
               gap: 14,
@@ -446,8 +445,7 @@ export default async function HistoryPageContent({
             clear: both;
           }
 
-          .historySessionsPanel,
-          .historyThreadPanel {
+          .historyPanel {
             margin: 0 !important;
             justify-self: stretch !important;
           }
@@ -456,7 +454,7 @@ export default async function HistoryPageContent({
             margin: 0;
           }
 
-          @media (max-width: 860px) {
+          @media (max-width: 760px) {
             .historyLayout {
               grid-template-columns: 1fr !important;
             }
