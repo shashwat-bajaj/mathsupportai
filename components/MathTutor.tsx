@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import AnswerDisplay from '@/components/AnswerDisplay';
 import FunctionGraph from '@/components/FunctionGraph';
 import { createClient } from '@/lib/supabase/client';
+import type { SubjectKey } from '@/lib/subjects';
 import {
   extractRememberedGraphExpression,
   isGraphOnlyDisplayRequest,
@@ -12,6 +13,7 @@ import {
 } from '@/lib/graphing';
 
 type MathTutorProps = {
+  subject?: SubjectKey;
   audience?: 'student' | 'parent';
   lockedMode?: 'auto' | 'teach' | 'hint' | 'diagnose' | 'quiz';
   title?: string;
@@ -31,6 +33,7 @@ type ParentHelpStyle =
   | 'likely-mistake';
 
 type TutorRequestPayload = {
+  subject: SubjectKey;
   question: string;
   gradeLevel: GradeLevel;
   mode: TutorMode;
@@ -155,6 +158,7 @@ function getFollowUpSuggestions(args: {
 }
 
 export default function MathTutor({
+  subject = 'math',
   audience = 'student',
   lockedMode,
   title,
@@ -283,6 +287,7 @@ export default function MathTutor({
     if (!questionText) return null;
 
     return {
+      subject,
       question: questionText,
       gradeLevel,
       mode,
