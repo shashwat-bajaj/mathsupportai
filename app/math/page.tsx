@@ -1,3 +1,3 @@
-import HomePage from "../page";
+import MathHomePageContent from '@/components/pages/MathHomePageContent';
 
-export default HomePage;
+export default MathHomePageContent;
