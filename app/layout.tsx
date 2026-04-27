@@ -5,22 +5,14 @@ import ThemeToggle from '@/components/ThemeToggle';
 import BrandMark from '@/components/BrandMark';
 import RouteShell from '@/components/RouteShell';
 import SiteBackdrop from '@/components/SiteBackdrop';
+import AdaptivePrimaryLinks from '@/components/AdaptivePrimaryLinks';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from '@vercel/analytics/next';
 
 export const metadata = {
-  title: 'Solvyq',
-  description: 'A unified AI learning platform starting with Math.'
+  title: 'MathSupport AI',
+  description: 'AI math support for students and parents.'
 };
-
-const primaryLinks = [
-  { href: '/', label: 'Solvyq' },
-  { href: '/math', label: 'Math' },
-  { href: '/physics', label: 'Physics' },
-  { href: '/chemistry', label: 'Chemistry' },
-  { href: '/biology', label: 'Biology' },
-  { href: '/math/history', label: 'History' }
-];
 
 const footerLinks = [
   { href: '/about', label: 'About' },
@@ -95,11 +87,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                       maxWidth: '100%'
                     }}
                   >
-                    {primaryLinks.map((link) => (
-                      <a key={link.href} href={link.href}>
-                        {link.label}
-                      </a>
-                    ))}
+                    <AdaptivePrimaryLinks />
                     <AuthNav />
                   </nav>
                 </div>
@@ -143,12 +131,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               >
                 <div style={{ display: 'grid', gap: 8, minWidth: 0 }}>
                   <p className="small" style={{ margin: 0 }}>
-                    <strong>Solvyq</strong> is being shaped into a calmer AI learning platform across
-                    Math, Physics, Chemistry, and Biology.
+                    <strong>MathSupport AI</strong> is being shaped into a calmer learning workspace
+                    for students and parents.
                   </p>
                   <p className="small" style={{ margin: 0, maxWidth: 720 }}>
-                    Math is the active subject branch now. The long-term focus is a unified product
-                    experience with subject-specific learning support and shared account history.
+                    The focus is better explanation, graph support, stronger follow-up flow, and a
+                    cleaner product experience across the whole site.
                   </p>
                 </div>
 
