@@ -15,7 +15,7 @@ const mathProductLinks = [
   { href: '/math/tutor', label: 'Students' },
   { href: '/math/parents', label: 'Parents' },
   { href: '/math/history', label: 'History' },
-  { href: '/about', label: 'About' },
+  { href: '/math/about', label: 'About' },
   { href: '/contact', label: 'Contact' }
 ];
 

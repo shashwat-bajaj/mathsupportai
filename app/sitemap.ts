@@ -3,11 +3,16 @@ export default function sitemap() {
 
   return [
     { url: `${base}/`, lastModified: new Date() },
+    { url: `${base}/about`, lastModified: new Date() },
     { url: `${base}/math`, lastModified: new Date() },
+    { url: `${base}/math/about`, lastModified: new Date() },
     { url: `${base}/math/tutor`, lastModified: new Date() },
     { url: `${base}/math/parents`, lastModified: new Date() },
     { url: `${base}/math/history`, lastModified: new Date() },
     { url: `${base}/math/pricing`, lastModified: new Date() },
+    { url: `${base}/physics`, lastModified: new Date() },
+    { url: `${base}/chemistry`, lastModified: new Date() },
+    { url: `${base}/biology`, lastModified: new Date() },
     { url: `${base}/login`, lastModified: new Date() }
   ];
 }

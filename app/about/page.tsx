@@ -1,19 +1,22 @@
+import Link from 'next/link';
 import Reveal from '@/components/Reveal';
+import { subjects } from '@/lib/subjects';
 
 export default function AboutPage() {
+  const subjectList = Object.values(subjects);
+
   return (
     <div className="grid" style={{ gap: 24 }}>
       <Reveal delay={0.02}>
         <section className="card spotlightCard" style={{ display: 'grid', gap: 14 }}>
-          <span className="badge">About the product</span>
+          <span className="badge">About Solvyq</span>
 
           <div style={{ display: 'grid', gap: 10 }}>
-            <h1 style={{ margin: 0 }}>Built to make math feel clearer, calmer, and easier to continue.</h1>
-            <p className="small" style={{ margin: 0, maxWidth: 820 }}>
-              MathSupport AI is being built as a learning-first math workspace for students and
-              parents. The goal is not just to produce answers, but to help users understand what is
-              happening, ask better follow-up questions, and return to earlier work without losing the
-              thread.
+            <h1 style={{ margin: 0 }}>A unified learning platform built around subject branches.</h1>
+            <p className="small" style={{ margin: 0, maxWidth: 860 }}>
+              Solvyq is being shaped as a calm AI learning platform where each subject can have its
+              own identity, tutor behavior, examples, and learning flow while still sharing one
+              account system, one deployment, and one coherent product foundation.
             </p>
           </div>
         </section>
@@ -22,26 +25,26 @@ export default function AboutPage() {
       <Reveal delay={0.08}>
         <section className="grid cols-3">
           <div className="card innerFeatureCard">
-            <h3 style={{ marginTop: 0 }}>Learning over answer dumping</h3>
+            <h3 style={{ marginTop: 0 }}>One parent brand</h3>
             <p className="small" style={{ marginBottom: 0 }}>
-              The product is designed around explanation, guided support, diagnosis, and practice
-              rather than one-click answer output.
+              Solvyq is the umbrella experience. Math is the first active branch, with Physics,
+              Chemistry, and Biology prepared as future subject branches.
             </p>
           </div>
 
           <div className="card innerFeatureCard">
-            <h3 style={{ marginTop: 0 }}>Built for real follow-ups</h3>
+            <h3 style={{ marginTop: 0 }}>Shared foundation</h3>
             <p className="small" style={{ marginBottom: 0 }}>
-              Sessions are meant to continue naturally, so users can ask the next question without
-              starting from zero each time.
+              The goal is to avoid disconnected apps. Auth, history, settings, deployment, and backend
+              structure should remain unified wherever practical.
             </p>
           </div>
 
           <div className="card innerFeatureCard">
-            <h3 style={{ marginTop: 0 }}>Accessible by design</h3>
+            <h3 style={{ marginTop: 0 }}>Subject-specific learning</h3>
             <p className="small" style={{ marginBottom: 0 }}>
-              Read aloud, translation, cleaner structure, and graph support are being added to make
-              the experience easier to use across different learning styles.
+              Each subject can eventually have its own prompts, examples, tools, visual identity, and
+              tutor behavior without requiring a separate codebase.
             </p>
           </div>
         </section>
@@ -50,38 +53,43 @@ export default function AboutPage() {
       <Reveal delay={0.14}>
         <section className="card" style={{ display: 'grid', gap: 18 }}>
           <div style={{ display: 'grid', gap: 8 }}>
-            <h2 style={{ margin: 0 }}>What the product is trying to become</h2>
-            <p className="small" style={{ margin: 0, maxWidth: 820 }}>
-              The long-term vision is a math support system that feels less like a generic chatbot and
-              more like a structured study environment — something that can teach, graph, diagnose,
-              adapt, and remember context in a way that is actually useful for learning.
+            <span className="badge">Subject branches</span>
+            <h2 style={{ margin: 0 }}>Start with Math, then expand carefully.</h2>
+            <p className="small" style={{ margin: 0, maxWidth: 860 }}>
+              Math is the active learning workspace today. The other branches are being introduced
+              gradually so the product can scale cleanly without duplicating infrastructure or losing
+              the current working experience.
             </p>
           </div>
 
           <div className="grid cols-3">
-            <div className="card featureCard">
-              <h3 style={{ marginTop: 0 }}>For students</h3>
-              <p className="small" style={{ marginBottom: 0 }}>
-                A workspace for solving problems, understanding steps, checking mistakes, practicing
-                similar questions, and revisiting saved sessions later.
-              </p>
-            </div>
+            {subjectList.map((subject) => (
+              <Link
+                key={subject.key}
+                href={subject.path}
+                className="card featureCard"
+                style={{
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  borderColor:
+                    subject.status === 'active' ? 'var(--accent-border)' : 'var(--border)'
+                }}
+              >
+                <span className="badge">
+                  {subject.status === 'active'
+                    ? 'Active'
+                    : subject.status === 'beta'
+                      ? 'Beta preview'
+                      : 'Coming soon'}
+                </span>
 
-            <div className="card featureCard">
-              <h3 style={{ marginTop: 0 }}>For parents</h3>
-              <p className="small" style={{ marginBottom: 0 }}>
-                A more guided support flow for adults helping a child learn, with simpler phrasing,
-                examples, talking points, and parent-friendly explanation.
-              </p>
-            </div>
+                <h3 style={{ marginBottom: 8 }}>{subject.name}</h3>
 
-            <div className="card featureCard">
-              <h3 style={{ marginTop: 0 }}>For the product itself</h3>
-              <p className="small" style={{ marginBottom: 0 }}>
-                A calmer interface, better continuity, stronger visual support, and more intentional
-                interaction design than a typical homework-help tool.
-              </p>
-            </div>
+                <p className="small" style={{ margin: 0 }}>
+                  {subject.description}
+                </p>
+              </Link>
+            ))}
           </div>
         </section>
       </Reveal>
@@ -89,21 +97,21 @@ export default function AboutPage() {
       <Reveal delay={0.2}>
         <section className="card spotlightCard" style={{ display: 'grid', gap: 16 }}>
           <div style={{ display: 'grid', gap: 8 }}>
-            <h2 style={{ margin: 0 }}>Current beta focus</h2>
-            <p className="small" style={{ margin: 0, maxWidth: 820 }}>
-              Right now the beta is focused on strengthening the core tutor experience: cleaner
-              responses, better follow-up flow, graph support, session history, parent guidance, and a
-              more polished overall interface.
+            <h2 style={{ margin: 0 }}>Current focus</h2>
+            <p className="small" style={{ margin: 0, maxWidth: 860 }}>
+              The current focus is preserving and improving Solvyq Math while building the structure
+              needed for future subjects. The product is moving step by step so the foundation stays
+              clean and the working Math experience remains stable.
             </p>
           </div>
 
           <div className="buttonRow">
-            <a className="btn" href="/math/tutor">
-              Open Student Workspace
-            </a>
-            <a className="btn secondary" href="/math/parents">
-              Open Parent Workspace
-            </a>
+            <Link className="btn" href="/math">
+              Open Solvyq Math
+            </Link>
+            <Link className="btn secondary" href="/contact">
+              Contact / Feedback
+            </Link>
           </div>
         </section>
       </Reveal>
