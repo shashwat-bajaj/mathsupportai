@@ -4,6 +4,7 @@ import { buildTutorPrompt } from '@/lib/prompts';
 import { normalizeGraphExpression } from '@/lib/graphing';
 import { createAdminSupabase } from '@/lib/supabase-admin';
 import { createClient as createAuthClient } from '@/lib/supabase/server';
+import { getSubjectConfig } from '@/lib/subjects';
 
 const DAILY_FREE_LIMIT = 20;
 
@@ -95,6 +96,15 @@ function isAdminUser(args: {
   }
 
   return false;
+}
+
+function getRequestedSubject(value: unknown) {
+  const subjectKey =
+    typeof value === 'string' && value.trim()
+      ? value.trim().toLowerCase()
+      : 'math';
+
+  return getSubjectConfig(subjectKey);
 }
 
 function getParentStyleInstruction(style: ParentHelpStyle) {
@@ -461,8 +471,27 @@ export async function POST(request: NextRequest) {
       topic = '',
       stuckPoint = '',
       graphOnlyBypass = false,
-      graphExpression = null
+      graphExpression = null,
+      subject = 'math'
     } = await request.json();
+
+    const subjectConfig = getRequestedSubject(subject);
+
+    if (!subjectConfig) {
+      return NextResponse.json(
+        { error: 'Invalid subject.' },
+        { status: 400 }
+      );
+    }
+
+    if (subjectConfig.key !== 'math' || subjectConfig.status !== 'active') {
+      return NextResponse.json(
+        {
+          error: `${subjectConfig.name} support is not enabled yet. Math is currently the active subject.`
+        },
+        { status: 501 }
+      );
+    }
 
     const questionText = typeof question === 'string' ? question.trim() : '';
     const normalizedGraphExpression =
@@ -637,7 +666,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       answer,
-      conversationId: activeConversationId
+      conversationId: activeConversationId,
+      subject: subjectConfig.key
     });
   } catch (error: any) {
     console.error('CHAT API ERROR:', error);
