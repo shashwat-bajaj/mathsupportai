@@ -58,10 +58,14 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
                 Open {subject.shortName} Workspace
               </Link>
             ) : (
-              <Link className="btn" href="/math/tutor">
-                Open Math Workspace
+              <Link className="btn" href={`${subject.path}/tutor`}>
+                View Tutor Preview
               </Link>
             )}
+
+            <Link className="btn secondary" href="/math/tutor">
+              Open Active Math Tutor
+            </Link>
 
             <Link className="btn secondary" href="/contact">
               Contact / Feedback
