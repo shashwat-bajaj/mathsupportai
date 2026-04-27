@@ -266,20 +266,6 @@ export default async function HistoryPageContent({
                 </a>
               </div>
             </form>
-
-            <style>
-              {`
-                @media (max-width: 760px) {
-                  .legacyHistoryForm {
-                    grid-template-columns: 1fr !important;
-                  }
-
-                  .legacyHistoryForm .buttonRow {
-                    flex-wrap: wrap !important;
-                  }
-                }
-              `}
-            </style>
           </section>
         </Reveal>
       ) : null}
@@ -310,9 +296,18 @@ export default async function HistoryPageContent({
           </section>
         </Reveal>
       ) : (
-        <section className="twoPane">
+        <section
+          className="historyTwoPane"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'minmax(280px, 360px) minmax(0, 1fr)',
+            gap: 24,
+            alignItems: 'start',
+            width: '100%'
+          }}
+        >
           <Reveal delay={0.1}>
-            <div className="card" style={{ display: 'grid', gap: 14 }}>
+            <div className="card" style={{ display: 'grid', gap: 14, minWidth: 0, width: '100%' }}>
               <div style={{ display: 'grid', gap: 6 }}>
                 <h2 style={{ margin: 0 }}>Saved conversations</h2>
                 <p className="small" style={{ margin: 0 }}>
@@ -369,7 +364,7 @@ export default async function HistoryPageContent({
           </Reveal>
 
           <Reveal delay={0.16}>
-            <div className="card" style={{ display: 'grid', gap: 14 }}>
+            <div className="card" style={{ display: 'grid', gap: 14, minWidth: 0, width: '100%' }}>
               <div className="buttonRow" style={{ justifyContent: 'space-between' }}>
                 <div style={{ display: 'grid', gap: 4 }}>
                   <h2 style={{ margin: 0 }}>Conversation thread</h2>
@@ -415,6 +410,35 @@ export default async function HistoryPageContent({
           </Reveal>
         </section>
       )}
+
+      <style>
+        {`
+          @media (max-width: 900px) {
+            .historyTwoPane {
+              grid-template-columns: 1fr !important;
+            }
+          }
+
+          @media (max-width: 760px) {
+            .legacyHistoryForm {
+              grid-template-columns: 1fr !important;
+            }
+
+            .legacyHistoryForm .buttonRow {
+              flex-wrap: wrap !important;
+            }
+          }
+
+          .historyTwoPane > * {
+            min-width: 0;
+            width: 100%;
+          }
+
+          .historyTwoPane .card {
+            justify-self: stretch;
+          }
+        `}
+      </style>
     </div>
   );
 }
