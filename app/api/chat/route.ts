@@ -4,7 +4,7 @@ import { buildTutorPrompt } from '@/lib/prompts';
 import { normalizeGraphExpression } from '@/lib/graphing';
 import { createAdminSupabase } from '@/lib/supabase-admin';
 import { createClient as createAuthClient } from '@/lib/supabase/server';
-import { getSubjectConfig } from '@/lib/subjects';
+import { getSubjectConfig, type SubjectConfig } from '@/lib/subjects';
 
 const DAILY_FREE_LIMIT = 20;
 
@@ -128,9 +128,9 @@ function getParentLevelInstruction(gradeLevel: string) {
     case 'elementary':
       return `Use very simple language, short sentences, concrete examples, and child-friendly analogies. Avoid heavy jargon.`;
     case 'middle-school':
-      return `Use clear everyday language, but begin connecting ideas to proper math vocabulary in a gentle way.`;
+      return `Use clear everyday language, but begin connecting ideas to proper subject vocabulary in a gentle way.`;
     case 'high-school':
-      return `Use accurate math terms, but keep the explanation parent-friendly and easy to say aloud.`;
+      return `Use accurate subject terms, but keep the explanation parent-friendly and easy to say aloud.`;
     case 'college':
     default:
       return `You may use more formal vocabulary, but still keep the response practical and parent-friendly.`;
@@ -198,13 +198,15 @@ function buildParentQuestion({
   gradeLevel,
   topic,
   stuckPoint,
-  helpStyle
+  helpStyle,
+  subject
 }: {
   question: string;
   gradeLevel: string;
   topic?: string;
   stuckPoint?: string;
   helpStyle: ParentHelpStyle;
+  subject: SubjectConfig;
 }) {
   const topicLine = topic?.trim() ? `Topic: ${topic.trim()}` : 'Topic: not specified';
   const stuckLine = stuckPoint?.trim()
@@ -212,7 +214,7 @@ function buildParentQuestion({
     : 'Where the child is stuck: not specified';
 
   return `
-You are helping a parent support a child with math learning.
+You are helping a parent support a child with ${subject.name} learning.
 
 Child level: ${gradeLevel}
 ${topicLine}
@@ -617,10 +619,15 @@ export async function POST(request: NextRequest) {
 
     let answer = '';
 
-    if (graphOnlyBypass && audience === 'student' && normalizedGraphExpression) {
+    if (
+      subjectConfig.features.graphing &&
+      graphOnlyBypass &&
+      audience === 'student' &&
+      normalizedGraphExpression
+    ) {
       answer = buildLocalGraphOnlyAnswer(normalizedGraphExpression);
     } else {
-      const symbolicCheck = await getSymbolicCheck(questionText);
+      const symbolicCheck = activeSubject === 'math' ? await getSymbolicCheck(questionText) : '';
       const conversationContext = buildConversationContext(existingTurns);
 
       const effectiveQuestion =
@@ -630,7 +637,8 @@ export async function POST(request: NextRequest) {
               gradeLevel,
               topic,
               stuckPoint,
-              helpStyle: parentHelpStyle as ParentHelpStyle
+              helpStyle: parentHelpStyle as ParentHelpStyle,
+              subject: subjectConfig
             })
           : buildStudentQuestion(questionText, mode);
 
@@ -641,7 +649,8 @@ export async function POST(request: NextRequest) {
         gradeLevel,
         mode,
         symbolicCheck,
-        audience
+        audience,
+        subject: subjectConfig
       });
 
       answer = await generateTutorAnswerWithRetry(prompt);
