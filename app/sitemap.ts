@@ -12,10 +12,13 @@ export default function sitemap() {
     { url: `${base}/math/pricing`, lastModified: new Date() },
     { url: `${base}/physics`, lastModified: new Date() },
     { url: `${base}/physics/tutor`, lastModified: new Date() },
+    { url: `${base}/physics/history`, lastModified: new Date() },
     { url: `${base}/chemistry`, lastModified: new Date() },
     { url: `${base}/chemistry/tutor`, lastModified: new Date() },
+    { url: `${base}/chemistry/history`, lastModified: new Date() },
     { url: `${base}/biology`, lastModified: new Date() },
     { url: `${base}/biology/tutor`, lastModified: new Date() },
+    { url: `${base}/biology/history`, lastModified: new Date() },
     { url: `${base}/login`, lastModified: new Date() }
   ];
 }
