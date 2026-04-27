@@ -242,10 +242,11 @@ export default async function HistoryPageContent({
               className="historyLookupForm"
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'minmax(220px, 420px) max-content',
+                gridTemplateColumns: 'minmax(220px, 420px) auto',
                 gap: 12,
                 alignItems: 'end',
-                maxWidth: 760
+                justifyContent: 'start',
+                maxWidth: 820
               }}
             >
               <div style={{ minWidth: 0 }}>
@@ -259,9 +260,18 @@ export default async function HistoryPageContent({
                 />
               </div>
 
-              <div className="buttonRow" style={{ flexWrap: 'nowrap' }}>
-                <button type="submit">Load legacy email history</button>
-                <a className="btn secondary" href="/login">
+              <div
+                className="buttonRow"
+                style={{
+                  flexWrap: 'nowrap',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center'
+                }}
+              >
+                <button type="submit" style={{ whiteSpace: 'nowrap' }}>
+                  Load legacy email history
+                </button>
+                <a className="btn secondary" href="/login" style={{ whiteSpace: 'nowrap' }}>
                   Log in instead
                 </a>
               </div>
@@ -294,13 +304,23 @@ export default async function HistoryPageContent({
           className="historyLayout"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'minmax(280px, 340px) minmax(0, 1fr)',
-            gap: 26,
+            gridTemplateColumns: '340px minmax(0, 1fr)',
+            columnGap: 26,
+            rowGap: 26,
             alignItems: 'start',
             width: '100%'
           }}
         >
-          <aside className="card" style={{ display: 'grid', gap: 14, width: '100%', minWidth: 0 }}>
+          <aside
+            className="card historySessionsPanel"
+            style={{
+              display: 'grid',
+              gap: 14,
+              width: '100%',
+              minWidth: 0,
+              alignSelf: 'start'
+            }}
+          >
             <div style={{ display: 'grid', gap: 6 }}>
               <h2 style={{ margin: 0 }}>Saved conversations</h2>
               <p className="small" style={{ margin: 0 }}>
@@ -341,7 +361,7 @@ export default async function HistoryPageContent({
                     </a>
 
                     {historyMode === 'account' ? (
-                      <div className="buttonRow">
+                      <div className="buttonRow" style={{ justifyContent: 'flex-start' }}>
                         <DeleteConversationButton
                           conversationId={conversation.id}
                           redirectHref={historyHref}
@@ -355,8 +375,25 @@ export default async function HistoryPageContent({
             </div>
           </aside>
 
-          <main className="card" style={{ display: 'grid', gap: 14, width: '100%', minWidth: 0 }}>
-            <div className="buttonRow" style={{ justifyContent: 'space-between' }}>
+          <main
+            className="card historyThreadPanel"
+            style={{
+              display: 'grid',
+              gap: 14,
+              width: '100%',
+              minWidth: 0,
+              alignSelf: 'start'
+            }}
+          >
+            <div
+              className="historyThreadHeader"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'minmax(0, 1fr) auto',
+                gap: 14,
+                alignItems: 'start'
+              }}
+            >
               <div style={{ display: 'grid', gap: 4 }}>
                 <h2 style={{ margin: 0 }}>Conversation thread</h2>
                 <p className="small" style={{ margin: 0 }}>
@@ -365,10 +402,12 @@ export default async function HistoryPageContent({
               </div>
 
               {historyMode === 'account' && selectedConversation ? (
-                <DeleteConversationButton
-                  conversationId={selectedConversation.id}
-                  redirectHref={historyHref}
-                />
+                <div style={{ justifySelf: 'end' }}>
+                  <DeleteConversationButton
+                    conversationId={selectedConversation.id}
+                    redirectHref={historyHref}
+                  />
+                </div>
               ) : null}
             </div>
 
@@ -403,17 +442,40 @@ export default async function HistoryPageContent({
 
       <style>
         {`
-          @media (max-width: 760px) {
+          .historyLayout {
+            clear: both;
+          }
+
+          .historySessionsPanel,
+          .historyThreadPanel {
+            margin: 0 !important;
+            justify-self: stretch !important;
+          }
+
+          .historyLookupForm .buttonRow {
+            margin: 0;
+          }
+
+          @media (max-width: 860px) {
             .historyLayout {
               grid-template-columns: 1fr !important;
             }
 
             .historyLookupForm {
               grid-template-columns: 1fr !important;
+              max-width: 100% !important;
             }
 
             .historyLookupForm .buttonRow {
               flex-wrap: wrap !important;
+            }
+
+            .historyThreadHeader {
+              grid-template-columns: 1fr !important;
+            }
+
+            .historyThreadHeader > div:last-child {
+              justify-self: start !important;
             }
           }
         `}
