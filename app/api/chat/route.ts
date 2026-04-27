@@ -493,6 +493,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const activeSubject = subjectConfig.key;
+
     const questionText = typeof question === 'string' ? question.trim() : '';
     const normalizedGraphExpression =
       typeof graphExpression === 'string' ? normalizeGraphExpression(graphExpression) : '';
@@ -570,10 +572,33 @@ export async function POST(request: NextRequest) {
     }> = [];
 
     if (activeConversationId) {
+      const { data: activeConversation, error: conversationLookupError } = await supabase
+        .from('learner_conversations')
+        .select('id, subject')
+        .eq('id', activeConversationId)
+        .eq('subject', activeSubject)
+        .maybeSingle();
+
+      if (conversationLookupError) {
+        console.error('SUPABASE CONVERSATION LOOKUP ERROR:', conversationLookupError);
+        return NextResponse.json(
+          { error: 'Could not verify the selected conversation.' },
+          { status: 500 }
+        );
+      }
+
+      if (!activeConversation) {
+        return NextResponse.json(
+          { error: 'Conversation was not found for this subject.' },
+          { status: 404 }
+        );
+      }
+
       const { data: previousTurns, error: turnsError } = await supabase
         .from('learner_sessions')
         .select('prompt, response, turn_index, created_at')
         .eq('conversation_id', activeConversationId)
+        .eq('subject', activeSubject)
         .order('turn_index', { ascending: true })
         .order('created_at', { ascending: true });
 
@@ -628,6 +653,7 @@ export async function POST(request: NextRequest) {
         .insert({
           user_id: user?.id || null,
           email: normalizedEmail,
+          subject: activeSubject,
           audience,
           title: makeConversationTitle(conversationSeed)
         })
@@ -655,6 +681,7 @@ export async function POST(request: NextRequest) {
         turn_index: turnIndex,
         email: normalizedEmail,
         ip_address: getClientIp(request),
+        subject: activeSubject,
         mode,
         level: gradeLevel,
         prompt: questionText,
@@ -667,7 +694,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       answer,
       conversationId: activeConversationId,
-      subject: subjectConfig.key
+      subject: activeSubject
     });
   } catch (error: any) {
     console.error('CHAT API ERROR:', error);

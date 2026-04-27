@@ -70,6 +70,7 @@ export default async function StudentWorkspacePage({
       .from('learner_conversations')
       .select('id, title, audience, created_at, updated_at')
       .eq('user_id', user.id)
+      .eq('subject', 'math')
       .eq('audience', 'student')
       .order('updated_at', { ascending: false })
       .limit(30);
@@ -83,6 +84,7 @@ export default async function StudentWorkspacePage({
         .from('learner_sessions')
         .select('conversation_id, prompt, turn_index, created_at')
         .in('conversation_id', conversationIds)
+        .eq('subject', 'math')
         .eq('turn_index', 1)
         .order('created_at', { ascending: true });
 
@@ -103,6 +105,7 @@ export default async function StudentWorkspacePage({
       .from('learner_sessions')
       .select('id, turn_index, mode, level, prompt, response, created_at')
       .eq('conversation_id', selectedConversation.id)
+      .eq('subject', 'math')
       .order('turn_index', { ascending: true })
       .order('created_at', { ascending: true });
 
