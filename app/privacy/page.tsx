@@ -8,12 +8,12 @@ export default function PrivacyPage() {
           <span className="badge">Privacy Policy</span>
 
           <div style={{ display: 'grid', gap: 10 }}>
-            <h1 style={{ margin: 0 }}>How MathSupport AI handles information during the beta.</h1>
+            <h1 style={{ margin: 0 }}>How Solvyq handles information during the beta.</h1>
             <p className="small" style={{ margin: 0 }}>
-              Last updated: March 2026
+              Last updated: April 2026
             </p>
             <p className="small" style={{ margin: 0, maxWidth: 840 }}>
-              MathSupport AI is currently offered as a free beta product. This Privacy Policy explains
+              Solvyq is currently offered as a free beta product. This Privacy Policy explains
               what information may be collected, how it may be used, and how it is handled while the
               product continues to develop.
             </p>
@@ -53,7 +53,7 @@ export default function PrivacyPage() {
         <section className="card" style={{ display: 'grid', gap: 16 }}>
           <h2 style={{ margin: 0 }}>Information we may collect</h2>
           <p className="small" style={{ margin: 0 }}>
-            Depending on how the product is used, MathSupport AI may collect information such as:
+            Depending on how the product is used, Solvyq may collect information such as:
           </p>
 
           <div className="grid cols-3">
@@ -110,10 +110,10 @@ export default function PrivacyPage() {
         <section className="card" style={{ display: 'grid', gap: 14 }}>
           <h2 style={{ margin: 0 }}>Third-party services and data sharing</h2>
           <p className="small" style={{ margin: 0 }}>
-            MathSupport AI does not sell personal information. The product may rely on third-party
-            service providers such as hosting, database, authentication, analytics, and AI
-            infrastructure providers that process information on behalf of the service in order to
-            make the product available.
+            Solvyq does not sell personal information. The product may rely on third-party service
+            providers such as hosting, database, authentication, analytics, and AI infrastructure
+            providers that process information on behalf of the service in order to make the product
+            available.
           </p>
         </section>
       </Reveal>
