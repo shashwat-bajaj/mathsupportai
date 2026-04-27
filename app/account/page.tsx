@@ -39,15 +39,15 @@ export default async function AccountPage() {
             <h3 style={{ marginTop: 0 }}>History</h3>
             <p className="small" style={{ marginBottom: 0 }}>
               Revisit saved conversations, continue older threads, and keep track of earlier work
-              without starting from zero.
+              across active Solvyq subject branches.
             </p>
           </div>
 
           <div className="card innerFeatureCard">
             <h3 style={{ marginTop: 0 }}>Preferences</h3>
             <p className="small" style={{ marginBottom: 0 }}>
-              Control theme, translation language, learner level, and default student tutor mode from
-              one place.
+              Control theme, translation language, learner level, and default tutor behavior from one
+              account-wide place.
             </p>
           </div>
 
@@ -63,10 +63,10 @@ export default async function AccountPage() {
       <Reveal delay={0.14}>
         <section className="grid cols-3">
           <ActionCard
-            title="Private history"
+            title="Account history"
             description="View sessions attached to your account and continue older tutor threads more naturally."
             action={
-              <a className="btn secondary" href="/math/history">
+              <a className="btn secondary" href="/history">
                 Open History
               </a>
             }
