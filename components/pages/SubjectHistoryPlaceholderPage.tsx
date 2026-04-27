@@ -18,47 +18,16 @@ function getStatusLabel(status: SubjectConfig['status']) {
   }
 }
 
-function subjectHeroStyle(subject: SubjectConfig) {
-  return {
-    borderColor: subject.theme.accent,
-    boxShadow: `0 24px 80px ${subject.theme.backgroundGlow}`,
-    background: `
-      radial-gradient(circle at 12% 10%, ${subject.theme.backgroundGlow}, transparent 34%),
-      linear-gradient(135deg, ${subject.theme.accentSoft}, transparent 58%)
-    `
-  };
-}
-
-function subjectBadgeStyle(subject: SubjectConfig) {
-  return {
-    borderColor: subject.theme.accent,
-    background: subject.theme.accentSoft
-  };
-}
-
-function subjectCardStyle(subject: SubjectConfig) {
-  return {
-    borderColor: subject.theme.accentSoft
-  };
-}
-
 export default function SubjectHistoryPlaceholderPage({
   subject
 }: SubjectHistoryPlaceholderPageProps) {
   return (
     <div className="grid" style={{ gap: 24 }}>
       <Reveal delay={0.02}>
-        <section
-          className="card spotlightCard"
-          style={{ display: 'grid', gap: 16, ...subjectHeroStyle(subject) }}
-        >
+        <section className="card spotlightCard" style={{ display: 'grid', gap: 16 }}>
           <div className="buttonRow">
-            <span className="badge" style={subjectBadgeStyle(subject)}>
-              {subject.name} History
-            </span>
-            <span className="badge" style={subjectBadgeStyle(subject)}>
-              {getStatusLabel(subject.status)}
-            </span>
+            <span className="badge">{subject.name} History</span>
+            <span className="badge">{getStatusLabel(subject.status)}</span>
           </div>
 
           <div style={{ display: 'grid', gap: 10 }}>
@@ -86,7 +55,7 @@ export default function SubjectHistoryPlaceholderPage({
 
       <Reveal delay={0.08}>
         <section className="grid cols-3">
-          <div className="card innerFeatureCard" style={subjectCardStyle(subject)}>
+          <div className="card innerFeatureCard">
             <h3 style={{ marginTop: 0 }}>Future saved sessions</h3>
             <p className="small" style={{ marginBottom: 0 }}>
               Once this branch is active, {subject.name} conversations can be saved and revisited
@@ -94,7 +63,7 @@ export default function SubjectHistoryPlaceholderPage({
             </p>
           </div>
 
-          <div className="card innerFeatureCard" style={subjectCardStyle(subject)}>
+          <div className="card innerFeatureCard">
             <h3 style={{ marginTop: 0 }}>Subject separation</h3>
             <p className="small" style={{ marginBottom: 0 }}>
               The database is already being prepared with subject fields so future history can stay
@@ -102,7 +71,7 @@ export default function SubjectHistoryPlaceholderPage({
             </p>
           </div>
 
-          <div className="card innerFeatureCard" style={subjectCardStyle(subject)}>
+          <div className="card innerFeatureCard">
             <h3 style={{ marginTop: 0 }}>Safe placeholder</h3>
             <p className="small" style={{ marginBottom: 0 }}>
               This page prevents inactive subjects from accidentally showing Math-only history before
