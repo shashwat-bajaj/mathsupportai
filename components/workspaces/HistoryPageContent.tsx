@@ -242,7 +242,7 @@ export default async function HistoryPageContent({
               className="historyLookupForm"
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'minmax(220px, 420px) max-content',
+                gridTemplateColumns: 'minmax(220px, 420px) auto',
                 gap: 12,
                 alignItems: 'end',
                 justifyContent: 'start',
@@ -300,158 +300,154 @@ export default async function HistoryPageContent({
           </p>
         </section>
       ) : (
-        <section
-          className="historyLayout"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '340px minmax(0, 1fr)',
-            gap: 26,
-            alignItems: 'start',
-            width: '100%'
-          }}
-        >
-          <aside
-            className="card historyPanel"
+        <div className="historyLayoutWrap">
+          <section
+            className="historyLayout"
             style={{
               display: 'grid',
-              gap: 14,
-              width: '100%',
-              minWidth: 0,
-              alignSelf: 'start'
+              gridTemplateColumns: 'minmax(280px, 340px) minmax(0, 1fr)',
+              gap: 26,
+              alignItems: 'start',
+              width: '100%'
             }}
           >
-            <div style={{ display: 'grid', gap: 6 }}>
-              <h2 style={{ margin: 0 }}>Saved conversations</h2>
-              <p className="small" style={{ margin: 0 }}>
-                {conversations.length} saved {conversations.length === 1 ? 'conversation' : 'conversations'}
-                {historyMode === 'account' ? ' in your account.' : ' found from email lookup.'}
-              </p>
-            </div>
-
-            <div className="sessionList">
-              {conversations.map((conversation) => {
-                const isActive = selectedConversation?.id === conversation.id;
-                const firstPrompt =
-                  firstPromptByConversation[conversation.id] ||
-                  conversation.title ||
-                  'Untitled conversation';
-
-                const href = buildHistoryHref({
-                  historyHref,
-                  historyMode,
-                  fallbackEmail,
-                  conversationId: conversation.id
-                });
-
-                return (
-                  <div
-                    key={conversation.id}
-                    className={`sessionItem ${isActive ? 'active' : ''}`}
-                    style={{ display: 'grid', gap: 8 }}
-                  >
-                    <a href={href}>
-                      <p className="small" style={{ margin: '0 0 6px' }}>
-                        <strong>{makePreview(firstPrompt)}</strong>
-                      </p>
-                      <p className="small" style={{ margin: 0 }}>
-                        {conversation.subject} • {conversation.audience} • Updated{' '}
-                        {formatDate(conversation.updated_at)}
-                      </p>
-                    </a>
-
-                    {historyMode === 'account' ? (
-                      <div className="buttonRow" style={{ justifyContent: 'flex-start' }}>
-                        <DeleteConversationButton
-                          conversationId={conversation.id}
-                          redirectHref={historyHref}
-                          compact
-                        />
-                      </div>
-                    ) : null}
-                  </div>
-                );
-              })}
-            </div>
-          </aside>
-
-          <main
-            className="card historyPanel"
-            style={{
-              display: 'grid',
-              gap: 14,
-              width: '100%',
-              minWidth: 0,
-              alignSelf: 'start'
-            }}
-          >
-            <div
-              className="historyThreadHeader"
+            <aside
+              className="card"
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'minmax(0, 1fr) auto',
                 gap: 14,
-                alignItems: 'start'
+                width: '100%',
+                minWidth: 0,
+                alignSelf: 'start'
               }}
             >
-              <div style={{ display: 'grid', gap: 4 }}>
-                <h2 style={{ margin: 0 }}>Conversation thread</h2>
+              <div style={{ display: 'grid', gap: 6 }}>
+                <h2 style={{ margin: 0 }}>Saved conversations</h2>
                 <p className="small" style={{ margin: 0 }}>
-                  View the full question-and-answer flow for the selected session.
+                  {conversations.length} saved {conversations.length === 1 ? 'conversation' : 'conversations'}
+                  {historyMode === 'account' ? ' in your account.' : ' found from email lookup.'}
                 </p>
               </div>
 
-              {historyMode === 'account' && selectedConversation ? (
-                <div style={{ justifySelf: 'end' }}>
-                  <DeleteConversationButton
-                    conversationId={selectedConversation.id}
-                    redirectHref={historyHref}
-                  />
-                </div>
-              ) : null}
-            </div>
+              <div className="sessionList">
+                {conversations.map((conversation) => {
+                  const isActive = selectedConversation?.id === conversation.id;
+                  const firstPrompt =
+                    firstPromptByConversation[conversation.id] ||
+                    conversation.title ||
+                    'Untitled conversation';
 
-            {selectedConversation ? (
-              turns.length > 0 ? (
-                <ConversationThread
-                  title={selectedConversation.title}
-                  audience={selectedConversation.audience}
-                  createdAt={selectedConversation.created_at}
-                  updatedAt={selectedConversation.updated_at}
-                  turns={turns}
-                  showDeleteTurnControls={historyMode === 'account'}
-                  redirectHref={
-                    historyMode === 'account'
-                      ? `${historyHref}?conversation=${selectedConversation.id}`
-                      : undefined
-                  }
-                />
+                  const href = buildHistoryHref({
+                    historyHref,
+                    historyMode,
+                    fallbackEmail,
+                    conversationId: conversation.id
+                  });
+
+                  return (
+                    <div
+                      key={conversation.id}
+                      className={`sessionItem ${isActive ? 'active' : ''}`}
+                      style={{ display: 'grid', gap: 8 }}
+                    >
+                      <a href={href}>
+                        <p className="small" style={{ margin: '0 0 6px' }}>
+                          <strong>{makePreview(firstPrompt)}</strong>
+                        </p>
+                        <p className="small" style={{ margin: 0 }}>
+                          {conversation.subject} • {conversation.audience} • Updated{' '}
+                          {formatDate(conversation.updated_at)}
+                        </p>
+                      </a>
+
+                      {historyMode === 'account' ? (
+                        <div className="buttonRow" style={{ justifyContent: 'flex-start' }}>
+                          <DeleteConversationButton
+                            conversationId={conversation.id}
+                            redirectHref={historyHref}
+                            compact
+                          />
+                        </div>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
+            </aside>
+
+            <main
+              className="card"
+              style={{
+                display: 'grid',
+                gap: 14,
+                width: '100%',
+                minWidth: 0,
+                alignSelf: 'start'
+              }}
+            >
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'minmax(0, 1fr) auto',
+                  gap: 14,
+                  alignItems: 'start'
+                }}
+              >
+                <div style={{ display: 'grid', gap: 4 }}>
+                  <h2 style={{ margin: 0 }}>Conversation thread</h2>
+                  <p className="small" style={{ margin: 0 }}>
+                    View the full question-and-answer flow for the selected session.
+                  </p>
+                </div>
+
+                {historyMode === 'account' && selectedConversation ? (
+                  <div style={{ justifySelf: 'end' }}>
+                    <DeleteConversationButton
+                      conversationId={selectedConversation.id}
+                      redirectHref={historyHref}
+                    />
+                  </div>
+                ) : null}
+              </div>
+
+              {selectedConversation ? (
+                turns.length > 0 ? (
+                  <ConversationThread
+                    title={selectedConversation.title}
+                    audience={selectedConversation.audience}
+                    createdAt={selectedConversation.created_at}
+                    updatedAt={selectedConversation.updated_at}
+                    turns={turns}
+                    showDeleteTurnControls={historyMode === 'account'}
+                    redirectHref={
+                      historyMode === 'account'
+                        ? `${historyHref}?conversation=${selectedConversation.id}`
+                        : undefined
+                    }
+                  />
+                ) : (
+                  <p className="small" style={{ margin: 0 }}>
+                    This conversation was found, but no saved turns were loaded.
+                  </p>
+                )
               ) : (
                 <p className="small" style={{ margin: 0 }}>
-                  This conversation was found, but no saved turns were loaded.
+                  Select a conversation to view it.
                 </p>
-              )
-            ) : (
-              <p className="small" style={{ margin: 0 }}>
-                Select a conversation to view it.
-              </p>
-            )}
-          </main>
-        </section>
+              )}
+            </main>
+          </section>
+        </div>
       )}
 
       <style>
         {`
+          .historyLayoutWrap {
+            width: 100%;
+          }
+
           .historyLayout {
-            clear: both;
-          }
-
-          .historyPanel {
-            margin: 0 !important;
-            justify-self: stretch !important;
-          }
-
-          .historyLookupForm .buttonRow {
-            margin: 0;
+            width: 100%;
           }
 
           @media (max-width: 760px) {
@@ -466,14 +462,6 @@ export default async function HistoryPageContent({
 
             .historyLookupForm .buttonRow {
               flex-wrap: wrap !important;
-            }
-
-            .historyThreadHeader {
-              grid-template-columns: 1fr !important;
-            }
-
-            .historyThreadHeader > div:last-child {
-              justify-self: start !important;
             }
           }
         `}
