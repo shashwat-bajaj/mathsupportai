@@ -9,17 +9,17 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from '@vercel/analytics/next';
 
 export const metadata = {
-  title: 'MathSupport AI',
-  description: 'AI math support for students and parents.'
+  title: 'Solvyq',
+  description: 'A unified AI learning platform starting with Math.'
 };
 
 const primaryLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/math/tutor', label: 'Students' },
-  { href: '/math/parents', label: 'Parents' },
-  { href: '/math/history', label: 'History' },
-  { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' }
+  { href: '/', label: 'Solvyq' },
+  { href: '/math', label: 'Math' },
+  { href: '/physics', label: 'Physics' },
+  { href: '/chemistry', label: 'Chemistry' },
+  { href: '/biology', label: 'Biology' },
+  { href: '/math/history', label: 'History' }
 ];
 
 const footerLinks = [
@@ -143,12 +143,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               >
                 <div style={{ display: 'grid', gap: 8, minWidth: 0 }}>
                   <p className="small" style={{ margin: 0 }}>
-                    <strong>MathSupport AI</strong> is being shaped into a calmer learning workspace
-                    for students and parents.
+                    <strong>Solvyq</strong> is being shaped into a calmer AI learning platform across
+                    Math, Physics, Chemistry, and Biology.
                   </p>
                   <p className="small" style={{ margin: 0, maxWidth: 720 }}>
-                    The focus is better explanation, graph support, stronger follow-up flow, and a
-                    cleaner product experience across the whole site.
+                    Math is the active subject branch now. The long-term focus is a unified product
+                    experience with subject-specific learning support and shared account history.
                   </p>
                 </div>
 
