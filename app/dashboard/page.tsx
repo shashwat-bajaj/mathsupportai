@@ -16,7 +16,7 @@ async function getTutorSessions() {
 
   return supabase
     .from('learner_sessions')
-    .select('id, email, mode, level, prompt, response, created_at')
+    .select('id, email, subject, mode, level, prompt, response, created_at')
     .order('created_at', { ascending: false })
     .limit(10);
 }
@@ -166,6 +166,7 @@ export default async function DashboardPage({
                   <strong>Email:</strong> {session.email || 'Not provided'}
                 </p>
                 <p className="small">
+                  <strong>Subject:</strong> {session.subject || 'math'} |{' '}
                   <strong>Mode:</strong> {session.mode} | <strong>Level:</strong>{' '}
                   {session.level}
                 </p>
