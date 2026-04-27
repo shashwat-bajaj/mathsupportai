@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { createAdminSupabase } from '@/lib/supabase-admin';
 import { createClient as createAuthClient } from '@/lib/supabase/server';
 import DeleteConversationButton from '@/components/DeleteConversationButton';
@@ -228,7 +227,7 @@ export default async function HistoryPageContent({
       </Reveal>
 
       {!user ? (
-        <Reveal delay={0.04}>
+        <Reveal delay={0.06}>
           <section className="card" style={{ display: 'grid', gap: 14 }}>
             <div style={{ display: 'grid', gap: 8 }}>
               <h2 style={{ margin: 0 }}>Load older beta history</h2>
@@ -238,153 +237,182 @@ export default async function HistoryPageContent({
               </p>
             </div>
 
-            <form method="GET" className="grid" style={{ gap: 12 }}>
-              <div>
+            <form
+              method="GET"
+              className="legacyHistoryForm"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'minmax(220px, 420px) auto',
+                gap: 12,
+                alignItems: 'end',
+                maxWidth: 760
+              }}
+            >
+              <div style={{ minWidth: 0 }}>
                 <label>Email</label>
                 <input
                   name="email"
                   type="email"
                   defaultValue={fallbackEmail}
                   placeholder="you@example.com"
+                  style={{ width: '100%' }}
                 />
               </div>
 
-              <div className="buttonRow">
+              <div className="buttonRow" style={{ flexWrap: 'nowrap' }}>
                 <button type="submit">Load legacy email history</button>
-                <Link className="btn secondary" href="/login">
+                <a className="btn secondary" href="/login">
                   Log in instead
-                </Link>
+                </a>
               </div>
             </form>
+
+            <style>
+              {`
+                @media (max-width: 760px) {
+                  .legacyHistoryForm {
+                    grid-template-columns: 1fr !important;
+                  }
+
+                  .legacyHistoryForm .buttonRow {
+                    flex-wrap: wrap !important;
+                  }
+                }
+              `}
+            </style>
           </section>
         </Reveal>
       ) : null}
 
       {historyMode === 'none' ? (
-        <section className="card">
-          <p className="small" style={{ margin: 0 }}>
-            Sign in to view private history, or use the email lookup form for older beta
-            conversations.
-          </p>
-        </section>
+        <Reveal delay={0.1}>
+          <section className="card">
+            <p className="small" style={{ margin: 0 }}>
+              Sign in to view private history, or use the email lookup form for older beta
+              conversations.
+            </p>
+          </section>
+        </Reveal>
       ) : errorMessage ? (
-        <section className="card">
-          <p className="small" style={{ margin: 0 }}>
-            Error loading history: {errorMessage}
-          </p>
-        </section>
+        <Reveal delay={0.1}>
+          <section className="card">
+            <p className="small" style={{ margin: 0 }}>
+              Error loading history: {errorMessage}
+            </p>
+          </section>
+        </Reveal>
       ) : conversations.length === 0 ? (
-        <section className="card">
-          <p className="small" style={{ margin: 0 }}>
-            {getEmptyMessage(subject)}
-          </p>
-        </section>
+        <Reveal delay={0.1}>
+          <section className="card">
+            <p className="small" style={{ margin: 0 }}>
+              {getEmptyMessage(subject)}
+            </p>
+          </section>
+        </Reveal>
       ) : (
-        <section
-          className="twoPane"
-          style={{
-            alignItems: 'start',
-            gridTemplateColumns: 'minmax(280px, 360px) minmax(0, 1fr)'
-          }}
-        >
-          <aside className="card" style={{ display: 'grid', gap: 14 }}>
-            <div style={{ display: 'grid', gap: 6 }}>
-              <h2 style={{ margin: 0 }}>Saved conversations</h2>
-              <p className="small" style={{ margin: 0 }}>
-                {conversations.length} saved {conversations.length === 1 ? 'conversation' : 'conversations'}
-                {historyMode === 'account' ? ' in your account.' : ' found from email lookup.'}
-              </p>
-            </div>
-
-            <div className="sessionList">
-              {conversations.map((conversation) => {
-                const isActive = selectedConversation?.id === conversation.id;
-                const firstPrompt =
-                  firstPromptByConversation[conversation.id] ||
-                  conversation.title ||
-                  'Untitled conversation';
-
-                const href = buildHistoryHref({
-                  historyHref,
-                  historyMode,
-                  fallbackEmail,
-                  conversationId: conversation.id
-                });
-
-                return (
-                  <div
-                    key={conversation.id}
-                    className={`sessionItem ${isActive ? 'active' : ''}`}
-                    style={{ display: 'grid', gap: 8 }}
-                  >
-                    <Link href={href} style={{ display: 'block' }}>
-                      <p className="small" style={{ margin: '0 0 6px' }}>
-                        <strong>{makePreview(firstPrompt)}</strong>
-                      </p>
-                      <p className="small" style={{ margin: 0 }}>
-                        {conversation.subject} • {conversation.audience} • Updated{' '}
-                        {formatDate(conversation.updated_at)}
-                      </p>
-                    </Link>
-
-                    {historyMode === 'account' ? (
-                      <div className="buttonRow">
-                        <DeleteConversationButton
-                          conversationId={conversation.id}
-                          redirectHref={historyHref}
-                          compact
-                        />
-                      </div>
-                    ) : null}
-                  </div>
-                );
-              })}
-            </div>
-          </aside>
-
-          <main className="card" style={{ display: 'grid', gap: 14, minWidth: 0 }}>
-            <div className="buttonRow" style={{ justifyContent: 'space-between' }}>
-              <div style={{ display: 'grid', gap: 4 }}>
-                <h2 style={{ margin: 0 }}>Conversation thread</h2>
+        <section className="twoPane">
+          <Reveal delay={0.1}>
+            <div className="card" style={{ display: 'grid', gap: 14 }}>
+              <div style={{ display: 'grid', gap: 6 }}>
+                <h2 style={{ margin: 0 }}>Saved conversations</h2>
                 <p className="small" style={{ margin: 0 }}>
-                  View the full question-and-answer flow for the selected session.
+                  {conversations.length} saved {conversations.length === 1 ? 'conversation' : 'conversations'}
+                  {historyMode === 'account' ? ' in your account.' : ' found from email lookup.'}
                 </p>
               </div>
 
-              {historyMode === 'account' && selectedConversation ? (
-                <DeleteConversationButton
-                  conversationId={selectedConversation.id}
-                  redirectHref={historyHref}
-                />
-              ) : null}
-            </div>
+              <div className="sessionList">
+                {conversations.map((conversation) => {
+                  const isActive = selectedConversation?.id === conversation.id;
+                  const firstPrompt =
+                    firstPromptByConversation[conversation.id] ||
+                    conversation.title ||
+                    'Untitled conversation';
 
-            {selectedConversation ? (
-              turns.length > 0 ? (
-                <ConversationThread
-                  title={selectedConversation.title}
-                  audience={selectedConversation.audience}
-                  createdAt={selectedConversation.created_at}
-                  updatedAt={selectedConversation.updated_at}
-                  turns={turns}
-                  showDeleteTurnControls={historyMode === 'account'}
-                  redirectHref={
-                    historyMode === 'account'
-                      ? `${historyHref}?conversation=${selectedConversation.id}`
-                      : undefined
-                  }
-                />
+                  const href = buildHistoryHref({
+                    historyHref,
+                    historyMode,
+                    fallbackEmail,
+                    conversationId: conversation.id
+                  });
+
+                  return (
+                    <div
+                      key={conversation.id}
+                      className={`sessionItem ${isActive ? 'active' : ''}`}
+                      style={{ display: 'grid', gap: 8 }}
+                    >
+                      <a href={href}>
+                        <p className="small" style={{ margin: '0 0 6px' }}>
+                          <strong>{makePreview(firstPrompt)}</strong>
+                        </p>
+                        <p className="small" style={{ margin: 0 }}>
+                          {conversation.subject} • {conversation.audience} • Updated{' '}
+                          {formatDate(conversation.updated_at)}
+                        </p>
+                      </a>
+
+                      {historyMode === 'account' ? (
+                        <div className="buttonRow">
+                          <DeleteConversationButton
+                            conversationId={conversation.id}
+                            redirectHref={historyHref}
+                            compact
+                          />
+                        </div>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.16}>
+            <div className="card" style={{ display: 'grid', gap: 14 }}>
+              <div className="buttonRow" style={{ justifyContent: 'space-between' }}>
+                <div style={{ display: 'grid', gap: 4 }}>
+                  <h2 style={{ margin: 0 }}>Conversation thread</h2>
+                  <p className="small" style={{ margin: 0 }}>
+                    View the full question-and-answer flow for the selected session.
+                  </p>
+                </div>
+
+                {historyMode === 'account' && selectedConversation ? (
+                  <DeleteConversationButton
+                    conversationId={selectedConversation.id}
+                    redirectHref={historyHref}
+                  />
+                ) : null}
+              </div>
+
+              {selectedConversation ? (
+                turns.length > 0 ? (
+                  <ConversationThread
+                    title={selectedConversation.title}
+                    audience={selectedConversation.audience}
+                    createdAt={selectedConversation.created_at}
+                    updatedAt={selectedConversation.updated_at}
+                    turns={turns}
+                    showDeleteTurnControls={historyMode === 'account'}
+                    redirectHref={
+                      historyMode === 'account'
+                        ? `${historyHref}?conversation=${selectedConversation.id}`
+                        : undefined
+                    }
+                  />
+                ) : (
+                  <p className="small" style={{ margin: 0 }}>
+                    This conversation was found, but no saved turns were loaded.
+                  </p>
+                )
               ) : (
                 <p className="small" style={{ margin: 0 }}>
-                  This conversation was found, but no saved turns were loaded.
+                  Select a conversation to view it.
                 </p>
-              )
-            ) : (
-              <p className="small" style={{ margin: 0 }}>
-                Select a conversation to view it.
-              </p>
-            )}
-          </main>
+              )}
+            </div>
+          </Reveal>
         </section>
       )}
     </div>
