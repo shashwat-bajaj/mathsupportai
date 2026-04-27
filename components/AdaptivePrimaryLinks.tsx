@@ -19,9 +19,13 @@ const mathProductLinks = [
   { href: '/contact', label: 'Contact' }
 ];
 
+function shouldUseMathProductNav(pathname: string) {
+  return pathname === '/math' || pathname.startsWith('/math/');
+}
+
 export default function AdaptivePrimaryLinks() {
   const pathname = usePathname();
-  const links = pathname === '/' ? solvyqLinks : mathProductLinks;
+  const links = shouldUseMathProductNav(pathname) ? mathProductLinks : solvyqLinks;
 
   return (
     <>
