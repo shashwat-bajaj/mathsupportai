@@ -30,16 +30,47 @@ function getStatusDescription(subject: SubjectConfig) {
   return `${subject.name} is planned for a future Solvyq subject branch. Math remains the active workspace for now.`;
 }
 
+function subjectHeroStyle(subject: SubjectConfig) {
+  return {
+    borderColor: subject.theme.accent,
+    boxShadow: `0 24px 80px ${subject.theme.backgroundGlow}`,
+    background: `
+      radial-gradient(circle at 12% 10%, ${subject.theme.backgroundGlow}, transparent 34%),
+      linear-gradient(135deg, ${subject.theme.accentSoft}, transparent 58%)
+    `
+  };
+}
+
+function subjectBadgeStyle(subject: SubjectConfig) {
+  return {
+    borderColor: subject.theme.accent,
+    background: subject.theme.accentSoft
+  };
+}
+
+function subjectCardStyle(subject: SubjectConfig) {
+  return {
+    borderColor: subject.theme.accentSoft
+  };
+}
+
 export default function SubjectLandingPage({ subject }: SubjectLandingPageProps) {
   const isActive = subject.status === 'active';
 
   return (
     <div className="grid" style={{ gap: 24 }}>
       <Reveal delay={0.02}>
-        <section className="card spotlightCard" style={{ display: 'grid', gap: 16 }}>
+        <section
+          className="card spotlightCard"
+          style={{ display: 'grid', gap: 16, ...subjectHeroStyle(subject) }}
+        >
           <div className="buttonRow">
-            <span className="badge">{getStatusLabel(subject.status)}</span>
-            <span className="badge">{subject.name}</span>
+            <span className="badge" style={subjectBadgeStyle(subject)}>
+              {getStatusLabel(subject.status)}
+            </span>
+            <span className="badge" style={subjectBadgeStyle(subject)}>
+              {subject.name}
+            </span>
           </div>
 
           <div style={{ display: 'grid', gap: 10 }}>
@@ -80,7 +111,7 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
 
       <Reveal delay={0.08}>
         <section className="grid cols-3">
-          <div className="card innerFeatureCard">
+          <div className="card innerFeatureCard" style={subjectCardStyle(subject)}>
             <h3 style={{ marginTop: 0 }}>Subject identity</h3>
             <p className="small" style={{ marginBottom: 0 }}>
               This branch will eventually have its own learning flow, examples, prompt behavior, and
@@ -88,7 +119,7 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
             </p>
           </div>
 
-          <div className="card innerFeatureCard">
+          <div className="card innerFeatureCard" style={subjectCardStyle(subject)}>
             <h3 style={{ marginTop: 0 }}>Shared foundation</h3>
             <p className="small" style={{ marginBottom: 0 }}>
               The goal is to keep one Vercel project, one Supabase setup, shared auth, shared history
@@ -96,7 +127,7 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
             </p>
           </div>
 
-          <div className="card innerFeatureCard">
+          <div className="card innerFeatureCard" style={subjectCardStyle(subject)}>
             <h3 style={{ marginTop: 0 }}>No duplicate app</h3>
             <p className="small" style={{ marginBottom: 0 }}>
               {subject.name} will grow as a subject branch inside Solvyq, not as a separate cloned
@@ -118,7 +149,11 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
 
           <div className="grid cols-3">
             {subject.tutor.examplePrompts.map((prompt) => (
-              <div key={prompt} className="card questionSurface" style={{ padding: 14 }}>
+              <div
+                key={prompt}
+                className="card questionSurface"
+                style={{ padding: 14, ...subjectCardStyle(subject) }}
+              >
                 <p className="small" style={{ margin: 0 }}>
                   {prompt}
                 </p>

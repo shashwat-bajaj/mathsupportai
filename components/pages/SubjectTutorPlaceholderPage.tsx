@@ -18,16 +18,47 @@ function getStatusLabel(status: SubjectConfig['status']) {
   }
 }
 
+function subjectHeroStyle(subject: SubjectConfig) {
+  return {
+    borderColor: subject.theme.accent,
+    boxShadow: `0 24px 80px ${subject.theme.backgroundGlow}`,
+    background: `
+      radial-gradient(circle at 12% 10%, ${subject.theme.backgroundGlow}, transparent 34%),
+      linear-gradient(135deg, ${subject.theme.accentSoft}, transparent 58%)
+    `
+  };
+}
+
+function subjectBadgeStyle(subject: SubjectConfig) {
+  return {
+    borderColor: subject.theme.accent,
+    background: subject.theme.accentSoft
+  };
+}
+
+function subjectCardStyle(subject: SubjectConfig) {
+  return {
+    borderColor: subject.theme.accentSoft
+  };
+}
+
 export default function SubjectTutorPlaceholderPage({
   subject
 }: SubjectTutorPlaceholderPageProps) {
   return (
     <div className="grid" style={{ gap: 24 }}>
       <Reveal delay={0.02}>
-        <section className="card spotlightCard" style={{ display: 'grid', gap: 16 }}>
+        <section
+          className="card spotlightCard"
+          style={{ display: 'grid', gap: 16, ...subjectHeroStyle(subject) }}
+        >
           <div className="buttonRow">
-            <span className="badge">{subject.name} Tutor</span>
-            <span className="badge">{getStatusLabel(subject.status)}</span>
+            <span className="badge" style={subjectBadgeStyle(subject)}>
+              {subject.name} Tutor
+            </span>
+            <span className="badge" style={subjectBadgeStyle(subject)}>
+              {getStatusLabel(subject.status)}
+            </span>
           </div>
 
           <div style={{ display: 'grid', gap: 10 }}>
@@ -55,7 +86,7 @@ export default function SubjectTutorPlaceholderPage({
 
       <Reveal delay={0.08}>
         <section className="grid cols-3">
-          <div className="card innerFeatureCard">
+          <div className="card innerFeatureCard" style={subjectCardStyle(subject)}>
             <h3 style={{ marginTop: 0 }}>Planned subject flow</h3>
             <p className="small" style={{ marginBottom: 0 }}>
               This tutor branch will eventually use subject-specific instructions, examples, and
@@ -63,7 +94,7 @@ export default function SubjectTutorPlaceholderPage({
             </p>
           </div>
 
-          <div className="card innerFeatureCard">
+          <div className="card innerFeatureCard" style={subjectCardStyle(subject)}>
             <h3 style={{ marginTop: 0 }}>Shared Solvyq foundation</h3>
             <p className="small" style={{ marginBottom: 0 }}>
               The goal is to keep one account system, one deployment, and one shared history
@@ -71,7 +102,7 @@ export default function SubjectTutorPlaceholderPage({
             </p>
           </div>
 
-          <div className="card innerFeatureCard">
+          <div className="card innerFeatureCard" style={subjectCardStyle(subject)}>
             <h3 style={{ marginTop: 0 }}>Not active yet</h3>
             <p className="small" style={{ marginBottom: 0 }}>
               This placeholder prevents unsupported subjects from accidentally calling the active Math
@@ -93,7 +124,11 @@ export default function SubjectTutorPlaceholderPage({
 
           <div className="grid cols-3">
             {subject.tutor.examplePrompts.map((prompt) => (
-              <div key={prompt} className="card questionSurface" style={{ padding: 14 }}>
+              <div
+                key={prompt}
+                className="card questionSurface"
+                style={{ padding: 14, ...subjectCardStyle(subject) }}
+              >
                 <p className="small" style={{ margin: 0 }}>
                   {prompt}
                 </p>
