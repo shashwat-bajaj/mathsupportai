@@ -7,5 +7,11 @@ export default function MathHistoryPage({
 }: {
   searchParams: Promise<{ email?: string; conversation?: string }>;
 }) {
-  return <HistoryPageContent searchParams={searchParams} historyHref="/math/history" />;
+  return (
+    <HistoryPageContent
+      searchParams={searchParams}
+      historyHref="/math/history"
+      subject="math"
+    />
+  );
 }

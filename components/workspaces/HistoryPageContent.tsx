@@ -3,11 +3,13 @@ import { createClient as createAuthClient } from '@/lib/supabase/server';
 import DeleteConversationButton from '@/components/DeleteConversationButton';
 import ConversationThread from '@/components/ConversationThread';
 import Reveal from '@/components/Reveal';
+import type { SubjectKey } from '@/lib/subjects';
 
 type ConversationRecord = {
   id: string;
   title: string | null;
   audience: string;
+  subject: string;
   created_at: string;
   updated_at: string;
 };
@@ -33,6 +35,7 @@ type TurnRecord = {
 type HistoryPageContentProps = {
   searchParams: Promise<{ email?: string; conversation?: string }>;
   historyHref?: string;
+  subject?: SubjectKey;
 };
 
 function formatDate(value: string) {
@@ -67,9 +70,23 @@ function buildHistoryHref({
   return `${historyHref}?email=${encodeURIComponent(fallbackEmail)}&conversation=${conversationId}`;
 }
 
+function getHistoryLabel(subject?: SubjectKey) {
+  if (subject === 'math') return 'Math History';
+  return 'History';
+}
+
+function getEmptyMessage(subject?: SubjectKey) {
+  if (subject === 'math') {
+    return 'No saved math conversations were found for this history view.';
+  }
+
+  return 'No saved conversations were found for this history view.';
+}
+
 export default async function HistoryPageContent({
   searchParams,
-  historyHref = '/history'
+  historyHref = '/history',
+  subject
 }: HistoryPageContentProps) {
   const params = await searchParams;
   const fallbackEmail = (params.email || '').trim().toLowerCase();
@@ -91,12 +108,18 @@ export default async function HistoryPageContent({
   if (user?.id) {
     historyMode = 'account';
 
-    const { data, error } = await supabase
+    let query = supabase
       .from('learner_conversations')
-      .select('id, title, audience, created_at, updated_at')
+      .select('id, title, audience, subject, created_at, updated_at')
       .eq('user_id', user.id)
       .order('updated_at', { ascending: false })
       .limit(30);
+
+    if (subject) {
+      query = query.eq('subject', subject);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       errorMessage = error.message;
@@ -106,12 +129,18 @@ export default async function HistoryPageContent({
   } else if (fallbackEmail) {
     historyMode = 'email';
 
-    const { data, error } = await supabase
+    let query = supabase
       .from('learner_conversations')
-      .select('id, title, audience, created_at, updated_at')
+      .select('id, title, audience, subject, created_at, updated_at')
       .eq('email', fallbackEmail)
       .order('updated_at', { ascending: false })
       .limit(30);
+
+    if (subject) {
+      query = query.eq('subject', subject);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       errorMessage = error.message;
@@ -123,12 +152,18 @@ export default async function HistoryPageContent({
   if (!errorMessage && conversations.length > 0) {
     const conversationIds = conversations.map((conversation) => conversation.id);
 
-    const { data: firstTurns, error: firstTurnsError } = await supabase
+    let query = supabase
       .from('learner_sessions')
       .select('conversation_id, prompt, turn_index, created_at')
       .in('conversation_id', conversationIds)
       .eq('turn_index', 1)
       .order('created_at', { ascending: true });
+
+    if (subject) {
+      query = query.eq('subject', subject);
+    }
+
+    const { data: firstTurns, error: firstTurnsError } = await query;
 
     if (firstTurnsError) {
       errorMessage = firstTurnsError.message;
@@ -147,12 +182,18 @@ export default async function HistoryPageContent({
     null;
 
   if (selectedConversation && !errorMessage) {
-    const { data, error } = await supabase
+    let query = supabase
       .from('learner_sessions')
       .select('id, conversation_id, turn_index, mode, level, prompt, response, created_at')
       .eq('conversation_id', selectedConversation.id)
       .order('turn_index', { ascending: true })
       .order('created_at', { ascending: true });
+
+    if (subject) {
+      query = query.eq('subject', subject);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       errorMessage = error.message;
@@ -165,7 +206,7 @@ export default async function HistoryPageContent({
     <div className="grid" style={{ gap: 24 }}>
       <Reveal delay={0.02}>
         <section className="card spotlightCard" style={{ display: 'grid', gap: 14 }}>
-          <span className="badge">History</span>
+          <span className="badge">{getHistoryLabel(subject)}</span>
 
           <div style={{ display: 'grid', gap: 10 }}>
             <h1 style={{ margin: 0 }}>Revisit earlier sessions without losing the thread.</h1>
@@ -239,7 +280,7 @@ export default async function HistoryPageContent({
         <Reveal delay={0.1}>
           <section className="card">
             <p className="small" style={{ margin: 0 }}>
-              No saved conversations were found for this history view.
+              {getEmptyMessage(subject)}
             </p>
           </section>
         </Reveal>
@@ -281,7 +322,8 @@ export default async function HistoryPageContent({
                           <strong>{makePreview(firstPrompt)}</strong>
                         </p>
                         <p className="small" style={{ margin: 0 }}>
-                          {conversation.audience} • Updated {formatDate(conversation.updated_at)}
+                          {conversation.subject} • {conversation.audience} • Updated{' '}
+                          {formatDate(conversation.updated_at)}
                         </p>
                       </a>
 
