@@ -129,6 +129,7 @@ export default async function StudentWorkspacePage({
 
         <Reveal delay={0.08}>
           <MathTutor
+            subject="math"
             audience="student"
             title="Tutor Support for Students"
             description="Use this page for direct math help, worked solutions, hints, diagnosis mode, graphable questions, and practice questions."
@@ -264,6 +265,7 @@ export default async function StudentWorkspacePage({
         <Reveal delay={0.14}>
           <main style={{ display: 'grid', gap: 18, minWidth: 0 }}>
             <MathTutor
+              subject="math"
               audience="student"
               initialConversationId={selectedConversation?.id || null}
               newSessionHref={studentWorkspaceHref}

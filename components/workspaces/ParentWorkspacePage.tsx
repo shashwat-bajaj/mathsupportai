@@ -131,6 +131,7 @@ export default async function ParentWorkspacePage({
 
         <Reveal delay={0.08}>
           <MathTutor
+            subject="math"
             audience="parent"
             lockedMode="hint"
             title="Tutor Support for Parents"
@@ -271,6 +272,7 @@ export default async function ParentWorkspacePage({
         <Reveal delay={0.14}>
           <main style={{ display: 'grid', gap: 18, minWidth: 0 }}>
             <MathTutor
+              subject="math"
               audience="parent"
               lockedMode="hint"
               initialConversationId={selectedConversation?.id || null}
