@@ -43,6 +43,9 @@ export default function SubjectTutorPlaceholderPage({
             <Link className="btn" href="/math/tutor">
               Open Active Math Tutor
             </Link>
+            <Link className="btn secondary" href={`${subject.path}/history`}>
+              View History Preview
+            </Link>
             <Link className="btn secondary" href={subject.path}>
               Back to {subject.name}
             </Link>

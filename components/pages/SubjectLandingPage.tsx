@@ -63,6 +63,10 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
               </Link>
             )}
 
+            <Link className="btn secondary" href={`${subject.path}/history`}>
+              View History Preview
+            </Link>
+
             <Link className="btn secondary" href="/math/tutor">
               Open Active Math Tutor
             </Link>
