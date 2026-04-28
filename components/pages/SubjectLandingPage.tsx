@@ -24,10 +24,10 @@ function getStatusDescription(subject: SubjectConfig) {
   }
 
   if (subject.status === 'beta') {
-    return `${subject.name} is being prepared as one of the next TutoVera subject branches. Math remains the active workspace for now.`;
+    return `${subject.name} is being prepared as one of the next TutoVera subject branches. TutoVera Math remains the active tutor workspace for now.`;
   }
 
-  return `${subject.name} is planned for a future TutoVera subject branch. Math remains the active workspace for now.`;
+  return `${subject.name} is planned as a future TutoVera subject branch. TutoVera Math remains the active tutor workspace for now.`;
 }
 
 function getPreviewPrompt(subject: SubjectConfig) {
@@ -114,6 +114,18 @@ function getUseCases(subject: SubjectConfig) {
   }
 }
 
+function getFinalHeading(subject: SubjectConfig) {
+  if (subject.status === 'active') {
+    return `${subject.name} is active now.`;
+  }
+
+  if (subject.status === 'beta') {
+    return `${subject.name} is being prepared for a future rollout.`;
+  }
+
+  return `${subject.name} is planned for a later rollout.`;
+}
+
 export default function SubjectLandingPage({ subject }: SubjectLandingPageProps) {
   const isActive = subject.status === 'active';
   const previewPrompt = getPreviewPrompt(subject);
@@ -131,7 +143,7 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
             </div>
 
             <h1 className="homeLeadTitle">
-              {subject.name} support built as a TutoVera subject branch.
+              {subject.name} support shaped for the TutoVera learning system.
             </h1>
 
             <p className="homeLeadSubtext">{subject.description}</p>
@@ -171,14 +183,14 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
               <div className="homeLeadProofItem">
                 <strong>Shared foundation</strong>
                 <p className="small" style={{ margin: 0 }}>
-                  One TutoVera account and structure.
+                  One TutoVera account, history, and structure.
                 </p>
               </div>
 
               <div className="homeLeadProofItem">
                 <strong>Careful rollout</strong>
                 <p className="small" style={{ margin: 0 }}>
-                  Math stays active while this branch prepares.
+                  Math stays stable while this branch develops.
                 </p>
               </div>
             </div>
@@ -262,10 +274,10 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
         <section className="card" style={{ display: 'grid', gap: 16 }}>
           <div style={{ display: 'grid', gap: 8 }}>
             <span className="badge">Example prompts</span>
-            <h2 style={{ margin: 0 }}>What users may eventually ask in {subject.name}.</h2>
+            <h2 style={{ margin: 0 }}>What users may ask in {subject.name}.</h2>
             <p className="small" style={{ margin: 0, maxWidth: 820 }}>
-              These examples come from the subject configuration and will later help shape the
-              subject-specific tutor experience.
+              These examples come from the subject configuration and help preview the kind of
+              subject-specific tutor behavior this branch can support.
             </p>
           </div>
 
@@ -284,15 +296,11 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
       <Reveal delay={0.12}>
         <section className="card spotlightCard" style={{ display: 'grid', gap: 16 }}>
           <div style={{ display: 'grid', gap: 8 }}>
-            <h2 style={{ margin: 0 }}>
-              {subject.status === 'active'
-                ? `${subject.name} is active now.`
-                : `${subject.name} is not active yet.`}
-            </h2>
+            <h2 style={{ margin: 0 }}>{getFinalHeading(subject)}</h2>
             <p className="small" style={{ margin: 0, maxWidth: 860 }}>
-              The current active tutor experience is TutoVera Math. This {subject.name} branch is being
-              shaped so it can eventually support its own tutor behavior, examples, history, and
-              learning flow without splitting TutoVera into separate apps.
+              The current active tutor experience is TutoVera Math. This {subject.name} branch is
+              being shaped so it can support its own tutor behavior, examples, history, and learning
+              flow without splitting TutoVera into separate apps.
             </p>
           </div>
 
