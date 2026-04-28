@@ -119,8 +119,8 @@ export default function SettingsForm({
         <div style={{ display: 'grid', gap: 8 }}>
           <h3 style={{ margin: 0 }}>Display and language</h3>
           <p className="small" style={{ margin: 0 }}>
-            Choose how the product looks by default and what translation language should be ready
-            when you need it.
+            Choose how TutoVera looks by default and which translation language should be ready when
+            you need it.
           </p>
         </div>
 
@@ -173,10 +173,10 @@ export default function SettingsForm({
         }}
       >
         <div style={{ display: 'grid', gap: 8 }}>
-          <h3 style={{ margin: 0 }}>Student tutor defaults</h3>
+          <h3 style={{ margin: 0 }}>Student workspace defaults</h3>
           <p className="small" style={{ margin: 0 }}>
-            Auto mode follows the wording of the question more naturally, while the other modes
-            push the tutor toward a more specific teaching style.
+            Auto mode follows the wording of the question naturally, while the other modes guide the
+            tutor toward a more specific learning style.
           </p>
         </div>
 
@@ -223,10 +223,10 @@ export default function SettingsForm({
         }}
       >
         <div style={{ display: 'grid', gap: 8 }}>
-          <h3 style={{ margin: 0 }}>Parent tutor defaults</h3>
+          <h3 style={{ margin: 0 }}>Parent workspace defaults</h3>
           <p className="small" style={{ margin: 0 }}>
-            Parent Tutor stays in guided hint mode by design, but you can choose the default
-            learner level here.
+            The Parent workspace stays in guided hint mode by design, but you can choose the default
+            learner level here so explanations feel better matched from the start.
           </p>
         </div>
 
@@ -262,7 +262,7 @@ export default function SettingsForm({
       >
         <div className="buttonRow">
           <button type="button" onClick={saveSettings} disabled={loading}>
-            {loading ? 'Saving...' : 'Save Settings'}
+            {loading ? 'Saving...' : 'Save settings'}
           </button>
         </div>
 
@@ -272,7 +272,8 @@ export default function SettingsForm({
           </p>
         ) : (
           <p className="small" style={{ margin: 0 }}>
-            Saved changes affect your default experience, but you can still adjust things inside a session.
+            Saved changes shape your default TutoVera experience, but you can still adjust things
+            inside each session.
           </p>
         )}
       </div>
