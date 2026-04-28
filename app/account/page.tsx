@@ -23,11 +23,11 @@ export default async function AccountPage() {
           <span className="badge">Account</span>
 
           <div style={{ display: 'grid', gap: 10 }}>
-            <h1 style={{ margin: 0 }}>Your account and saved workspace.</h1>
+            <h1 style={{ margin: 0 }}>Your TutoVera account and saved learning workspace.</h1>
             <p className="small" style={{ margin: 0, maxWidth: 820 }}>
               Signed in as <strong>{user.email}</strong>. Your account keeps session history,
-              preferences, and tutor defaults connected across visits so the product feels more
-              continuous over time.
+              preferences, and tutor defaults connected across visits so TutoVera feels more
+              continuous each time you return.
             </p>
           </div>
         </section>
@@ -36,15 +36,15 @@ export default async function AccountPage() {
       <Reveal delay={0.08}>
         <section className="grid cols-3">
           <div className="card innerFeatureCard">
-            <h3 style={{ marginTop: 0 }}>History</h3>
+            <h3 style={{ marginTop: 0 }}>Saved history</h3>
             <p className="small" style={{ marginBottom: 0 }}>
-              Revisit saved conversations, continue older threads, and keep track of earlier work
+              Revisit saved conversations, continue older threads, and keep track of learning work
               across active TutoVera subject branches.
             </p>
           </div>
 
           <div className="card innerFeatureCard">
-            <h3 style={{ marginTop: 0 }}>Preferences</h3>
+            <h3 style={{ marginTop: 0 }}>Learning preferences</h3>
             <p className="small" style={{ marginBottom: 0 }}>
               Control theme, translation language, learner level, and default tutor behavior from one
               account-wide place.
@@ -54,7 +54,8 @@ export default async function AccountPage() {
           <div className="card innerFeatureCard">
             <h3 style={{ marginTop: 0 }}>Account access</h3>
             <p className="small" style={{ marginBottom: 0 }}>
-              Stay signed in while working through sessions, or sign out whenever you are done.
+              Stay signed in while working through sessions, or sign out whenever you are done using
+              TutoVera on this device.
             </p>
           </div>
         </section>
@@ -84,7 +85,7 @@ export default async function AccountPage() {
 
           <ActionCard
             title="Account access"
-            description="Sign out when you are done using the product on this device."
+            description="Sign out when you are done using TutoVera on this device."
             action={<SignOutButton />}
           />
         </section>
