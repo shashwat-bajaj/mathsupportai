@@ -276,8 +276,24 @@ function isGraphExplanationRequest(question: string) {
     /\b(explain|describe|what does|how does|why does)\b/i.test(question);
 }
 
-function buildStudentQuestion(question: string, mode: string) {
+function buildStudentQuestion(question: string, mode: string, subject: SubjectConfig) {
   let enhanced = question;
+
+  if (subject.key !== 'math') {
+    if (mode === 'diagnose') {
+      enhanced = `${enhanced}
+
+If the user did not actually provide their work or reasoning, say that you cannot diagnose an exact mistake yet, and then show what they should check first.`;
+    }
+
+    if (mode === 'hint') {
+      enhanced = `${enhanced}
+
+Stay in hint mode unless a full explanation is absolutely necessary.`;
+    }
+
+    return enhanced.trim();
+  }
 
   if (mode === 'auto') {
     if (isAmbiguousStandaloneMathInput(question)) {
@@ -486,10 +502,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (subjectConfig.key !== 'math' || subjectConfig.status !== 'active') {
+    if (subjectConfig.status !== 'active') {
       return NextResponse.json(
         {
-          error: `${subjectConfig.name} support is not enabled yet. Math is currently the active subject.`
+          error: `${subjectConfig.name} support is not enabled yet. TutoVera Math is currently the active tutor workspace.`
         },
         { status: 501 }
       );
@@ -640,7 +656,7 @@ export async function POST(request: NextRequest) {
               helpStyle: parentHelpStyle as ParentHelpStyle,
               subject: subjectConfig
             })
-          : buildStudentQuestion(questionText, mode);
+          : buildStudentQuestion(questionText, mode, subjectConfig);
 
       const prompt = buildTutorPrompt({
         question: conversationContext

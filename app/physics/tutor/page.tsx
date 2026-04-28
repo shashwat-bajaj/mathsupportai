@@ -1,13 +1,11 @@
-import { notFound } from 'next/navigation';
-import SubjectTutorPlaceholderPage from '@/components/pages/SubjectTutorPlaceholderPage';
-import { getSubjectConfig } from '@/lib/subjects';
+import StudentWorkspacePage from '@/components/workspaces/StudentWorkspacePage';
 
-export default function PhysicsTutorPage() {
-  const subject = getSubjectConfig('physics');
+export const dynamic = 'force-dynamic';
 
-  if (!subject) {
-    notFound();
-  }
-
-  return <SubjectTutorPlaceholderPage subject={subject} />;
+export default function PhysicsTutorPage({
+  searchParams
+}: {
+  searchParams: Promise<{ conversation?: string }>;
+}) {
+  return <StudentWorkspacePage searchParams={searchParams} subject="physics" />;
 }

@@ -1,13 +1,17 @@
-import { notFound } from 'next/navigation';
-import SubjectHistoryPlaceholderPage from '@/components/pages/SubjectHistoryPlaceholderPage';
-import { getSubjectConfig } from '@/lib/subjects';
+import HistoryPageContent from '@/components/workspaces/HistoryPageContent';
 
-export default function PhysicsHistoryPage() {
-  const subject = getSubjectConfig('physics');
+export const dynamic = 'force-dynamic';
 
-  if (!subject) {
-    notFound();
-  }
-
-  return <SubjectHistoryPlaceholderPage subject={subject} />;
+export default function PhysicsHistoryPage({
+  searchParams
+}: {
+  searchParams: Promise<{ email?: string; conversation?: string }>;
+}) {
+  return (
+    <HistoryPageContent
+      searchParams={searchParams}
+      historyHref="/physics/history"
+      subject="physics"
+    />
+  );
 }

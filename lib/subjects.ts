@@ -72,7 +72,7 @@ export const subjects: Record<SubjectKey, SubjectConfig> = {
     key: "physics",
     name: "Physics",
     shortName: "Physics",
-    status: "beta",
+    status: "active",
     path: "/physics",
     description:
       "Conceptual and equation-based support for mechanics, energy, waves, electricity, and modern physics.",
