@@ -13,8 +13,9 @@ export default function TermsPage() {
               Last updated: April 2026
             </p>
             <p className="small" style={{ margin: 0, maxWidth: 840 }}>
-              These Terms of Use govern access to and use of TutoVera while the product remains in its
-              current beta phase. By using the service, you agree to these terms.
+              These Terms of Use govern access to and use of TutoVera while the product remains in
+              its beta phase. By using the service, you agree to use it responsibly and accept these
+              terms.
             </p>
           </div>
         </section>
@@ -25,16 +26,16 @@ export default function TermsPage() {
           <div className="card innerFeatureCard">
             <h3 style={{ marginTop: 0 }}>Educational support</h3>
             <p className="small" style={{ marginBottom: 0 }}>
-              The product is designed to help users learn, revise, and work through academic subjects
-              more clearly, not to guarantee outcomes.
+              TutoVera is designed to help users learn, revise, practice, and work through academic
+              subjects more clearly. It does not guarantee outcomes.
             </p>
           </div>
 
           <div className="card innerFeatureCard">
             <h3 style={{ marginTop: 0 }}>Beta environment</h3>
             <p className="small" style={{ marginBottom: 0 }}>
-              Features, workflows, availability, and access rules may change as the product continues
-              to evolve.
+              Features, workflows, availability, limits, and access rules may change as the product
+              continues to evolve.
             </p>
           </div>
 
@@ -42,7 +43,7 @@ export default function TermsPage() {
             <h3 style={{ marginTop: 0 }}>Responsible use</h3>
             <p className="small" style={{ marginBottom: 0 }}>
               Users are expected to use the service lawfully, respectfully, and without attempting to
-              misuse or disrupt it.
+              misuse, overload, or disrupt it.
             </p>
           </div>
         </section>
@@ -52,8 +53,9 @@ export default function TermsPage() {
         <section className="card" style={{ display: 'grid', gap: 14 }}>
           <h2 style={{ margin: 0 }}>Educational support only</h2>
           <p className="small" style={{ margin: 0 }}>
-            TutoVera is intended as a learning aid and educational support tool. It does not guarantee
-            correct answers, grading outcomes, academic performance, or exam results.
+            TutoVera is intended as a learning aid and educational support tool. It does not
+            guarantee correct answers, grading outcomes, academic performance, admission outcomes,
+            certification results, or exam results.
           </p>
         </section>
       </Reveal>
@@ -64,45 +66,68 @@ export default function TermsPage() {
           <p className="small" style={{ margin: 0 }}>
             The service is provided for informational and educational purposes only. Users are
             responsible for checking important answers, methods, reasoning, and conclusions before
-            relying on them in coursework, assessments, tutoring, or other decisions.
+            relying on them in coursework, assessments, tutoring, teaching, or other decisions.
           </p>
         </section>
       </Reveal>
 
       <Reveal delay={0.18}>
         <section className="card" style={{ display: 'grid', gap: 14 }}>
-          <h2 style={{ margin: 0 }}>Acceptable use</h2>
+          <h2 style={{ margin: 0 }}>AI-generated responses</h2>
           <p className="small" style={{ margin: 0 }}>
-            You agree not to misuse the service, attempt to disrupt or overload the platform, submit
-            harmful or unlawful content, reverse engineer protected components, bypass platform
-            restrictions, or use the product in a way that violates applicable laws, rules, or
-            policies.
+            TutoVera uses artificial intelligence to generate tutor responses. AI-generated content
+            may be incorrect, incomplete, or unsuitable for a particular academic context. Users
+            should review and verify important work before relying on it.
           </p>
         </section>
       </Reveal>
 
       <Reveal delay={0.2}>
         <section className="card" style={{ display: 'grid', gap: 14 }}>
-          <h2 style={{ margin: 0 }}>Beta service status</h2>
+          <h2 style={{ margin: 0 }}>Acceptable use</h2>
           <p className="small" style={{ margin: 0 }}>
-            TutoVera is currently a beta product. Features may be added, changed, limited, interrupted,
-            removed, or discontinued at any time as the service develops.
+            You agree not to misuse the service, attempt to disrupt or overload the platform, submit
+            harmful or unlawful content, reverse engineer protected components, bypass platform
+            restrictions, interfere with security, or use the product in a way that violates
+            applicable laws, rules, or policies.
           </p>
         </section>
       </Reveal>
 
       <Reveal delay={0.22}>
         <section className="card" style={{ display: 'grid', gap: 14 }}>
-          <h2 style={{ margin: 0 }}>Usage limits</h2>
+          <h2 style={{ margin: 0 }}>Beta service status</h2>
           <p className="small" style={{ margin: 0 }}>
-            Free beta access may be subject to request limits, technical restrictions, admin controls,
-            provider-side limitations, or temporary suspension in order to protect reliability,
-            prevent abuse, and manage platform capacity.
+            TutoVera is currently a beta product. Features may be added, changed, limited,
+            interrupted, removed, or discontinued at any time as the service develops.
           </p>
         </section>
       </Reveal>
 
       <Reveal delay={0.24}>
+        <section className="card" style={{ display: 'grid', gap: 14 }}>
+          <h2 style={{ margin: 0 }}>Usage limits</h2>
+          <p className="small" style={{ margin: 0 }}>
+            Free beta access may be subject to request limits, technical restrictions, admin
+            controls, provider-side limitations, or temporary suspension in order to protect
+            reliability, prevent abuse, and manage platform capacity.
+          </p>
+        </section>
+      </Reveal>
+
+      <Reveal delay={0.26}>
+        <section className="card" style={{ display: 'grid', gap: 14 }}>
+          <h2 style={{ margin: 0 }}>User content and saved sessions</h2>
+          <p className="small" style={{ margin: 0 }}>
+            Users may submit questions, learning materials, messages, and related content while using
+            the product. TutoVera may process and store submitted content, tutor responses, and saved
+            session history as needed to operate the service, support account features, improve the
+            beta, and maintain product reliability.
+          </p>
+        </section>
+      </Reveal>
+
+      <Reveal delay={0.28}>
         <section className="card" style={{ display: 'grid', gap: 14 }}>
           <h2 style={{ margin: 0 }}>Intellectual property</h2>
           <p className="small" style={{ margin: 0 }}>
@@ -114,7 +139,18 @@ export default function TermsPage() {
         </section>
       </Reveal>
 
-      <Reveal delay={0.26}>
+      <Reveal delay={0.3}>
+        <section className="card" style={{ display: 'grid', gap: 14 }}>
+          <h2 style={{ margin: 0 }}>Third-party services</h2>
+          <p className="small" style={{ margin: 0 }}>
+            TutoVera may rely on third-party providers for hosting, database, authentication,
+            analytics, email, AI infrastructure, and related product operations. These providers may
+            process information as needed to make the service available.
+          </p>
+        </section>
+      </Reveal>
+
+      <Reveal delay={0.32}>
         <section className="card" style={{ display: 'grid', gap: 14 }}>
           <h2 style={{ margin: 0 }}>Disclaimer of warranties</h2>
           <p className="small" style={{ margin: 0 }}>
@@ -124,18 +160,18 @@ export default function TermsPage() {
         </section>
       </Reveal>
 
-      <Reveal delay={0.28}>
+      <Reveal delay={0.34}>
         <section className="card" style={{ display: 'grid', gap: 14 }}>
           <h2 style={{ margin: 0 }}>Limitation of liability</h2>
           <p className="small" style={{ margin: 0 }}>
             To the fullest extent permitted by law, TutoVera will not be liable for indirect,
-            incidental, consequential, special, exemplary, or reliance-based damages arising from or
-            related to the use of the service.
+            incidental, consequential, special, exemplary, punitive, or reliance-based damages arising
+            from or related to the use of the service.
           </p>
         </section>
       </Reveal>
 
-      <Reveal delay={0.3}>
+      <Reveal delay={0.36}>
         <section className="card" style={{ display: 'grid', gap: 14 }}>
           <h2 style={{ margin: 0 }}>Changes to these terms</h2>
           <p className="small" style={{ margin: 0 }}>
