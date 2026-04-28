@@ -45,7 +45,7 @@ export default function ContactPage() {
             <h1 style={{ margin: 0 }}>Send feedback, report issues, or ask about the beta.</h1>
             <p className="small" style={{ margin: 0, maxWidth: 820 }}>
               Use this page to share bugs, confusing moments, feature requests, product ideas, or
-              anything that would make Solvyq more useful for students, parents, and future subject
+              anything that would make TutoVera more useful for students, parents, and future subject
               branches.
             </p>
           </div>

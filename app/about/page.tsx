@@ -9,12 +9,12 @@ export default function AboutPage() {
     <div className="grid" style={{ gap: 24 }}>
       <Reveal delay={0.02}>
         <section className="card spotlightCard" style={{ display: 'grid', gap: 14 }}>
-          <span className="badge">About Solvyq</span>
+          <span className="badge">About TutoVera</span>
 
           <div style={{ display: 'grid', gap: 10 }}>
-            <h1 style={{ margin: 0 }}>A unified learning platform built around subject branches.</h1>
+            <h1 style={{ margin: 0 }}>Tutoring you can trust, across every subject branch.</h1>
             <p className="small" style={{ margin: 0, maxWidth: 860 }}>
-              Solvyq is being shaped as a calm AI learning platform where each subject can have its
+              TutoVera is being shaped as a calm AI learning platform where each subject can have its
               own identity, tutor behavior, examples, and learning flow while still sharing one
               account system, one deployment, and one coherent product foundation.
             </p>
@@ -23,11 +23,50 @@ export default function AboutPage() {
       </Reveal>
 
       <Reveal delay={0.08}>
+        <section className="card" style={{ display: 'grid', gap: 18 }}>
+          <div style={{ display: 'grid', gap: 8 }}>
+            <span className="badge">The name</span>
+            <h2 style={{ margin: 0 }}>Why TutoVera?</h2>
+            <p className="small" style={{ margin: 0, maxWidth: 900 }}>
+              TutoVera combines <strong>“Tuto,”</strong> from tutor, with{' '}
+              <strong>“Vera,”</strong> a word associated with truth, faith, belief, and trust. The
+              name reflects the kind of learning support this platform is meant to provide: clear,
+              steady, and trustworthy guidance for students and parents.
+            </p>
+          </div>
+
+          <div className="grid cols-3">
+            <div className="card innerFeatureCard">
+              <h3 style={{ marginTop: 0 }}>Tuto</h3>
+              <p className="small" style={{ marginBottom: 0 }}>
+                A short, friendly reference to tutoring, teaching, and guided learning support.
+              </p>
+            </div>
+
+            <div className="card innerFeatureCard">
+              <h3 style={{ marginTop: 0 }}>Vera</h3>
+              <p className="small" style={{ marginBottom: 0 }}>
+                A name-like word connected with truth, belief, faith, and trust.
+              </p>
+            </div>
+
+            <div className="card innerFeatureCard">
+              <h3 style={{ marginTop: 0 }}>Tutoring you can trust</h3>
+              <p className="small" style={{ marginBottom: 0 }}>
+                The guiding idea behind the platform: helpful explanations, calmer learning, and
+                support that feels reliable.
+              </p>
+            </div>
+          </div>
+        </section>
+      </Reveal>
+
+      <Reveal delay={0.14}>
         <section className="grid cols-3">
           <div className="card innerFeatureCard">
             <h3 style={{ marginTop: 0 }}>One parent brand</h3>
             <p className="small" style={{ marginBottom: 0 }}>
-              Solvyq is the umbrella experience. Math is the first active branch, with Physics,
+              TutoVera is the umbrella experience. Math is the first active branch, with Physics,
               Chemistry, and Biology prepared as future subject branches.
             </p>
           </div>
@@ -50,7 +89,7 @@ export default function AboutPage() {
         </section>
       </Reveal>
 
-      <Reveal delay={0.14}>
+      <Reveal delay={0.2}>
         <section className="card" style={{ display: 'grid', gap: 18 }}>
           <div style={{ display: 'grid', gap: 8 }}>
             <span className="badge">Subject branches</span>
@@ -94,12 +133,12 @@ export default function AboutPage() {
         </section>
       </Reveal>
 
-      <Reveal delay={0.2}>
+      <Reveal delay={0.26}>
         <section className="card spotlightCard" style={{ display: 'grid', gap: 16 }}>
           <div style={{ display: 'grid', gap: 8 }}>
             <h2 style={{ margin: 0 }}>Current focus</h2>
             <p className="small" style={{ margin: 0, maxWidth: 860 }}>
-              The current focus is preserving and improving Solvyq Math while building the structure
+              The current focus is preserving and improving TutoVera Math while building the structure
               needed for future subjects. The product is moving step by step so the foundation stays
               clean and the working Math experience remains stable.
             </p>
@@ -107,7 +146,7 @@ export default function AboutPage() {
 
           <div className="buttonRow">
             <Link className="btn" href="/math">
-              Open Solvyq Math
+              Open TutoVera Math
             </Link>
             <Link className="btn secondary" href="/contact">
               Contact / Feedback

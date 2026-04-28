@@ -1,6 +1,6 @@
 export default function BrandMark() {
   return (
-    <a href="/" className="brandLink" aria-label="Solvyq home">
+    <a href="/" className="brandLink" aria-label="TutoVera home">
       <span
         className="brandBadge"
         style={{
@@ -38,7 +38,7 @@ export default function BrandMark() {
       </span>
 
       <span className="brandText">
-        <span className="brandTitle">Solvyq</span>
+        <span className="brandTitle">TutoVera</span>
         <span className="brandSubtitle">Clearer learning, step by step</span>
       </span>
     </a>

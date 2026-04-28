@@ -39,7 +39,7 @@ export default async function AccountPage() {
             <h3 style={{ marginTop: 0 }}>History</h3>
             <p className="small" style={{ marginBottom: 0 }}>
               Revisit saved conversations, continue older threads, and keep track of earlier work
-              across active Solvyq subject branches.
+              across active TutoVera subject branches.
             </p>
           </div>
 

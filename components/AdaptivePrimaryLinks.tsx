@@ -2,8 +2,8 @@
 
 import { usePathname } from 'next/navigation';
 
-const solvyqLinks = [
-  { href: '/', label: 'Solvyq' },
+const tutoveraLinks = [
+  { href: '/', label: 'TutoVera' },
   { href: '/math', label: 'Math' },
   { href: '/physics', label: 'Physics' },
   { href: '/chemistry', label: 'Chemistry' },
@@ -25,7 +25,7 @@ function shouldUseMathProductNav(pathname: string) {
 
 export default function AdaptivePrimaryLinks() {
   const pathname = usePathname();
-  const links = shouldUseMathProductNav(pathname) ? mathProductLinks : solvyqLinks;
+  const links = shouldUseMathProductNav(pathname) ? mathProductLinks : tutoveraLinks;
 
   return (
     <>

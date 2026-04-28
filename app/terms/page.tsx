@@ -8,12 +8,12 @@ export default function TermsPage() {
           <span className="badge">Terms of Use</span>
 
           <div style={{ display: 'grid', gap: 10 }}>
-            <h1 style={{ margin: 0 }}>Terms for using Solvyq during the beta stage.</h1>
+            <h1 style={{ margin: 0 }}>Terms for using TutoVera during the beta stage.</h1>
             <p className="small" style={{ margin: 0 }}>
               Last updated: April 2026
             </p>
             <p className="small" style={{ margin: 0, maxWidth: 840 }}>
-              These Terms of Use govern access to and use of Solvyq while the product remains in its
+              These Terms of Use govern access to and use of TutoVera while the product remains in its
               current beta phase. By using the service, you agree to these terms.
             </p>
           </div>
@@ -52,7 +52,7 @@ export default function TermsPage() {
         <section className="card" style={{ display: 'grid', gap: 14 }}>
           <h2 style={{ margin: 0 }}>Educational support only</h2>
           <p className="small" style={{ margin: 0 }}>
-            Solvyq is intended as a learning aid and educational support tool. It does not guarantee
+            TutoVera is intended as a learning aid and educational support tool. It does not guarantee
             correct answers, grading outcomes, academic performance, or exam results.
           </p>
         </section>
@@ -85,7 +85,7 @@ export default function TermsPage() {
         <section className="card" style={{ display: 'grid', gap: 14 }}>
           <h2 style={{ margin: 0 }}>Beta service status</h2>
           <p className="small" style={{ margin: 0 }}>
-            Solvyq is currently a beta product. Features may be added, changed, limited, interrupted,
+            TutoVera is currently a beta product. Features may be added, changed, limited, interrupted,
             removed, or discontinued at any time as the service develops.
           </p>
         </section>
@@ -107,7 +107,7 @@ export default function TermsPage() {
           <h2 style={{ margin: 0 }}>Intellectual property</h2>
           <p className="small" style={{ margin: 0 }}>
             The site design, workflows, branding, interface elements, and original platform materials
-            belong to Solvyq or its licensors. You may use the product for its intended educational
+            belong to TutoVera or its licensors. You may use the product for its intended educational
             purpose, but you may not copy, redistribute, or commercially exploit protected parts of
             the platform without permission.
           </p>
@@ -128,7 +128,7 @@ export default function TermsPage() {
         <section className="card" style={{ display: 'grid', gap: 14 }}>
           <h2 style={{ margin: 0 }}>Limitation of liability</h2>
           <p className="small" style={{ margin: 0 }}>
-            To the fullest extent permitted by law, Solvyq will not be liable for indirect,
+            To the fullest extent permitted by law, TutoVera will not be liable for indirect,
             incidental, consequential, special, exemplary, or reliance-based damages arising from or
             related to the use of the service.
           </p>

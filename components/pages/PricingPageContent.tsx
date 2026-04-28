@@ -10,7 +10,7 @@ export default function PricingPageContent() {
           <div style={{ display: 'grid', gap: 10 }}>
             <h1 style={{ margin: 0 }}>Simple for now, with more structured plans later.</h1>
             <p className="small" style={{ margin: 0, maxWidth: 820 }}>
-              Solvyq Math is currently available as a free beta while the product experience is
+              TutoVera Math is currently available as a free beta while the product experience is
               still being improved. The goal right now is to make the tutor more useful, more
               reliable, and more polished before introducing fuller premium plans.
             </p>
@@ -69,7 +69,7 @@ export default function PricingPageContent() {
           <div style={{ display: 'grid', gap: 8 }}>
             <h2 style={{ margin: 0 }}>Why the beta is still free</h2>
             <p className="small" style={{ margin: 0, maxWidth: 820 }}>
-              The current focus is on improving the core Solvyq Math experience first: better tutor
+              The current focus is on improving the core TutoVera Math experience first: better tutor
               flow, clearer graph behavior, stronger history, more reliable interactions, and a more
               polished interface overall. Pricing can become more structured once the product feels
               stronger end to end.

@@ -10,7 +10,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from '@vercel/analytics/next';
 
 export const metadata = {
-  title: 'Solvyq',
+  title: 'TutoVera',
   description: 'A unified AI learning platform starting with Math.'
 };
 
@@ -131,7 +131,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               >
                 <div style={{ display: 'grid', gap: 8, minWidth: 0 }}>
                   <p className="small" style={{ margin: 0 }}>
-                    <strong>Solvyq</strong> is being shaped into a calmer AI learning platform across
+                    <strong>TutoVera</strong> is being shaped into a calmer AI learning platform across
                     Math, Physics, Chemistry, and Biology.
                   </p>
                   <p className="small" style={{ margin: 0, maxWidth: 720 }}>

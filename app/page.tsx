@@ -10,12 +10,12 @@ export default function HomePage() {
       <section className="homeLead">
         <div className="homeLeadGrid">
           <div className="homeLeadCopy">
-            <span className="badge">Solvyq learning platform</span>
+            <span className="badge">TutoVera learning platform</span>
 
             <h1 className="homeLeadTitle">One calm workspace for learning across subjects.</h1>
 
             <p className="homeLeadSubtext">
-              Solvyq is being shaped as a unified AI learning platform, starting with Math and
+              TutoVera is being shaped as a unified AI learning platform, starting with Math and
               expanding into Physics, Chemistry, and Biology without splitting the product into
               disconnected apps.
             </p>
@@ -61,7 +61,7 @@ export default function HomePage() {
                   <span />
                   <span />
                 </div>
-                <span className="small">Solvyq structure</span>
+                <span className="small">TutoVera structure</span>
               </div>
 
               <div className="homePreviewStack">
@@ -109,7 +109,7 @@ export default function HomePage() {
         >
           <div style={{ display: 'grid', gap: 8 }}>
             <span className="badge">Subjects</span>
-            <h2 style={{ margin: 0 }}>Choose a Solvyq branch.</h2>
+            <h2 style={{ margin: 0 }}>Choose a TutoVera branch.</h2>
             <p className="small" style={{ margin: 0, maxWidth: 1120 }}>
               Each subject will have its own homepage, identity, and learning flow while sharing the
               same core account, history, deployment, and backend structure.
@@ -158,7 +158,7 @@ export default function HomePage() {
             <span className="badge">Current focus</span>
             <h2 style={{ margin: 0 }}>Math remains the active product branch.</h2>
             <p className="small" style={{ margin: 0, maxWidth: 920 }}>
-              The current working tutor experience is preserved under /math. The Solvyq homepage now
+              The current working tutor experience is preserved under /math. The TutoVera homepage now
               gives the product a parent brand while keeping the existing Math workspace stable.
             </p>
           </div>

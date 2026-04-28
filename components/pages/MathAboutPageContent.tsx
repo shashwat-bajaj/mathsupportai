@@ -5,12 +5,12 @@ export default function MathAboutPageContent() {
     <div className="grid" style={{ gap: 24 }}>
       <Reveal delay={0.02}>
         <section className="card spotlightCard" style={{ display: 'grid', gap: 14 }}>
-          <span className="badge">About Solvyq Math</span>
+          <span className="badge">About TutoVera Math</span>
 
           <div style={{ display: 'grid', gap: 10 }}>
             <h1 style={{ margin: 0 }}>Built to make math feel clearer, calmer, and easier to continue.</h1>
             <p className="small" style={{ margin: 0, maxWidth: 820 }}>
-              Solvyq Math is being built as a learning-first math workspace for students and
+              TutoVera Math is being built as a learning-first math workspace for students and
               parents. The goal is not just to produce answers, but to help users understand what is
               happening, ask better follow-up questions, and return to earlier work without losing the
               thread.
@@ -50,7 +50,7 @@ export default function MathAboutPageContent() {
       <Reveal delay={0.14}>
         <section className="card" style={{ display: 'grid', gap: 18 }}>
           <div style={{ display: 'grid', gap: 8 }}>
-            <h2 style={{ margin: 0 }}>What Solvyq Math is trying to become</h2>
+            <h2 style={{ margin: 0 }}>What TutoVera Math is trying to become</h2>
             <p className="small" style={{ margin: 0, maxWidth: 820 }}>
               The long-term vision is a math support system that feels less like a generic chatbot and
               more like a structured study environment — something that can teach, graph, diagnose,

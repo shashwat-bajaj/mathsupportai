@@ -31,11 +31,11 @@ export default function SubjectTutorPlaceholderPage({
           </div>
 
           <div style={{ display: 'grid', gap: 10 }}>
-            <h1 style={{ margin: 0 }}>Solvyq {subject.name} tutor is not enabled yet.</h1>
+            <h1 style={{ margin: 0 }}>TutoVera {subject.name} tutor is not enabled yet.</h1>
             <p className="small" style={{ margin: 0, maxWidth: 860 }}>
               This page is reserved for the future {subject.name} learning workspace. Math is the
               active tutor branch right now, while {subject.name} support is being prepared as part
-              of the broader Solvyq subject structure.
+              of the broader TutoVera subject structure.
             </p>
           </div>
 
@@ -64,7 +64,7 @@ export default function SubjectTutorPlaceholderPage({
           </div>
 
           <div className="card innerFeatureCard">
-            <h3 style={{ marginTop: 0 }}>Shared Solvyq foundation</h3>
+            <h3 style={{ marginTop: 0 }}>Shared TutoVera foundation</h3>
             <p className="small" style={{ marginBottom: 0 }}>
               The goal is to keep one account system, one deployment, and one shared history
               structure while still giving each subject its own learning experience.

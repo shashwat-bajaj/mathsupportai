@@ -31,7 +31,7 @@ export default function SubjectHistoryPlaceholderPage({
           </div>
 
           <div style={{ display: 'grid', gap: 10 }}>
-            <h1 style={{ margin: 0 }}>Solvyq {subject.name} history is not enabled yet.</h1>
+            <h1 style={{ margin: 0 }}>TutoVera {subject.name} history is not enabled yet.</h1>
             <p className="small" style={{ margin: 0, maxWidth: 860 }}>
               This page is reserved for future {subject.name} session history. Math history is the
               active history branch right now, while {subject.name} tutor and saved-session support

@@ -48,10 +48,10 @@ export const subjects: Record<SubjectKey, SubjectConfig> = {
       backgroundGlow: "rgba(124, 58, 237, 0.22)",
     },
     tutor: {
-      label: "Solvyq Math",
+      label: "TutoVera Math",
       placeholder: "Ask a math question or paste the problem you are working on...",
       systemPrompt:
-        "You are Solvyq Math, a supportive AI math tutor. Explain clearly, guide step by step, and help the learner understand the reasoning rather than only giving the answer.",
+        "You are TutoVera Math, a supportive AI math tutor. Explain clearly, guide step by step, and help the learner understand the reasoning rather than only giving the answer.",
       examplePrompts: [
         "Solve this quadratic step by step",
         "Explain derivatives simply",
@@ -84,10 +84,10 @@ export const subjects: Record<SubjectKey, SubjectConfig> = {
       backgroundGlow: "rgba(37, 99, 235, 0.22)",
     },
     tutor: {
-      label: "Solvyq Physics",
+      label: "TutoVera Physics",
       placeholder: "Ask a physics question or paste a word problem...",
       systemPrompt:
-        "You are Solvyq Physics, a supportive AI physics tutor. Explain concepts, equations, variables, units, and problem-solving steps clearly.",
+        "You are TutoVera Physics, a supportive AI physics tutor. Explain concepts, equations, variables, units, and problem-solving steps clearly.",
       examplePrompts: [
         "Explain Newton's second law",
         "Help me solve projectile motion",
@@ -120,10 +120,10 @@ export const subjects: Record<SubjectKey, SubjectConfig> = {
       backgroundGlow: "rgba(16, 185, 129, 0.22)",
     },
     tutor: {
-      label: "Solvyq Chemistry",
+      label: "TutoVera Chemistry",
       placeholder: "Ask a chemistry question or paste a reaction...",
       systemPrompt:
-        "You are Solvyq Chemistry, a supportive AI chemistry tutor. Explain chemical reasoning, equations, units, and steps clearly.",
+        "You are TutoVera Chemistry, a supportive AI chemistry tutor. Explain chemical reasoning, equations, units, and steps clearly.",
       examplePrompts: [
         "Balance this chemical equation",
         "Explain stoichiometry",
@@ -156,10 +156,10 @@ export const subjects: Record<SubjectKey, SubjectConfig> = {
       backgroundGlow: "rgba(34, 197, 94, 0.22)",
     },
     tutor: {
-      label: "Solvyq Biology",
+      label: "TutoVera Biology",
       placeholder: "Ask a biology question or describe the topic you are studying...",
       systemPrompt:
-        "You are Solvyq Biology, a supportive AI biology tutor. Explain biological systems, vocabulary, and processes clearly.",
+        "You are TutoVera Biology, a supportive AI biology tutor. Explain biological systems, vocabulary, and processes clearly.",
       examplePrompts: [
         "Explain mitosis vs meiosis",
         "Help me understand DNA replication",

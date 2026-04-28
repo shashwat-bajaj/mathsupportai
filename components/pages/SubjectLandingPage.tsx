@@ -20,14 +20,14 @@ function getStatusLabel(status: SubjectConfig['status']) {
 
 function getStatusDescription(subject: SubjectConfig) {
   if (subject.status === 'active') {
-    return `${subject.name} is currently available inside the Solvyq learning workspace.`;
+    return `${subject.name} is currently available inside the TutoVera learning workspace.`;
   }
 
   if (subject.status === 'beta') {
-    return `${subject.name} is being prepared as one of the next Solvyq subject branches. Math remains the active workspace for now.`;
+    return `${subject.name} is being prepared as one of the next TutoVera subject branches. Math remains the active workspace for now.`;
   }
 
-  return `${subject.name} is planned for a future Solvyq subject branch. Math remains the active workspace for now.`;
+  return `${subject.name} is planned for a future TutoVera subject branch. Math remains the active workspace for now.`;
 }
 
 function getPreviewPrompt(subject: SubjectConfig) {
@@ -127,11 +127,11 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
           <div className="homeLeadCopy">
             <div className="buttonRow">
               <span className="badge">{getStatusLabel(subject.status)}</span>
-              <span className="badge">Solvyq {subject.name}</span>
+              <span className="badge">TutoVera {subject.name}</span>
             </div>
 
             <h1 className="homeLeadTitle">
-              {subject.name} support built as a Solvyq subject branch.
+              {subject.name} support built as a TutoVera subject branch.
             </h1>
 
             <p className="homeLeadSubtext">{subject.description}</p>
@@ -171,7 +171,7 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
               <div className="homeLeadProofItem">
                 <strong>Shared foundation</strong>
                 <p className="small" style={{ margin: 0 }}>
-                  One Solvyq account and structure.
+                  One TutoVera account and structure.
                 </p>
               </div>
 
@@ -239,7 +239,7 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
             <span className="badge">How it will help</span>
             <h2 style={{ margin: 0 }}>A subject workspace, not a separate app.</h2>
             <p className="small" style={{ margin: 0, maxWidth: 1120 }}>
-              {subject.name} will grow inside the same Solvyq platform, using the same account,
+              {subject.name} will grow inside the same TutoVera platform, using the same account,
               deployment, and history foundation while allowing the learning experience to become
               specific to the subject.
             </p>
@@ -290,9 +290,9 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
                 : `${subject.name} is not active yet.`}
             </h2>
             <p className="small" style={{ margin: 0, maxWidth: 860 }}>
-              The current active tutor experience is Solvyq Math. This {subject.name} branch is being
+              The current active tutor experience is TutoVera Math. This {subject.name} branch is being
               shaped so it can eventually support its own tutor behavior, examples, history, and
-              learning flow without splitting Solvyq into separate apps.
+              learning flow without splitting TutoVera into separate apps.
             </p>
           </div>
 
