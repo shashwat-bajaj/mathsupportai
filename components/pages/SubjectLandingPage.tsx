@@ -20,7 +20,7 @@ function getStatusLabel(status: SubjectConfig['status']) {
 
 function getStatusDescription(subject: SubjectConfig) {
   if (subject.status === 'active') {
-    return `${subject.name} is currently available inside the TutoVera learning workspace.`;
+    return `TutoVera ${subject.name} is active now with student, parent, and history workspaces.`;
   }
 
   if (subject.status === 'beta') {
@@ -37,7 +37,9 @@ function getPreviewPrompt(subject: SubjectConfig) {
 function getPreviewResponse(subject: SubjectConfig) {
   switch (subject.key) {
     case 'physics':
-      return 'A future Physics workspace can explain the concept, identify variables, connect formulas, check units, and guide the problem step by step.';
+      return subject.status === 'active'
+        ? 'TutoVera Physics can explain the concept, identify variables, connect formulas, check units, and guide the problem step by step.'
+        : 'A future Physics workspace can explain the concept, identify variables, connect formulas, check units, and guide the problem step by step.';
     case 'chemistry':
       return 'A future Chemistry workspace can explain reactions, balance equations, walk through stoichiometry, and connect formulas to lab-style reasoning.';
     case 'biology':
@@ -116,7 +118,7 @@ function getUseCases(subject: SubjectConfig) {
 
 function getFinalHeading(subject: SubjectConfig) {
   if (subject.status === 'active') {
-    return `${subject.name} is active now.`;
+    return `TutoVera ${subject.name} is active now.`;
   }
 
   if (subject.status === 'beta') {
@@ -154,22 +156,30 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
 
             <div className="buttonRow">
               {isActive ? (
-                <Link className="btn" href={`${subject.path}/tutor`}>
-                  Open {subject.shortName} Workspace
-                </Link>
+                <>
+                  <Link className="btn" href={`${subject.path}/tutor`}>
+                    Open Student Workspace
+                  </Link>
+                  <Link className="btn secondary" href={`${subject.path}/parents`}>
+                    Open Parent Workspace
+                  </Link>
+                  <Link className="btn secondary" href={`${subject.path}/history`}>
+                    View {subject.name} History
+                  </Link>
+                </>
               ) : (
-                <Link className="btn" href={`${subject.path}/tutor`}>
-                  View Tutor Preview
-                </Link>
+                <>
+                  <Link className="btn" href={`${subject.path}/tutor`}>
+                    View Tutor Preview
+                  </Link>
+                  <Link className="btn secondary" href={`${subject.path}/history`}>
+                    View History Preview
+                  </Link>
+                  <Link className="btn secondary" href="/math/tutor">
+                    Open Active Math Tutor
+                  </Link>
+                </>
               )}
-
-              <Link className="btn secondary" href={`${subject.path}/history`}>
-                View History Preview
-              </Link>
-
-              <Link className="btn secondary" href="/math/tutor">
-                Open Active Math Tutor
-              </Link>
             </div>
 
             <div className="homeLeadProof">
@@ -188,9 +198,11 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
               </div>
 
               <div className="homeLeadProofItem">
-                <strong>Careful rollout</strong>
+                <strong>{isActive ? 'Active branch' : 'Careful rollout'}</strong>
                 <p className="small" style={{ margin: 0 }}>
-                  Math stays stable while this branch develops.
+                  {isActive
+                    ? 'Student, parent, and history workspaces are available now.'
+                    : 'Math stays stable while this branch develops.'}
                 </p>
               </div>
             </div>
@@ -204,7 +216,9 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
                   <span />
                   <span />
                 </div>
-                <span className="small">{subject.name} tutor preview</span>
+                <span className="small">
+                  {isActive ? `${subject.name} tutor workspace` : `${subject.name} tutor preview`}
+                </span>
               </div>
 
               <div className="homePreviewStack">
@@ -224,7 +238,7 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
 
                 <div className="homePreviewGrid">
                   <div className="homePreviewMiniCard">
-                    <span className="badge">Planned tools</span>
+                    <span className="badge">{isActive ? 'Available tools' : 'Planned tools'}</span>
                     <p className="small" style={{ margin: 0 }}>
                       Step-by-step support, subject examples, saved sessions, and guided follow-ups.
                     </p>
@@ -248,10 +262,10 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
       <Reveal delay={0.04}>
         <section className="card spotlightCard" style={{ display: 'grid', gap: 22 }}>
           <div style={{ display: 'grid', gap: 8 }}>
-            <span className="badge">How it will help</span>
+            <span className="badge">How it helps</span>
             <h2 style={{ margin: 0 }}>A subject workspace, not a separate app.</h2>
             <p className="small" style={{ margin: 0, maxWidth: 1120 }}>
-              {subject.name} will grow inside the same TutoVera platform, using the same account,
+              {subject.name} lives inside the same TutoVera platform, using the same account,
               deployment, and history foundation while allowing the learning experience to become
               specific to the subject.
             </p>
@@ -298,22 +312,38 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
           <div style={{ display: 'grid', gap: 8 }}>
             <h2 style={{ margin: 0 }}>{getFinalHeading(subject)}</h2>
             <p className="small" style={{ margin: 0, maxWidth: 860 }}>
-              The current active tutor experience is TutoVera Math. This {subject.name} branch is
-              being shaped so it can support its own tutor behavior, examples, history, and learning
-              flow without splitting TutoVera into separate apps.
+              {isActive
+                ? `TutoVera ${subject.name} now has its own student workspace, parent workspace, and subject-specific history while still sharing the broader TutoVera foundation.`
+                : `The current active tutor experience is TutoVera Math. This ${subject.name} branch is being shaped so it can support its own tutor behavior, examples, history, and learning flow without splitting TutoVera into separate apps.`}
             </p>
           </div>
 
           <div className="buttonRow">
-            <Link className="btn" href="/math/tutor">
-              Open Active Math Tutor
-            </Link>
-            <Link className="btn secondary" href={`${subject.path}/tutor`}>
-              View {subject.name} Tutor Preview
-            </Link>
-            <Link className="btn secondary" href="/contact">
-              Contact / Feedback
-            </Link>
+            {isActive ? (
+              <>
+                <Link className="btn" href={`${subject.path}/tutor`}>
+                  Open Student Workspace
+                </Link>
+                <Link className="btn secondary" href={`${subject.path}/parents`}>
+                  Open Parent Workspace
+                </Link>
+                <Link className="btn secondary" href="/contact">
+                  Contact / Feedback
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link className="btn" href="/math/tutor">
+                  Open Active Math Tutor
+                </Link>
+                <Link className="btn secondary" href={`${subject.path}/tutor`}>
+                  View {subject.name} Tutor Preview
+                </Link>
+                <Link className="btn secondary" href="/contact">
+                  Contact / Feedback
+                </Link>
+              </>
+            )}
           </div>
         </section>
       </Reveal>

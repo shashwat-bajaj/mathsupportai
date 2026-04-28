@@ -37,20 +37,14 @@ function getActiveSubjectNav(pathname: string): ActiveSubjectNav | null {
 }
 
 function getSubjectProductLinks(subject: ActiveSubjectNav) {
-  const links = [
+  return [
     { href: subject.basePath, label: subject.label },
     { href: `${subject.basePath}/tutor`, label: 'Students' },
     { href: `${subject.basePath}/parents`, label: 'Parents' },
-    { href: `${subject.basePath}/history`, label: 'History' }
+    { href: `${subject.basePath}/history`, label: 'History' },
+    { href: `${subject.basePath}/about`, label: 'About' },
+    { href: '/contact', label: 'Contact' }
   ];
-
-  if (subject.key === 'math') {
-    links.push({ href: '/math/about', label: 'About' });
-  }
-
-  links.push({ href: '/contact', label: 'Contact' });
-
-  return links;
 }
 
 export default function AdaptivePrimaryLinks() {

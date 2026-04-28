@@ -75,7 +75,7 @@ function getParentWorkspaceCopy(subject: SubjectConfig) {
 
   if (subject.key === 'physics') {
     return {
-      badge: 'Physics parent workspace',
+      badge: 'Parent workspace',
       signedOutTitle:
         'Guidance for helping a child understand physics without simply giving the answer.',
       signedOutDescription:
@@ -96,7 +96,7 @@ function getParentWorkspaceCopy(subject: SubjectConfig) {
   }
 
   return {
-    badge: `${subject.name} parent workspace`,
+    badge: 'Parent workspace',
     signedOutTitle:
       `Guidance for helping a child understand ${subject.name.toLowerCase()} more clearly.`,
     signedOutDescription:
@@ -239,7 +239,8 @@ export default async function ParentWorkspacePage({
                 <strong>Saved sessions</strong>
               </p>
               <p className="small" style={{ margin: 0 }}>
-                {conversations.length} available in your {subjectConfig.name.toLowerCase()} parent history.
+                {conversations.length} available in your{' '}
+                {subjectConfig.name.toLowerCase()} parent history.
               </p>
             </div>
 
@@ -357,7 +358,8 @@ export default async function ParentWorkspacePage({
                     <div style={{ display: 'grid', gap: 4 }}>
                       <h2 style={{ margin: 0 }}>Current Session Thread</h2>
                       <p className="small" style={{ margin: 0 }}>
-                        View the full question-and-answer flow for this {subjectConfig.name.toLowerCase()} parent session.
+                        View the full question-and-answer flow for this{' '}
+                        {subjectConfig.name.toLowerCase()} parent session.
                       </p>
                     </div>
 

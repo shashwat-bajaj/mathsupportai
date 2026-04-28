@@ -71,7 +71,7 @@ function getWorkspaceIntro(subject: SubjectConfig) {
 
   if (subject.key === 'physics') {
     return {
-      badge: 'Physics student workspace',
+      badge: 'Student workspace',
       signedOutTitle: 'Work through physics concepts, formulas, units, and problem setup.',
       signedOutDescription:
         'Use this workspace for physics explanations, equation-based reasoning, variable setup, unit checks, conceptual questions, and practice prompts. Signed-in users can also save sessions and revisit them later.',
@@ -88,7 +88,7 @@ function getWorkspaceIntro(subject: SubjectConfig) {
   }
 
   return {
-    badge: `${subject.name} student workspace`,
+    badge: 'Student workspace',
     signedOutTitle: `Work through ${subject.name.toLowerCase()} questions with a clearer learning flow.`,
     signedOutDescription:
       `Use this workspace for ${subject.name.toLowerCase()} explanations, guided support, diagnosis, and practice prompts. Signed-in users can also save sessions and revisit them later.`,
@@ -225,7 +225,8 @@ export default async function StudentWorkspacePage({
                 <strong>Saved sessions</strong>
               </p>
               <p className="small" style={{ margin: 0 }}>
-                {conversations.length} available in your {subjectConfig.name.toLowerCase()} student history.
+                {conversations.length} available in your{' '}
+                {subjectConfig.name.toLowerCase()} student history.
               </p>
             </div>
 
@@ -341,7 +342,8 @@ export default async function StudentWorkspacePage({
                     <div style={{ display: 'grid', gap: 4 }}>
                       <h2 style={{ margin: 0 }}>Current Session Thread</h2>
                       <p className="small" style={{ margin: 0 }}>
-                        View the full question-and-answer flow for this {subjectConfig.name.toLowerCase()} student session.
+                        View the full question-and-answer flow for this{' '}
+                        {subjectConfig.name.toLowerCase()} student session.
                       </p>
                     </div>
 
