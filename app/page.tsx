@@ -12,17 +12,17 @@ export default function HomePage() {
           <div className="homeLeadCopy">
             <span className="badge">TutoVera learning platform</span>
 
-            <h1 className="homeLeadTitle">One calm workspace for learning across subjects.</h1>
+            <h1 className="homeLeadTitle">Tutoring you can trust, across every subject branch.</h1>
 
             <p className="homeLeadSubtext">
-              TutoVera is being shaped as a unified AI learning platform, starting with Math and
-              expanding into Physics, Chemistry, and Biology without splitting the product into
-              disconnected apps.
+              TutoVera is a calm AI learning platform starting with Math and expanding into Physics,
+              Chemistry, and Biology. Each subject can grow into its own learning workspace while
+              still sharing one account, one history foundation, and one connected product experience.
             </p>
 
             <div className="buttonRow">
               <Link className="btn" href="/math">
-                Open Math
+                Open TutoVera Math
               </Link>
               <Link className="btn secondary" href="#subjects">
                 View Subjects
@@ -31,23 +31,23 @@ export default function HomePage() {
 
             <div className="homeLeadProof">
               <div className="homeLeadProofItem">
-                <strong>One account</strong>
+                <strong>Trusted guidance</strong>
                 <p className="small" style={{ margin: 0 }}>
-                  Shared login and learning history foundation.
+                  Built around clearer explanations, follow-ups, and steady learning support.
                 </p>
               </div>
 
               <div className="homeLeadProofItem">
                 <strong>Subject branches</strong>
                 <p className="small" style={{ margin: 0 }}>
-                  Math first, then science subjects.
+                  Math is active now, with science branches prepared for future growth.
                 </p>
               </div>
 
               <div className="homeLeadProofItem">
-                <strong>Unified setup</strong>
+                <strong>One foundation</strong>
                 <p className="small" style={{ margin: 0 }}>
-                  One app, one backend, no disconnected clones.
+                  Shared account, settings, history, deployment, and backend structure.
                 </p>
               </div>
             </div>
@@ -61,37 +61,41 @@ export default function HomePage() {
                   <span />
                   <span />
                 </div>
-                <span className="small">TutoVera structure</span>
+                <span className="small">TutoVera preview</span>
               </div>
 
               <div className="homePreviewStack">
                 <div className="homePreviewPanel homePreviewChat">
                   <div className="homePreviewPrompt">
                     <p className="small" style={{ margin: 0 }}>
-                      Choose a subject branch, then continue into the matching learning workspace.
+                      I need help learning a topic, but I want the explanation to feel clear and
+                      trustworthy.
                     </p>
                   </div>
 
                   <div className="homePreviewResponse">
                     <p className="small" style={{ margin: 0 }}>
-                      Math is active now. Physics, Chemistry, and Biology are prepared as subject
-                      branches that can grow from the same shared foundation.
+                      Start with the active Math workspace today. As TutoVera grows, each subject
+                      branch can offer its own examples, tutor behavior, and learning flow while
+                      staying connected to the same platform.
                     </p>
                   </div>
                 </div>
 
                 <div className="homePreviewGrid">
                   <div className="homePreviewMiniCard">
-                    <span className="badge">Active</span>
+                    <span className="badge">Active now</span>
                     <p className="small" style={{ margin: 0 }}>
-                      Math tutor, parent support, history, and pricing are now under /math.
+                      TutoVera Math includes student tutoring, parent support, saved history, and a
+                      free beta experience.
                     </p>
                   </div>
 
                   <div className="homePreviewMiniCard">
-                    <span className="badge">Next</span>
+                    <span className="badge">Built to expand</span>
                     <p className="small" style={{ margin: 0 }}>
-                      Subject-aware tutoring, shared settings, and future science branches.
+                      Physics, Chemistry, and Biology are structured as future subject branches, not
+                      separate cloned apps.
                     </p>
                   </div>
                 </div>
@@ -111,8 +115,9 @@ export default function HomePage() {
             <span className="badge">Subjects</span>
             <h2 style={{ margin: 0 }}>Choose a TutoVera branch.</h2>
             <p className="small" style={{ margin: 0, maxWidth: 1120 }}>
-              Each subject will have its own homepage, identity, and learning flow while sharing the
-              same core account, history, deployment, and backend structure.
+              Each subject branch can have its own homepage, examples, tutor behavior, and visual
+              identity while sharing the same core account, history, settings, deployment, and backend
+              structure.
             </p>
           </div>
 
@@ -156,10 +161,11 @@ export default function HomePage() {
         <section className="card" style={{ display: 'grid', gap: 16 }}>
           <div style={{ display: 'grid', gap: 8 }}>
             <span className="badge">Current focus</span>
-            <h2 style={{ margin: 0 }}>Math remains the active product branch.</h2>
+            <h2 style={{ margin: 0 }}>TutoVera Math is the active branch today.</h2>
             <p className="small" style={{ margin: 0, maxWidth: 920 }}>
-              The current working tutor experience is preserved under /math. The TutoVera homepage now
-              gives the product a parent brand while keeping the existing Math workspace stable.
+              The working tutor experience is preserved under /math while the parent TutoVera brand
+              gives the product room to grow. The goal is to improve Math carefully first, then expand
+              future subject branches without breaking the shared foundation.
             </p>
           </div>
 
