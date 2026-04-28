@@ -13,9 +13,9 @@ export default function PrivacyPage() {
               Last updated: April 2026
             </p>
             <p className="small" style={{ margin: 0, maxWidth: 840 }}>
-              TutoVera is currently offered as a free beta product. This Privacy Policy explains
-              what information may be collected, how it may be used, and how it is handled while the
-              product continues to develop.
+              TutoVera is currently offered as a free beta learning product. This Privacy Policy
+              explains what information may be collected, how it may be used, and how it is handled
+              while the platform continues to develop.
             </p>
           </div>
         </section>
@@ -26,7 +26,7 @@ export default function PrivacyPage() {
           <div className="card innerFeatureCard">
             <h3 style={{ marginTop: 0 }}>Product operation</h3>
             <p className="small" style={{ marginBottom: 0 }}>
-              Some information is used to run the tutor, save sessions, support sign-in, and keep the
+              Some information is used to run the tutor, support sign-in, save sessions, and keep the
               product functioning normally.
             </p>
           </div>
@@ -34,16 +34,16 @@ export default function PrivacyPage() {
           <div className="card innerFeatureCard">
             <h3 style={{ marginTop: 0 }}>Beta improvement</h3>
             <p className="small" style={{ marginBottom: 0 }}>
-              Usage patterns, submitted questions, and tutor flows may also be reviewed to improve the
-              product over time.
+              Usage patterns, submitted questions, tutor flows, and feedback may be reviewed to make
+              TutoVera clearer, more reliable, and more useful over time.
             </p>
           </div>
 
           <div className="card innerFeatureCard">
             <h3 style={{ marginTop: 0 }}>Limited scope</h3>
             <p className="small" style={{ marginBottom: 0 }}>
-              This beta is an educational support product and is not presented as a formal student
-              records system or official school platform.
+              TutoVera is an educational support product and is not presented as a formal student
+              records system, official school platform, or guaranteed academic service.
             </p>
           </div>
         </section>
@@ -68,8 +68,8 @@ export default function PrivacyPage() {
             <div className="card featureCard">
               <h3 style={{ marginTop: 0 }}>Tutor activity</h3>
               <p className="small" style={{ marginBottom: 0 }}>
-                This may include the questions you submit, uploaded learning content, tutor responses,
-                saved conversation history, and related session data.
+                This may include questions you submit, uploaded learning content, tutor responses,
+                saved conversation history, selected modes, subject context, and related session data.
               </p>
             </div>
 
@@ -77,7 +77,7 @@ export default function PrivacyPage() {
               <h3 style={{ marginTop: 0 }}>Technical information</h3>
               <p className="small" style={{ marginBottom: 0 }}>
                 Limited request metadata may be processed for security, diagnostics, rate limiting,
-                abuse prevention, and product reliability.
+                abuse prevention, reliability, and product performance.
               </p>
             </div>
           </div>
@@ -89,8 +89,8 @@ export default function PrivacyPage() {
           <h2 style={{ margin: 0 }}>How information may be used</h2>
           <p className="small" style={{ margin: 0 }}>
             Submitted information may be used to operate the tutor, save session history, support
-            account features, improve product quality, understand beta usage, reduce abuse, and help
-            shape future features and workflows.
+            account features, improve product quality, understand beta usage, reduce abuse, diagnose
+            technical issues, and help shape future subject branches, tools, and workflows.
           </p>
         </section>
       </Reveal>
@@ -100,8 +100,8 @@ export default function PrivacyPage() {
           <h2 style={{ margin: 0 }}>AI-generated responses</h2>
           <p className="small" style={{ margin: 0 }}>
             Tutor responses are generated with artificial intelligence and may sometimes be incorrect,
-            incomplete, or unsuitable for a particular academic setting. Important answers should be
-            reviewed and verified before being relied on.
+            incomplete, or unsuitable for a particular academic setting. Important answers, methods,
+            and conclusions should be reviewed and verified before being relied on.
           </p>
         </section>
       </Reveal>
@@ -111,9 +111,9 @@ export default function PrivacyPage() {
           <h2 style={{ margin: 0 }}>Third-party services and data sharing</h2>
           <p className="small" style={{ margin: 0 }}>
             TutoVera does not sell personal information. The product may rely on third-party service
-            providers such as hosting, database, authentication, analytics, and AI infrastructure
-            providers that process information on behalf of the service in order to make the product
-            available.
+            providers such as hosting, database, authentication, analytics, email, and AI
+            infrastructure providers that process information on behalf of the service in order to
+            make the product available.
           </p>
         </section>
       </Reveal>
@@ -122,9 +122,9 @@ export default function PrivacyPage() {
         <section className="card" style={{ display: 'grid', gap: 14 }}>
           <h2 style={{ margin: 0 }}>Data retention</h2>
           <p className="small" style={{ margin: 0 }}>
-            Beta submissions, saved history, signup information, and related product data may be
-            retained for development, debugging, analytics, product improvement, and service
-            continuity unless deletion is requested and technically feasible.
+            Beta submissions, saved history, signup information, contact messages, and related
+            product data may be retained for development, debugging, analytics, product improvement,
+            and service continuity unless deletion is requested and technically feasible.
           </p>
         </section>
       </Reveal>
@@ -134,7 +134,7 @@ export default function PrivacyPage() {
           <h2 style={{ margin: 0 }}>Children and student use</h2>
           <p className="small" style={{ margin: 0 }}>
             If the service is used by minors or students, a parent, guardian, teacher, or school
-            should decide whether the tool is appropriate for that context. This beta is not currently
+            should decide whether the tool is appropriate for that context. TutoVera is not currently
             designed as a formal school-managed records environment.
           </p>
         </section>
