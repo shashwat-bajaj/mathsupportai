@@ -9,7 +9,6 @@ type ActiveSubjectNav = {
 };
 
 const tutoveraLinks = [
-  { href: '/', label: 'TutoVera' },
   { href: '/math', label: 'Math' },
   { href: '/physics', label: 'Physics' },
   { href: '/chemistry', label: 'Chemistry' },
@@ -46,6 +45,7 @@ function getActiveSubjectNav(pathname: string): ActiveSubjectNav | null {
 
 function getSubjectProductLinks(subject: ActiveSubjectNav) {
   return [
+    { href: '/', label: 'TutoVera' },
     { href: subject.basePath, label: subject.label },
     { href: `${subject.basePath}/tutor`, label: 'Students' },
     { href: `${subject.basePath}/parents`, label: 'Parents' },

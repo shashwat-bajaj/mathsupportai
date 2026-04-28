@@ -18,16 +18,20 @@ function getStatusLabel(status: SubjectConfig['status']) {
   }
 }
 
+function getHeroBadge(subject: SubjectConfig) {
+  return `TutoVera ${subject.name} • ${getStatusLabel(subject.status)}`;
+}
+
 function getStatusDescription(subject: SubjectConfig) {
   if (subject.status === 'active') {
     return `TutoVera ${subject.name} is active now with student, parent, and history workspaces.`;
   }
 
   if (subject.status === 'beta') {
-    return `${subject.name} is being prepared as one of the next TutoVera subject branches. TutoVera Math remains the active tutor workspace for now.`;
+    return `${subject.name} is being prepared as one of the next TutoVera subject branches. Active TutoVera branches are available now while this workspace is still being prepared.`;
   }
 
-  return `${subject.name} is planned as a future TutoVera subject branch. TutoVera Math remains the active tutor workspace for now.`;
+  return `${subject.name} is planned as a future TutoVera subject branch. Active TutoVera branches are available now while this workspace is still being prepared.`;
 }
 
 function getPreviewPrompt(subject: SubjectConfig) {
@@ -41,7 +45,9 @@ function getPreviewResponse(subject: SubjectConfig) {
         ? 'TutoVera Physics can explain the concept, identify variables, connect formulas, check units, and guide the problem step by step.'
         : 'A future Physics workspace can explain the concept, identify variables, connect formulas, check units, and guide the problem step by step.';
     case 'chemistry':
-      return 'A future Chemistry workspace can explain reactions, balance equations, walk through stoichiometry, and connect formulas to lab-style reasoning.';
+      return subject.status === 'active'
+        ? 'TutoVera Chemistry can explain reactions, balance equations, walk through stoichiometry, and connect formulas to lab-style reasoning.'
+        : 'A future Chemistry workspace can explain reactions, balance equations, walk through stoichiometry, and connect formulas to lab-style reasoning.';
     case 'biology':
       return 'A future Biology workspace can explain vocabulary, compare processes, summarize systems, and help connect details to the bigger concept.';
     case 'math':
@@ -139,10 +145,7 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
       <section className="homeLead">
         <div className="homeLeadGrid">
           <div className="homeLeadCopy">
-            <div className="buttonRow">
-              <span className="badge">{getStatusLabel(subject.status)}</span>
-              <span className="badge">TutoVera {subject.name}</span>
-            </div>
+            <span className="badge">{getHeroBadge(subject)}</span>
 
             <h1 className="homeLeadTitle">
               {subject.name} support shaped for the TutoVera learning system.
@@ -162,9 +165,6 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
                   </Link>
                   <Link className="btn secondary" href={`${subject.path}/parents`}>
                     Open Parent Workspace
-                  </Link>
-                  <Link className="btn secondary" href={`${subject.path}/history`}>
-                    View {subject.name} History
                   </Link>
                 </>
               ) : (
@@ -202,7 +202,7 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
                 <p className="small" style={{ margin: 0 }}>
                   {isActive
                     ? 'Student, parent, and history workspaces are available now.'
-                    : 'Math stays stable while this branch develops.'}
+                    : 'Active branches stay stable while this branch develops.'}
                 </p>
               </div>
             </div>
@@ -217,7 +217,7 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
                   <span />
                 </div>
                 <span className="small">
-                  {isActive ? `${subject.name} tutor workspace` : `${subject.name} tutor preview`}
+                  {isActive ? `TutoVera ${subject.name} preview` : `${subject.name} tutor preview`}
                 </span>
               </div>
 
@@ -238,7 +238,7 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
 
                 <div className="homePreviewGrid">
                   <div className="homePreviewMiniCard">
-                    <span className="badge">{isActive ? 'Available tools' : 'Planned tools'}</span>
+                    <span className="badge">{isActive ? 'Session tools' : 'Planned tools'}</span>
                     <p className="small" style={{ margin: 0 }}>
                       Step-by-step support, subject examples, saved sessions, and guided follow-ups.
                     </p>
@@ -262,24 +262,43 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
       <Reveal delay={0.04}>
         <section className="card spotlightCard" style={{ display: 'grid', gap: 22 }}>
           <div style={{ display: 'grid', gap: 8 }}>
-            <span className="badge">How it helps</span>
-            <h2 style={{ margin: 0 }}>A subject workspace, not a separate app.</h2>
+            <span className="badge">How it’s used</span>
+            <h2 style={{ margin: 0 }}>One {subject.name.toLowerCase()} workspace, two ways in.</h2>
             <p className="small" style={{ margin: 0, maxWidth: 1120 }}>
-              {subject.name} lives inside the same TutoVera platform, using the same account,
-              deployment, and history foundation while allowing the learning experience to become
-              specific to the subject.
+              Students can work through {subject.name.toLowerCase()} questions, explanations, and
+              follow-ups. Parents can get simpler guidance, examples, talking points, and practice
+              support without jumping straight to the final answer.
             </p>
           </div>
 
-          <div className="grid cols-3">
-            {useCases.map((item) => (
-              <div key={item.title} className="card innerFeatureCard">
-                <h3 style={{ marginTop: 0 }}>{item.title}</h3>
-                <p className="small" style={{ marginBottom: 0 }}>
-                  {item.text}
-                </p>
+          <div className="sectionSplit">
+            <div className="sectionCell">
+              <span className="badge">Students</span>
+              <h3 style={{ margin: 0 }}>Work through {subject.name.toLowerCase()}, then keep going.</h3>
+              <p className="small" style={{ margin: 0, maxWidth: 640 }}>
+                Best for explanations, guided reasoning, checking mistakes, practice prompts, and
+                asking the next question without restarting the whole flow.
+              </p>
+              <div className="buttonRow">
+                <Link className="btn" href={`${subject.path}/tutor`}>
+                  Go to Students
+                </Link>
               </div>
-            ))}
+            </div>
+
+            <div className="sectionCell">
+              <span className="badge">Parents</span>
+              <h3 style={{ margin: 0 }}>Support a child more clearly.</h3>
+              <p className="small" style={{ margin: 0, maxWidth: 640 }}>
+                Best for simpler explanations, parent talking points, child-friendly examples, and
+                guided help that supports learning instead of replacing it.
+              </p>
+              <div className="buttonRow">
+                <Link className="btn secondary" href={`${subject.path}/parents`}>
+                  Go to Parents
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
       </Reveal>
@@ -314,7 +333,7 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
             <p className="small" style={{ margin: 0, maxWidth: 860 }}>
               {isActive
                 ? `TutoVera ${subject.name} now has its own student workspace, parent workspace, and subject-specific history while still sharing the broader TutoVera foundation.`
-                : `The current active tutor experience is TutoVera Math. This ${subject.name} branch is being shaped so it can support its own tutor behavior, examples, history, and learning flow without splitting TutoVera into separate apps.`}
+                : `This ${subject.name} branch is being shaped so it can support its own tutor behavior, examples, history, and learning flow without splitting TutoVera into separate apps.`}
             </p>
           </div>
 
@@ -326,9 +345,6 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
                 </Link>
                 <Link className="btn secondary" href={`${subject.path}/parents`}>
                   Open Parent Workspace
-                </Link>
-                <Link className="btn secondary" href="/contact">
-                  Contact / Feedback
                 </Link>
               </>
             ) : (
