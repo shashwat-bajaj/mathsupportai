@@ -8,11 +8,11 @@ export default function PricingPageContent() {
           <span className="badge">Pricing</span>
 
           <div style={{ display: 'grid', gap: 10 }}>
-            <h1 style={{ margin: 0 }}>Simple for now, with more structured plans later.</h1>
+            <h1 style={{ margin: 0 }}>Free during beta, with thoughtful plans later.</h1>
             <p className="small" style={{ margin: 0, maxWidth: 820 }}>
-              TutoVera Math is currently available as a free beta while the product experience is
-              still being improved. The goal right now is to make the tutor more useful, more
-              reliable, and more polished before introducing fuller premium plans.
+              TutoVera Math is currently available as a free beta while the learning experience is
+              still being improved. The focus right now is building a tutor that feels clearer, more
+              reliable, and more trustworthy before introducing structured paid plans.
             </p>
           </div>
         </section>
@@ -27,11 +27,11 @@ export default function PricingPageContent() {
 
             <ul className="list">
               <li>Step-by-step math support</li>
-              <li>Hints, diagnosis mode, quiz mode, and auto mode</li>
+              <li>Auto mode, hint mode, diagnosis mode, and quiz mode</li>
               <li>Session history for signed-in users</li>
               <li>Graph support for graphable questions</li>
               <li>Read aloud and translation tools</li>
-              <li>Early access while the product evolves</li>
+              <li>Early access while TutoVera Math continues to improve</li>
             </ul>
           </div>
 
@@ -56,7 +56,7 @@ export default function PricingPageContent() {
 
             <ul className="list">
               <li>Parent-oriented support packages</li>
-              <li>Potential family access ideas</li>
+              <li>Potential family access options</li>
               <li>Expanded guided-learning workflows</li>
               <li>Future access tiers and promo options</li>
             </ul>
@@ -69,7 +69,7 @@ export default function PricingPageContent() {
           <div style={{ display: 'grid', gap: 8 }}>
             <h2 style={{ margin: 0 }}>Why the beta is still free</h2>
             <p className="small" style={{ margin: 0, maxWidth: 820 }}>
-              The current focus is on improving the core TutoVera Math experience first: better tutor
+              The current priority is improving the core TutoVera Math experience first: better tutor
               flow, clearer graph behavior, stronger history, more reliable interactions, and a more
               polished interface overall. Pricing can become more structured once the product feels
               stronger end to end.
