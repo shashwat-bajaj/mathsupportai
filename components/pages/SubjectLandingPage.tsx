@@ -49,7 +49,9 @@ function getPreviewResponse(subject: SubjectConfig) {
         ? 'TutoVera Chemistry can explain reactions, balance equations, walk through stoichiometry, and connect formulas to lab-style reasoning.'
         : 'A future Chemistry workspace can explain reactions, balance equations, walk through stoichiometry, and connect formulas to lab-style reasoning.';
     case 'biology':
-      return 'A future Biology workspace can explain vocabulary, compare processes, summarize systems, and help connect details to the bigger concept.';
+      return subject.status === 'active'
+        ? 'TutoVera Biology can explain vocabulary, compare biological processes, summarize systems, and help connect details to the bigger concept.'
+        : 'A future Biology workspace can explain vocabulary, compare processes, summarize systems, and help connect details to the bigger concept.';
     case 'math':
     default:
       return 'TutoVera Math can explain steps, support follow-ups, graph when useful, diagnose mistakes, and keep the learning thread connected.';

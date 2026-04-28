@@ -1,13 +1,11 @@
-import { notFound } from 'next/navigation';
-import SubjectTutorPlaceholderPage from '@/components/pages/SubjectTutorPlaceholderPage';
-import { getSubjectConfig } from '@/lib/subjects';
+import StudentWorkspacePage from '@/components/workspaces/StudentWorkspacePage';
 
-export default function BiologyTutorPage() {
-  const subject = getSubjectConfig('biology');
+export const dynamic = 'force-dynamic';
 
-  if (!subject) {
-    notFound();
-  }
-
-  return <SubjectTutorPlaceholderPage subject={subject} />;
+export default function BiologyTutorPage({
+  searchParams
+}: {
+  searchParams: Promise<{ conversation?: string }>;
+}) {
+  return <StudentWorkspacePage searchParams={searchParams} subject="biology" />;
 }

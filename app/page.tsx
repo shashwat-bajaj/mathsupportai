@@ -17,10 +17,9 @@ export default function HomePage() {
             <h1 className="homeLeadTitle">Tutoring you can trust, across every subject branch.</h1>
 
             <p className="homeLeadSubtext">
-              TutoVera is a calm AI learning platform with active support for Math, Physics, and
-              Chemistry, plus a Biology branch prepared for future growth. Each subject has its own
-              learning workspace while sharing one account, one history foundation, and one connected
-              product experience.
+              TutoVera is a calm AI learning platform with active support for Math, Physics,
+              Chemistry, and Biology. Each subject has its own learning workspace while sharing one
+              account, one history foundation, and one connected product experience.
             </p>
 
             <div className="buttonRow">
@@ -43,7 +42,7 @@ export default function HomePage() {
               <div className="homeLeadProofItem">
                 <strong>Active branches</strong>
                 <p className="small" style={{ margin: 0 }}>
-                  Math, Physics, and Chemistry are active now.
+                  Math, Physics, Chemistry, and Biology are active now.
                 </p>
               </div>
 
@@ -96,7 +95,8 @@ export default function HomePage() {
                   <div className="homePreviewMiniCard">
                     <span className="badge">Built to expand</span>
                     <p className="small" style={{ margin: 0 }}>
-                      Biology is structured as the next subject branch, not a separate cloned app.
+                      TutoVera is structured so future tools, subjects, and study workflows can grow
+                      from the same shared foundation.
                     </p>
                   </div>
                 </div>
@@ -162,10 +162,11 @@ export default function HomePage() {
         <section className="card" style={{ display: 'grid', gap: 16 }}>
           <div style={{ display: 'grid', gap: 8 }}>
             <span className="badge">Current focus</span>
-            <h2 style={{ margin: 0 }}>Math, Physics, and Chemistry are active branches today.</h2>
+            <h2 style={{ margin: 0 }}>All four core subject branches are active today.</h2>
             <p className="small" style={{ margin: 0, maxWidth: 920 }}>
-              The current focus is making the active branches feel stable, consistent, and useful
-              before expanding the same structure to Biology and future product features.
+              The current focus is making Math, Physics, Chemistry, and Biology feel stable,
+              consistent, and useful before expanding into payments, richer subject tools, mobile app
+              polish, and future product features.
             </p>
           </div>
 
@@ -178,6 +179,9 @@ export default function HomePage() {
             </Link>
             <Link className="btn secondary" href="/chemistry/tutor">
               Open Chemistry
+            </Link>
+            <Link className="btn secondary" href="/biology/tutor">
+              Open Biology
             </Link>
           </div>
         </section>

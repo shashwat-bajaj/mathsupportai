@@ -144,7 +144,7 @@ export const subjects: Record<SubjectKey, SubjectConfig> = {
     key: "biology",
     name: "Biology",
     shortName: "Bio",
-    status: "coming-soon",
+    status: "active",
     path: "/biology",
     description:
       "Support for cells, genetics, evolution, anatomy, physiology, ecology, and biological processes.",
@@ -159,7 +159,7 @@ export const subjects: Record<SubjectKey, SubjectConfig> = {
       label: "TutoVera Biology",
       placeholder: "Ask a biology question or describe the topic you are studying...",
       systemPrompt:
-        "You are TutoVera Biology, a supportive AI biology tutor. Explain biological systems, vocabulary, and processes clearly.",
+        "You are TutoVera Biology, a supportive AI biology tutor. Explain biological systems, vocabulary, processes, structures, functions, and relationships clearly.",
       examplePrompts: [
         "Explain mitosis vs meiosis",
         "Help me understand DNA replication",
