@@ -99,7 +99,7 @@ export default function SettingsForm({
       return;
     }
 
-    window.localStorage.setItem('mathsupport-theme', themePreference);
+    window.localStorage.setItem('tutovera-theme', themePreference);
     document.documentElement.setAttribute('data-theme', resolveTheme(themePreference));
 
     setStatus('Settings saved.');

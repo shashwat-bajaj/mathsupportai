@@ -26,7 +26,7 @@ const footerLinks = [
 const themeBootstrapScript = `
 (function () {
   try {
-    var saved = localStorage.getItem('mathsupport-theme') || 'system';
+    var saved = localStorage.getItem('tutovera-theme') || 'system';
     var resolved =
       saved === 'system'
         ? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
