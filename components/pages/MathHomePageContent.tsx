@@ -21,7 +21,7 @@ export default function MathHomePageContent() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.04, duration: 0.28, ease: 'easeOut' }}
             >
-              Free beta now live
+              TutoVera Math • Free beta now live
             </motion.span>
 
             <motion.h1
@@ -30,7 +30,7 @@ export default function MathHomePageContent() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 0.4, ease: 'easeOut' }}
             >
-              Math help that stays clear after the first answer.
+              Math tutoring you can trust beyond the first answer.
             </motion.h1>
 
             <motion.p
@@ -39,8 +39,8 @@ export default function MathHomePageContent() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.18, duration: 0.4, ease: 'easeOut' }}
             >
-              For students and parents who want explanation, graphing, and follow-up flow in one
-              calmer workspace.
+              TutoVera Math helps students and parents work through explanations, graphing, mistakes,
+              and follow-up questions in one calmer learning workspace.
             </motion.p>
 
             <motion.div
@@ -99,7 +99,7 @@ export default function MathHomePageContent() {
                   <span />
                   <span />
                 </div>
-                <span className="small">Tutor preview</span>
+                <span className="small">TutoVera Math preview</span>
               </div>
 
               <div className="homePreviewStack">
@@ -145,11 +145,11 @@ export default function MathHomePageContent() {
         <section className="card spotlightCard" style={{ display: 'grid', gap: 22 }}>
           <div style={{ display: 'grid', gap: 8 }}>
             <span className="badge">How it’s used</span>
-            <h2 style={{ margin: 0 }}>One system, two ways in.</h2>
+            <h2 style={{ margin: 0 }}>One math workspace, two ways in.</h2>
             <p className="small" style={{ margin: 0, maxWidth: 1120 }}>
               Students can solve, graph, diagnose, and continue the same thread. Parents can get
-              simpler explanations, examples, and guided support without jumping straight to the
-              final answer.
+              simpler explanations, examples, and guided support without jumping straight to the final
+              answer.
             </p>
           </div>
 
