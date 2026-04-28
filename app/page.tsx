@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Reveal from '@/components/Reveal';
+import BetaSignup from '@/components/BetaSignup';
 import { subjects } from '@/lib/subjects';
 
 export default function HomePage() {
@@ -115,8 +116,8 @@ export default function HomePage() {
             <span className="badge">Subjects</span>
             <h2 style={{ margin: 0 }}>Choose a TutoVera branch.</h2>
             <p className="small" style={{ margin: 0, maxWidth: 1120 }}>
-              Each subject branch has its own homepage, examples, tutor behavior, and visual identity
-              while sharing the same core account, history, settings, deployment, and backend
+              Each subject branch has its own homepage, examples, tutor behavior, tools, and visual
+              identity while sharing the same core account, history, settings, deployment, and backend
               structure.
             </p>
           </div>
@@ -180,6 +181,10 @@ export default function HomePage() {
             </Link>
           </div>
         </section>
+      </Reveal>
+
+      <Reveal delay={0.12}>
+        <BetaSignup />
       </Reveal>
     </div>
   );

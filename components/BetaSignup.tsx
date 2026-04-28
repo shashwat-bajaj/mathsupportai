@@ -29,7 +29,7 @@ export default function BetaSignup() {
         return;
       }
 
-      setStatus('You have been added to the beta list.');
+      setStatus('You have been added to the TutoVera beta list.');
       setName('');
       setEmail('');
       setGoal('');
@@ -58,13 +58,14 @@ export default function BetaSignup() {
         }}
       >
         <div style={{ display: 'grid', gap: 12 }}>
-          <span className="badge">Join the beta</span>
+          <span className="badge">Join the TutoVera beta</span>
 
           <div style={{ display: 'grid', gap: 10 }}>
-            <h2 style={{ margin: 0 }}>Help shape the product while it is still being refined.</h2>
+            <h2 style={{ margin: 0 }}>Help shape TutoVera while it is still being refined.</h2>
             <p className="small" style={{ margin: 0, maxWidth: 520 }}>
               Leave your details so we can track early interest, understand real study needs, and
-              improve the product around actual learners and families.
+              improve Math, Physics, Chemistry, Biology, and future learning tools around actual
+              learners and families.
             </p>
           </div>
 
@@ -79,16 +80,16 @@ export default function BetaSignup() {
             <div style={{ display: 'grid', gap: 5 }}>
               <strong style={{ fontSize: '0.98rem' }}>Built for real use</strong>
               <p className="small" style={{ margin: 0 }}>
-                Algebra, calculus, revision, homework support, parent guidance, and clearer
-                follow-up flow.
+                Homework support, revision, parent guidance, subject-specific explanations, and
+                clearer follow-up flow across active TutoVera branches.
               </p>
             </div>
 
             <div style={{ display: 'grid', gap: 5 }}>
               <strong style={{ fontSize: '0.98rem' }}>Early access focus</strong>
               <p className="small" style={{ margin: 0 }}>
-                Tutor quality, graphing, saved sessions, parent support, and cleaner interaction
-                design.
+                Tutor quality, saved sessions, parent support, subject tools, accessibility, and
+                cleaner interaction design.
               </p>
             </div>
           </div>
@@ -129,7 +130,7 @@ export default function BetaSignup() {
               <textarea
                 value={goal}
                 onChange={(e) => setGoal(e.target.value)}
-                placeholder="Examples: algebra homework, SAT prep, calculus revision, learning step-by-step"
+                placeholder="Examples: algebra homework, physics formulas, chemistry balancing, biology revision, parent support"
               />
             </div>
           </div>

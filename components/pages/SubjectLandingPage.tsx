@@ -52,7 +52,7 @@ function getPreviewResponse(subject: SubjectConfig) {
       return 'A future Biology workspace can explain vocabulary, compare processes, summarize systems, and help connect details to the bigger concept.';
     case 'math':
     default:
-      return 'The active Math workspace explains steps, supports follow-ups, graphs when useful, and keeps the learning thread connected.';
+      return 'TutoVera Math can explain steps, support follow-ups, graph when useful, diagnose mistakes, and keep the learning thread connected.';
   }
 }
 
@@ -122,6 +122,72 @@ function getUseCases(subject: SubjectConfig) {
   }
 }
 
+function getSubjectTools(subject: SubjectConfig) {
+  switch (subject.key) {
+    case 'physics':
+      return [
+        {
+          title: 'Formula reasoning',
+          text: 'Connect variables, formulas, substitutions, and units so the equation actually makes sense.'
+        },
+        {
+          title: 'Unit checks',
+          text: 'Support dimensional thinking by tracking units and helping users notice mismatches.'
+        },
+        {
+          title: 'Future simulators',
+          text: 'Physics can later grow into motion, forces, circuits, waves, and energy simulators.'
+        }
+      ];
+    case 'chemistry':
+      return [
+        {
+          title: 'Equation balancing',
+          text: 'Guide chemical equation balancing with clear atom-count reasoning instead of guessing.'
+        },
+        {
+          title: 'Stoichiometry support',
+          text: 'Help with mole ratios, conversions, limiting reactants, molarity, and unit-aware setup.'
+        },
+        {
+          title: 'Future lab tools',
+          text: 'Chemistry can later grow into reaction helpers, lab-style reasoning, and conversion tools.'
+        }
+      ];
+    case 'biology':
+      return [
+        {
+          title: 'Process explainers',
+          text: 'Support processes like mitosis, DNA replication, respiration, evolution, and physiology.'
+        },
+        {
+          title: 'Vocabulary breakdowns',
+          text: 'Explain biology terms in everyday language before connecting them to formal meaning.'
+        },
+        {
+          title: 'Future diagram support',
+          text: 'Biology can later grow into labeled diagrams, systems maps, and comparison tools.'
+        }
+      ];
+    case 'math':
+    default:
+      return [
+        {
+          title: 'Graphing support',
+          text: 'Graphable math questions can show a visual graph when a function or curve helps the explanation.'
+        },
+        {
+          title: 'Step-by-step solving',
+          text: 'Support algebra, calculus, statistics, and problem-solving with clear intermediate steps.'
+        },
+        {
+          title: 'Mistake diagnosis',
+          text: 'Help users identify where their setup, sign, arithmetic, algebra, or reasoning went wrong.'
+        }
+      ];
+  }
+}
+
 function getFinalHeading(subject: SubjectConfig) {
   if (subject.status === 'active') {
     return `TutoVera ${subject.name} is active now.`;
@@ -139,6 +205,7 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
   const previewPrompt = getPreviewPrompt(subject);
   const previewResponse = getPreviewResponse(subject);
   const useCases = getUseCases(subject);
+  const subjectTools = getSubjectTools(subject);
 
   return (
     <div className="grid" style={{ gap: 34 }}>
@@ -238,9 +305,9 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
 
                 <div className="homePreviewGrid">
                   <div className="homePreviewMiniCard">
-                    <span className="badge">{isActive ? 'Session tools' : 'Planned tools'}</span>
+                    <span className="badge">Subject tools</span>
                     <p className="small" style={{ margin: 0 }}>
-                      Step-by-step support, subject examples, saved sessions, and guided follow-ups.
+                      {subjectTools[0]?.text || 'Subject-specific tools and guided learning support.'}
                     </p>
                   </div>
 
@@ -306,6 +373,30 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
       <Reveal delay={0.08}>
         <section className="card" style={{ display: 'grid', gap: 16 }}>
           <div style={{ display: 'grid', gap: 8 }}>
+            <span className="badge">Subject tools</span>
+            <h2 style={{ margin: 0 }}>{subject.name} has its own learning needs.</h2>
+            <p className="small" style={{ margin: 0, maxWidth: 820 }}>
+              The interface stays consistent across TutoVera, while the tools and learning behavior
+              can become specific to each subject.
+            </p>
+          </div>
+
+          <div className="grid cols-3">
+            {subjectTools.map((tool) => (
+              <div key={tool.title} className="card innerFeatureCard">
+                <h3 style={{ marginTop: 0 }}>{tool.title}</h3>
+                <p className="small" style={{ marginBottom: 0 }}>
+                  {tool.text}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+      </Reveal>
+
+      <Reveal delay={0.12}>
+        <section className="card" style={{ display: 'grid', gap: 16 }}>
+          <div style={{ display: 'grid', gap: 8 }}>
             <span className="badge">Example prompts</span>
             <h2 style={{ margin: 0 }}>What users may ask in {subject.name}.</h2>
             <p className="small" style={{ margin: 0, maxWidth: 820 }}>
@@ -326,7 +417,7 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
         </section>
       </Reveal>
 
-      <Reveal delay={0.12}>
+      <Reveal delay={0.16}>
         <section className="card spotlightCard" style={{ display: 'grid', gap: 16 }}>
           <div style={{ display: 'grid', gap: 8 }}>
             <h2 style={{ margin: 0 }}>{getFinalHeading(subject)}</h2>
