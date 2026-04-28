@@ -42,11 +42,11 @@ export default function ContactPage() {
           <span className="badge">Contact</span>
 
           <div style={{ display: 'grid', gap: 10 }}>
-            <h1 style={{ margin: 0 }}>Send feedback, report issues, or ask about the beta.</h1>
+            <h1 style={{ margin: 0 }}>Help shape TutoVera while it grows.</h1>
             <p className="small" style={{ margin: 0, maxWidth: 820 }}>
               Use this page to share bugs, confusing moments, feature requests, product ideas, or
-              anything that would make TutoVera more useful for students, parents, and future subject
-              branches.
+              anything that would make TutoVera more useful and trustworthy for students, parents,
+              and future subject branches.
             </p>
           </div>
         </section>
@@ -64,8 +64,8 @@ export default function ContactPage() {
           <div className="card innerFeatureCard">
             <h3 style={{ marginTop: 0 }}>Bug reports</h3>
             <p className="small" style={{ marginBottom: 0 }}>
-              Report broken flows, confusing tutor behavior, graph issues, or anything that does not
-              work as expected.
+              Report broken flows, confusing tutor behavior, graph issues, login problems, or
+              anything that does not work as expected.
             </p>
           </div>
 
@@ -73,7 +73,7 @@ export default function ContactPage() {
             <h3 style={{ marginTop: 0 }}>Feature requests</h3>
             <p className="small" style={{ marginBottom: 0 }}>
               Suggest workflows, tools, UI changes, or study features that would make the product
-              more useful over time.
+              more helpful over time.
             </p>
           </div>
         </section>
@@ -84,7 +84,8 @@ export default function ContactPage() {
           <div style={{ display: 'grid', gap: 8 }}>
             <h2 style={{ margin: 0 }}>Message form</h2>
             <p className="small" style={{ margin: 0 }}>
-              The more specific the message, the easier it is to improve the product meaningfully.
+              The more specific your message is, the easier it is to improve TutoVera in a meaningful
+              way.
             </p>
           </div>
 
