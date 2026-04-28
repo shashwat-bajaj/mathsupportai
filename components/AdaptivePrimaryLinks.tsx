@@ -2,6 +2,12 @@
 
 import { usePathname } from 'next/navigation';
 
+type ActiveSubjectNav = {
+  key: 'math' | 'physics';
+  basePath: string;
+  label: string;
+};
+
 const tutoveraLinks = [
   { href: '/', label: 'TutoVera' },
   { href: '/math', label: 'Math' },
@@ -10,22 +16,47 @@ const tutoveraLinks = [
   { href: '/biology', label: 'Biology' }
 ];
 
-const mathProductLinks = [
-  { href: '/math', label: 'Home' },
-  { href: '/math/tutor', label: 'Students' },
-  { href: '/math/parents', label: 'Parents' },
-  { href: '/math/history', label: 'History' },
-  { href: '/math/about', label: 'About' },
-  { href: '/contact', label: 'Contact' }
-];
+function getActiveSubjectNav(pathname: string): ActiveSubjectNav | null {
+  if (pathname === '/math' || pathname.startsWith('/math/')) {
+    return {
+      key: 'math',
+      basePath: '/math',
+      label: 'Math'
+    };
+  }
 
-function shouldUseMathProductNav(pathname: string) {
-  return pathname === '/math' || pathname.startsWith('/math/');
+  if (pathname === '/physics' || pathname.startsWith('/physics/')) {
+    return {
+      key: 'physics',
+      basePath: '/physics',
+      label: 'Physics'
+    };
+  }
+
+  return null;
+}
+
+function getSubjectProductLinks(subject: ActiveSubjectNav) {
+  const links = [
+    { href: subject.basePath, label: subject.label },
+    { href: `${subject.basePath}/tutor`, label: 'Students' },
+    { href: `${subject.basePath}/parents`, label: 'Parents' },
+    { href: `${subject.basePath}/history`, label: 'History' }
+  ];
+
+  if (subject.key === 'math') {
+    links.push({ href: '/math/about', label: 'About' });
+  }
+
+  links.push({ href: '/contact', label: 'Contact' });
+
+  return links;
 }
 
 export default function AdaptivePrimaryLinks() {
   const pathname = usePathname();
-  const links = shouldUseMathProductNav(pathname) ? mathProductLinks : tutoveraLinks;
+  const activeSubject = getActiveSubjectNav(pathname);
+  const links = activeSubject ? getSubjectProductLinks(activeSubject) : tutoveraLinks;
 
   return (
     <>

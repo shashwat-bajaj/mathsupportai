@@ -4,6 +4,7 @@ import MathTutor from '@/components/MathTutor';
 import ConversationThread from '@/components/ConversationThread';
 import DeleteConversationButton from '@/components/DeleteConversationButton';
 import Reveal from '@/components/Reveal';
+import { getSubjectConfig, subjects, type SubjectConfig, type SubjectKey } from '@/lib/subjects';
 
 type ConversationRecord = {
   id: string;
@@ -30,6 +31,11 @@ type TurnRecord = {
   created_at: string;
 };
 
+type ParentWorkspacePageProps = {
+  searchParams: Promise<{ conversation?: string }>;
+  subject?: SubjectKey;
+};
+
 function makePreview(text: string, max = 88) {
   if (!text) return '';
   const cleaned = text.replace(/\s+/g, ' ').trim();
@@ -44,15 +50,82 @@ function formatDate(value: string) {
   }
 }
 
-const parentWorkspaceHref = '/math/parents';
+function getParentWorkspaceCopy(subject: SubjectConfig) {
+  if (subject.key === 'math') {
+    return {
+      badge: 'Parent workspace',
+      signedOutTitle:
+        'Guidance for helping a child learn, without jumping straight to the final answer.',
+      signedOutDescription:
+        'Use this workspace when you want parent-friendly explanation, simple examples, talking points, likely-mistake guidance, and practice prompts that help a child understand the concept more clearly.',
+      signedInTitle:
+        'A calmer support surface for adults helping a child learn math more clearly.',
+      signedInDescription:
+        'Ask for simpler explanations, talking points, examples, likely-mistake guidance, and practice prompts without forcing the interaction into a full worked solution.',
+      defaultFlow:
+        'Guided hint mode with child-level explanation and parent-friendly support.',
+      bestFor:
+        'Explaining concepts aloud, giving examples, spotting confusion, and supporting practice.',
+      tutorDescription:
+        'Use this version when you want parent-friendly guidance, simpler explanation, talking points, examples, and practice prompts without jumping straight to the full solution.',
+      placeholder:
+        'Example: My child is learning long division and gets confused after the first subtraction step. How can I explain it clearly?'
+    };
+  }
+
+  if (subject.key === 'physics') {
+    return {
+      badge: 'Physics parent workspace',
+      signedOutTitle:
+        'Guidance for helping a child understand physics without simply giving the answer.',
+      signedOutDescription:
+        'Use this workspace when you want parent-friendly physics explanations, simple examples, talking points, likely-mistake guidance, and practice prompts that help a child understand the concept more clearly.',
+      signedInTitle:
+        'A calmer support surface for adults helping a child learn physics more clearly.',
+      signedInDescription:
+        'Ask for simpler explanations, everyday analogies, formula setup guidance, unit-checking support, likely-mistake guidance, and practice prompts without turning everything into a full worked solution.',
+      defaultFlow:
+        'Guided hint mode with concept-first explanation, parent-friendly language, and unit-aware support.',
+      bestFor:
+        'Explaining concepts aloud, connecting formulas to meaning, spotting confusion, and supporting practice.',
+      tutorDescription:
+        'Use this version when you want parent-friendly Physics guidance, simpler explanations, talking points, examples, and practice prompts without jumping straight to a full solution.',
+      placeholder:
+        "Example: My child is learning Newton's second law and keeps mixing up force, mass, and acceleration. How can I explain it clearly?"
+    };
+  }
+
+  return {
+    badge: `${subject.name} parent workspace`,
+    signedOutTitle:
+      `Guidance for helping a child understand ${subject.name.toLowerCase()} more clearly.`,
+    signedOutDescription:
+      `Use this workspace when you want parent-friendly ${subject.name.toLowerCase()} explanations, examples, talking points, likely-mistake guidance, and practice prompts.`,
+    signedInTitle:
+      `A calmer support surface for adults helping a child learn ${subject.name.toLowerCase()} more clearly.`,
+    signedInDescription:
+      `Ask for simpler explanations, examples, likely-mistake guidance, and practice prompts for ${subject.name.toLowerCase()} learning.`,
+    defaultFlow:
+      'Guided hint mode with child-level explanation and parent-friendly support.',
+    bestFor:
+      'Explaining concepts aloud, giving examples, spotting confusion, and supporting practice.',
+    tutorDescription:
+      `Use this version when you want parent-friendly ${subject.name} guidance without jumping straight to the full answer.`,
+    placeholder:
+      `Example: My child is learning a ${subject.name.toLowerCase()} topic and feels stuck. How can I explain it clearly?`
+  };
+}
 
 export default async function ParentWorkspacePage({
-  searchParams
-}: {
-  searchParams: Promise<{ conversation?: string }>;
-}) {
+  searchParams,
+  subject = 'math'
+}: ParentWorkspacePageProps) {
   const params = await searchParams;
   const selectedConversationId = (params.conversation || '').trim();
+
+  const subjectConfig = getSubjectConfig(subject) || subjects.math;
+  const parentWorkspaceHref = `${subjectConfig.path}/parents`;
+  const copy = getParentWorkspaceCopy(subjectConfig);
 
   const authClient = await createAuthClient();
   const {
@@ -70,7 +143,7 @@ export default async function ParentWorkspacePage({
       .from('learner_conversations')
       .select('id, title, audience, created_at, updated_at')
       .eq('user_id', user.id)
-      .eq('subject', 'math')
+      .eq('subject', subjectConfig.key)
       .eq('audience', 'parent')
       .order('updated_at', { ascending: false })
       .limit(30);
@@ -84,7 +157,7 @@ export default async function ParentWorkspacePage({
         .from('learner_sessions')
         .select('conversation_id, prompt, turn_index, created_at')
         .in('conversation_id', conversationIds)
-        .eq('subject', 'math')
+        .eq('subject', subjectConfig.key)
         .eq('turn_index', 1)
         .order('created_at', { ascending: true });
 
@@ -105,7 +178,7 @@ export default async function ParentWorkspacePage({
       .from('learner_sessions')
       .select('id, turn_index, mode, level, prompt, response, created_at')
       .eq('conversation_id', selectedConversation.id)
-      .eq('subject', 'math')
+      .eq('subject', subjectConfig.key)
       .order('turn_index', { ascending: true })
       .order('created_at', { ascending: true });
 
@@ -117,16 +190,12 @@ export default async function ParentWorkspacePage({
       <div className="grid" style={{ gap: 24 }}>
         <Reveal delay={0.02}>
           <section className="card spotlightCard" style={{ display: 'grid', gap: 14 }}>
-            <span className="badge">Parent workspace</span>
+            <span className="badge">{copy.badge}</span>
 
             <div style={{ display: 'grid', gap: 10 }}>
-              <h1 style={{ margin: 0 }}>
-                Guidance for helping a child learn, without jumping straight to the final answer.
-              </h1>
+              <h1 style={{ margin: 0 }}>{copy.signedOutTitle}</h1>
               <p className="small" style={{ margin: 0, maxWidth: 840 }}>
-                Use this workspace when you want parent-friendly explanation, simple examples,
-                talking points, likely-mistake guidance, and practice prompts that help a child
-                understand the concept more clearly.
+                {copy.signedOutDescription}
               </p>
             </div>
           </section>
@@ -134,12 +203,12 @@ export default async function ParentWorkspacePage({
 
         <Reveal delay={0.08}>
           <MathTutor
-            subject="math"
+            subject={subjectConfig.key}
             audience="parent"
             lockedMode="hint"
-            title="Tutor Support for Parents"
-            description="Use this version when you want guidance on how to help a child learn without jumping straight to the full solution."
-            placeholder="Example: My child is learning long division and gets confused after the first subtraction step. How can I explain it clearly?"
+            title={`Tutor Support for ${subjectConfig.name} Parents`}
+            description={copy.tutorDescription}
+            placeholder={copy.placeholder}
           />
         </Reveal>
       </div>
@@ -151,14 +220,10 @@ export default async function ParentWorkspacePage({
       <Reveal delay={0.02}>
         <section className="card spotlightCard" style={{ display: 'grid', gap: 16 }}>
           <div style={{ display: 'grid', gap: 10 }}>
-            <span className="badge">Parent workspace</span>
-            <h1 style={{ margin: 0 }}>
-              A calmer support surface for adults helping a child learn math more clearly.
-            </h1>
+            <span className="badge">{copy.badge}</span>
+            <h1 style={{ margin: 0 }}>{copy.signedInTitle}</h1>
             <p className="small" style={{ margin: 0, maxWidth: 860 }}>
-              Ask for simpler explanations, talking points, examples, likely-mistake guidance, and
-              practice prompts without forcing the interaction into a full worked solution. Signed in
-              as <strong>{user.email}</strong>.
+              {copy.signedInDescription} Signed in as <strong>{user.email}</strong>.
             </p>
           </div>
 
@@ -174,7 +239,7 @@ export default async function ParentWorkspacePage({
                 <strong>Saved sessions</strong>
               </p>
               <p className="small" style={{ margin: 0 }}>
-                {conversations.length} available in your parent history.
+                {conversations.length} available in your {subjectConfig.name.toLowerCase()} parent history.
               </p>
             </div>
 
@@ -183,7 +248,7 @@ export default async function ParentWorkspacePage({
                 <strong>Default flow</strong>
               </p>
               <p className="small" style={{ margin: 0 }}>
-                Guided hint mode with child-level explanation and parent-friendly support.
+                {copy.defaultFlow}
               </p>
             </div>
 
@@ -192,129 +257,131 @@ export default async function ParentWorkspacePage({
                 <strong>Best for</strong>
               </p>
               <p className="small" style={{ margin: 0 }}>
-                Explaining concepts aloud, giving examples, spotting confusion, and supporting practice.
+                {copy.bestFor}
               </p>
             </div>
           </div>
         </section>
       </Reveal>
 
-      <section className="twoPane">
-        <Reveal delay={0.08}>
-          <aside
-            className="card"
-            style={{
-              position: 'sticky',
-              top: 94,
-              alignSelf: 'start',
-              display: 'grid',
-              gap: 14
-            }}
-          >
-            <div style={{ display: 'grid', gap: 6 }}>
-              <h2 style={{ margin: 0 }}>Parent Sessions</h2>
-              <p className="small" style={{ margin: 0 }}>
-                Open an earlier parent thread or start a new one.
-              </p>
-            </div>
-
-            <div className="buttonRow">
-              <a className="btn secondary" href={parentWorkspaceHref}>
-                New Session
-              </a>
-            </div>
-
-            {conversations.length === 0 ? (
-              <div className="card questionSurface" style={{ padding: 14 }}>
+      <div className="parentWorkspacePaneWrap">
+        <section className="twoPane">
+          <Reveal delay={0.08}>
+            <aside
+              className="card"
+              style={{
+                position: 'sticky',
+                top: 94,
+                alignSelf: 'start',
+                display: 'grid',
+                gap: 14
+              }}
+            >
+              <div style={{ display: 'grid', gap: 6 }}>
+                <h2 style={{ margin: 0 }}>{subjectConfig.name} Parent Sessions</h2>
                 <p className="small" style={{ margin: 0 }}>
-                  No saved parent sessions yet.
+                  Open an earlier parent thread or start a new one.
                 </p>
               </div>
-            ) : (
-              <div className="sessionList">
-                {conversations.map((conversation) => {
-                  const isActive = selectedConversation?.id === conversation.id;
-                  const firstPrompt =
-                    firstPromptByConversation[conversation.id] ||
-                    conversation.title ||
-                    'Untitled conversation';
 
-                  return (
-                    <div
-                      key={conversation.id}
-                      className={`sessionItem ${isActive ? 'active' : ''}`}
-                      style={{ display: 'grid', gap: 8 }}
-                    >
-                      <a
-                        href={`${parentWorkspaceHref}?conversation=${conversation.id}`}
-                        style={{ display: 'block' }}
-                      >
-                        <p className="small" style={{ margin: '0 0 6px' }}>
-                          <strong>{makePreview(firstPrompt)}</strong>
-                        </p>
-                        <p className="small" style={{ margin: 0 }}>
-                          Updated {formatDate(conversation.updated_at)}
-                        </p>
-                      </a>
-
-                      <div className="buttonRow">
-                        <DeleteConversationButton
-                          conversationId={conversation.id}
-                          redirectHref={parentWorkspaceHref}
-                          compact
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
+              <div className="buttonRow">
+                <a className="btn secondary" href={parentWorkspaceHref}>
+                  New Session
+                </a>
               </div>
-            )}
-          </aside>
-        </Reveal>
 
-        <Reveal delay={0.14}>
-          <main style={{ display: 'grid', gap: 18, minWidth: 0 }}>
-            <MathTutor
-              subject="math"
-              audience="parent"
-              lockedMode="hint"
-              initialConversationId={selectedConversation?.id || null}
-              newSessionHref={parentWorkspaceHref}
-              title="Tutor Support for Parents"
-              description="Use this version when you want parent-friendly guidance, simpler explanation, talking points, examples, and practice prompts without jumping straight to the full solution."
-              placeholder="Example: My child is learning long division and gets confused after the first subtraction step. How can I explain it clearly?"
-            />
+              {conversations.length === 0 ? (
+                <div className="card questionSurface" style={{ padding: 14 }}>
+                  <p className="small" style={{ margin: 0 }}>
+                    No saved {subjectConfig.name.toLowerCase()} parent sessions yet.
+                  </p>
+                </div>
+              ) : (
+                <div className="sessionList">
+                  {conversations.map((conversation) => {
+                    const isActive = selectedConversation?.id === conversation.id;
+                    const firstPrompt =
+                      firstPromptByConversation[conversation.id] ||
+                      conversation.title ||
+                      'Untitled conversation';
 
-            {selectedConversation && turns.length > 0 ? (
-              <section className="card" style={{ display: 'grid', gap: 16 }}>
-                <div className="buttonRow" style={{ justifyContent: 'space-between' }}>
-                  <div style={{ display: 'grid', gap: 4 }}>
-                    <h2 style={{ margin: 0 }}>Current Session Thread</h2>
-                    <p className="small" style={{ margin: 0 }}>
-                      View the full question-and-answer flow for this parent session.
-                    </p>
+                    return (
+                      <div
+                        key={conversation.id}
+                        className={`sessionItem ${isActive ? 'active' : ''}`}
+                        style={{ display: 'grid', gap: 8 }}
+                      >
+                        <a
+                          href={`${parentWorkspaceHref}?conversation=${conversation.id}`}
+                          style={{ display: 'block' }}
+                        >
+                          <p className="small" style={{ margin: '0 0 6px' }}>
+                            <strong>{makePreview(firstPrompt)}</strong>
+                          </p>
+                          <p className="small" style={{ margin: 0 }}>
+                            Updated {formatDate(conversation.updated_at)}
+                          </p>
+                        </a>
+
+                        <div className="buttonRow">
+                          <DeleteConversationButton
+                            conversationId={conversation.id}
+                            redirectHref={parentWorkspaceHref}
+                            compact
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </aside>
+          </Reveal>
+
+          <Reveal delay={0.14}>
+            <main style={{ display: 'grid', gap: 18, minWidth: 0 }}>
+              <MathTutor
+                subject={subjectConfig.key}
+                audience="parent"
+                lockedMode="hint"
+                initialConversationId={selectedConversation?.id || null}
+                newSessionHref={parentWorkspaceHref}
+                title={`Tutor Support for ${subjectConfig.name} Parents`}
+                description={copy.tutorDescription}
+                placeholder={copy.placeholder}
+              />
+
+              {selectedConversation && turns.length > 0 ? (
+                <section className="card" style={{ display: 'grid', gap: 16 }}>
+                  <div className="buttonRow" style={{ justifyContent: 'space-between' }}>
+                    <div style={{ display: 'grid', gap: 4 }}>
+                      <h2 style={{ margin: 0 }}>Current Session Thread</h2>
+                      <p className="small" style={{ margin: 0 }}>
+                        View the full question-and-answer flow for this {subjectConfig.name.toLowerCase()} parent session.
+                      </p>
+                    </div>
+
+                    <DeleteConversationButton
+                      conversationId={selectedConversation.id}
+                      redirectHref={parentWorkspaceHref}
+                    />
                   </div>
 
-                  <DeleteConversationButton
-                    conversationId={selectedConversation.id}
-                    redirectHref={parentWorkspaceHref}
+                  <ConversationThread
+                    title={selectedConversation.title}
+                    audience={selectedConversation.audience}
+                    createdAt={selectedConversation.created_at}
+                    updatedAt={selectedConversation.updated_at}
+                    turns={turns}
+                    showDeleteTurnControls
+                    redirectHref={`${parentWorkspaceHref}?conversation=${selectedConversation.id}`}
                   />
-                </div>
-
-                <ConversationThread
-                  title={selectedConversation.title}
-                  audience={selectedConversation.audience}
-                  createdAt={selectedConversation.created_at}
-                  updatedAt={selectedConversation.updated_at}
-                  turns={turns}
-                  showDeleteTurnControls
-                  redirectHref={`${parentWorkspaceHref}?conversation=${selectedConversation.id}`}
-                />
-              </section>
-            ) : null}
-          </main>
-        </Reveal>
-      </section>
+                </section>
+              ) : null}
+            </main>
+          </Reveal>
+        </section>
+      </div>
     </div>
   );
 }
