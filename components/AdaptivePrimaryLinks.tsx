@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 type ActiveSubjectNav = {
@@ -63,9 +64,9 @@ export default function AdaptivePrimaryLinks() {
   return (
     <>
       {links.map((link) => (
-        <a key={link.href} href={link.href}>
+        <Link key={link.href} href={link.href}>
           {link.label}
-        </a>
+        </Link>
       ))}
     </>
   );
