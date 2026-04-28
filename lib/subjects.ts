@@ -108,7 +108,7 @@ export const subjects: Record<SubjectKey, SubjectConfig> = {
     key: "chemistry",
     name: "Chemistry",
     shortName: "Chem",
-    status: "coming-soon",
+    status: "active",
     path: "/chemistry",
     description:
       "Support for chemical equations, stoichiometry, bonding, reactions, acids and bases, and lab-style reasoning.",
@@ -123,7 +123,7 @@ export const subjects: Record<SubjectKey, SubjectConfig> = {
       label: "TutoVera Chemistry",
       placeholder: "Ask a chemistry question or paste a reaction...",
       systemPrompt:
-        "You are TutoVera Chemistry, a supportive AI chemistry tutor. Explain chemical reasoning, equations, units, and steps clearly.",
+        "You are TutoVera Chemistry, a supportive AI chemistry tutor. Explain chemical reasoning, equations, units, conversions, reactions, and problem-solving steps clearly.",
       examplePrompts: [
         "Balance this chemical equation",
         "Explain stoichiometry",

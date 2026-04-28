@@ -1,13 +1,17 @@
-import { notFound } from 'next/navigation';
-import SubjectHistoryPlaceholderPage from '@/components/pages/SubjectHistoryPlaceholderPage';
-import { getSubjectConfig } from '@/lib/subjects';
+import HistoryPageContent from '@/components/workspaces/HistoryPageContent';
 
-export default function ChemistryHistoryPage() {
-  const subject = getSubjectConfig('chemistry');
+export const dynamic = 'force-dynamic';
 
-  if (!subject) {
-    notFound();
-  }
-
-  return <SubjectHistoryPlaceholderPage subject={subject} />;
+export default function ChemistryHistoryPage({
+  searchParams
+}: {
+  searchParams: Promise<{ email?: string; conversation?: string }>;
+}) {
+  return (
+    <HistoryPageContent
+      searchParams={searchParams}
+      historyHref="/chemistry/history"
+      subject="chemistry"
+    />
+  );
 }

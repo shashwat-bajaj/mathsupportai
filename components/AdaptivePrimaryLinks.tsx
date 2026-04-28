@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation';
 
 type ActiveSubjectNav = {
-  key: 'math' | 'physics';
+  key: 'math' | 'physics' | 'chemistry';
   basePath: string;
   label: string;
 };
@@ -30,6 +30,14 @@ function getActiveSubjectNav(pathname: string): ActiveSubjectNav | null {
       key: 'physics',
       basePath: '/physics',
       label: 'Physics'
+    };
+  }
+
+  if (pathname === '/chemistry' || pathname.startsWith('/chemistry/')) {
+    return {
+      key: 'chemistry',
+      basePath: '/chemistry',
+      label: 'Chemistry'
     };
   }
 
