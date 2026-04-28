@@ -24,11 +24,11 @@ export default async function SettingsPage() {
           <span className="badge">Settings</span>
 
           <div style={{ display: 'grid', gap: 10 }}>
-            <h1 style={{ margin: 0 }}>Adjust the product to fit how you learn and study.</h1>
+            <h1 style={{ margin: 0 }}>Adjust TutoVera to fit how you learn and study.</h1>
             <p className="small" style={{ margin: 0, maxWidth: 820 }}>
-              Manage your display preferences, translation defaults, and tutor behavior for both
-              Student and Parent experiences. These settings help keep the workspace more consistent
-              from one session to the next.
+              Manage your display preferences, translation defaults, learner levels, and tutor
+              behavior for both Student and Parent experiences. These settings help keep your
+              workspace more consistent from one session to the next.
             </p>
           </div>
         </section>
@@ -39,8 +39,8 @@ export default async function SettingsPage() {
           <div className="card innerFeatureCard">
             <h3 style={{ marginTop: 0 }}>Display preferences</h3>
             <p className="small" style={{ marginBottom: 0 }}>
-              Control theme behavior and language defaults so the interface feels more comfortable to
-              use over time.
+              Control theme behavior and language defaults so TutoVera feels more comfortable to use
+              over time.
             </p>
           </div>
 
@@ -56,7 +56,7 @@ export default async function SettingsPage() {
             <h3 style={{ marginTop: 0 }}>Parent defaults</h3>
             <p className="small" style={{ marginBottom: 0 }}>
               Keep the parent workspace better aligned with the child’s level so explanations feel
-              more usable right away.
+              clearer and more usable right away.
             </p>
           </div>
         </section>
@@ -67,8 +67,8 @@ export default async function SettingsPage() {
           <div style={{ display: 'grid', gap: 8 }}>
             <h2 style={{ margin: 0 }}>Preference controls</h2>
             <p className="small" style={{ margin: 0 }}>
-              Changes saved here shape the default experience, while still letting you adjust things
-              inside a session whenever needed.
+              Changes saved here shape your default TutoVera experience, while still letting you
+              adjust things inside a session whenever needed.
             </p>
           </div>
 
