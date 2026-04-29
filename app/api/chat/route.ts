@@ -27,6 +27,7 @@ async function getSymbolicCheck(question: string) {
     });
 
     if (!res.ok) return '';
+
     const data = await res.json();
     return JSON.stringify(data, null, 2);
   } catch {
@@ -283,13 +284,13 @@ function buildStudentQuestion(question: string, mode: string, subject: SubjectCo
     if (mode === 'diagnose') {
       enhanced = `${enhanced}
 
-If the user did not actually provide their work or reasoning, say that you cannot diagnose an exact mistake yet, and then show what they should check first.`;
+If the user did not actually provide their work or steps, say that you cannot diagnose an exact mistake yet, and then show what they should check first.`;
     }
 
     if (mode === 'hint') {
       enhanced = `${enhanced}
 
-Stay in hint mode unless a full explanation is absolutely necessary.`;
+Stay in hint mode unless a full answer is absolutely necessary.`;
     }
 
     return enhanced.trim();
@@ -505,7 +506,7 @@ export async function POST(request: NextRequest) {
     if (subjectConfig.status !== 'active') {
       return NextResponse.json(
         {
-          error: `${subjectConfig.name} support is not enabled yet. TutoVera Math is currently the active tutor workspace.`
+          error: `${subjectConfig.name} support is not currently available. Please choose an active TutoVera subject branch.`
         },
         { status: 501 }
       );

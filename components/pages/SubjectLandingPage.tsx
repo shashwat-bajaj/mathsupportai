@@ -14,7 +14,7 @@ function getStatusLabel(status: SubjectConfig['status']) {
       return 'Beta preview';
     case 'coming-soon':
     default:
-      return 'Coming soon';
+      return 'Preparing';
   }
 }
 
@@ -27,11 +27,7 @@ function getStatusDescription(subject: SubjectConfig) {
     return `TutoVera ${subject.name} is active now with student, parent, and history workspaces.`;
   }
 
-  if (subject.status === 'beta') {
-    return `${subject.name} is being prepared as one of the next TutoVera subject branches. Active TutoVera branches are available now while this workspace is still being prepared.`;
-  }
-
-  return `${subject.name} is planned as a future TutoVera subject branch. Active TutoVera branches are available now while this workspace is still being prepared.`;
+  return `${subject.name} is being prepared as a TutoVera subject branch. Active TutoVera branches are available while this workspace is still being shaped.`;
 }
 
 function getPreviewPrompt(subject: SubjectConfig) {
@@ -43,15 +39,15 @@ function getPreviewResponse(subject: SubjectConfig) {
     case 'physics':
       return subject.status === 'active'
         ? 'TutoVera Physics can explain the concept, identify variables, connect formulas, check units, and guide the problem step by step.'
-        : 'A future Physics workspace can explain the concept, identify variables, connect formulas, check units, and guide the problem step by step.';
+        : 'A Physics workspace can explain the concept, identify variables, connect formulas, check units, and guide the problem step by step.';
     case 'chemistry':
       return subject.status === 'active'
         ? 'TutoVera Chemistry can explain reactions, balance equations, walk through stoichiometry, and connect formulas to lab-style reasoning.'
-        : 'A future Chemistry workspace can explain reactions, balance equations, walk through stoichiometry, and connect formulas to lab-style reasoning.';
+        : 'A Chemistry workspace can explain reactions, balance equations, walk through stoichiometry, and connect formulas to lab-style reasoning.';
     case 'biology':
       return subject.status === 'active'
         ? 'TutoVera Biology can explain vocabulary, compare biological processes, summarize systems, and help connect details to the bigger concept.'
-        : 'A future Biology workspace can explain vocabulary, compare processes, summarize systems, and help connect details to the bigger concept.';
+        : 'A Biology workspace can explain vocabulary, compare processes, summarize systems, and help connect details to the bigger concept.';
     case 'math':
     default:
       return 'TutoVera Math can explain steps, support follow-ups, graph when useful, diagnose mistakes, and keep the learning thread connected.';
@@ -196,10 +192,10 @@ function getFinalHeading(subject: SubjectConfig) {
   }
 
   if (subject.status === 'beta') {
-    return `${subject.name} is being prepared for a future rollout.`;
+    return `${subject.name} is being prepared for beta access.`;
   }
 
-  return `${subject.name} is planned for a later rollout.`;
+  return `${subject.name} is being prepared.`;
 }
 
 export default function SubjectLandingPage({ subject }: SubjectLandingPageProps) {
@@ -238,14 +234,11 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
                 </>
               ) : (
                 <>
-                  <Link className="btn" href={`${subject.path}/tutor`}>
-                    View Tutor Preview
+                  <Link className="btn" href="/">
+                    Back to TutoVera Home
                   </Link>
-                  <Link className="btn secondary" href={`${subject.path}/history`}>
-                    View History Preview
-                  </Link>
-                  <Link className="btn secondary" href="/math/tutor">
-                    Open Active Math Tutor
+                  <Link className="btn secondary" href="/contact">
+                    Contact / Feedback
                   </Link>
                 </>
               )}
@@ -271,7 +264,7 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
                 <p className="small" style={{ margin: 0 }}>
                   {isActive
                     ? 'Student, parent, and history workspaces are available now.'
-                    : 'Active branches stay stable while this branch develops.'}
+                    : 'This branch is being shaped carefully before active use.'}
                 </p>
               </div>
             </div>
@@ -286,7 +279,7 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
                   <span />
                 </div>
                 <span className="small">
-                  {isActive ? `TutoVera ${subject.name} preview` : `${subject.name} tutor preview`}
+                  {isActive ? `TutoVera ${subject.name} preview` : `${subject.name} preview`}
                 </span>
               </div>
 
@@ -318,7 +311,7 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
                     <p className="small" style={{ margin: 0 }}>
                       {subject.status === 'active'
                         ? 'This subject branch is active.'
-                        : 'This subject branch is reserved for a future rollout.'}
+                        : 'This subject branch is being prepared.'}
                     </p>
                   </div>
                 </div>
@@ -349,8 +342,8 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
                 asking the next question without restarting the whole flow.
               </p>
               <div className="buttonRow">
-                <Link className="btn" href={`${subject.path}/tutor`}>
-                  Go to Students
+                <Link className="btn" href={isActive ? `${subject.path}/tutor` : '/'}>
+                  {isActive ? 'Go to Students' : 'Back to TutoVera Home'}
                 </Link>
               </div>
             </div>
@@ -363,8 +356,8 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
                 guided help that supports learning instead of replacing it.
               </p>
               <div className="buttonRow">
-                <Link className="btn secondary" href={`${subject.path}/parents`}>
-                  Go to Parents
+                <Link className="btn secondary" href={isActive ? `${subject.path}/parents` : '/'}>
+                  {isActive ? 'Go to Parents' : 'Back to TutoVera Home'}
                 </Link>
               </div>
             </div>
@@ -442,11 +435,8 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
               </>
             ) : (
               <>
-                <Link className="btn" href="/math/tutor">
-                  Open Active Math Tutor
-                </Link>
-                <Link className="btn secondary" href={`${subject.path}/tutor`}>
-                  View {subject.name} Tutor Preview
+                <Link className="btn" href="/">
+                  Back to TutoVera Home
                 </Link>
                 <Link className="btn secondary" href="/contact">
                   Contact / Feedback
