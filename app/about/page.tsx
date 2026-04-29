@@ -4,6 +4,7 @@ import { subjects } from '@/lib/subjects';
 
 export default function AboutPage() {
   const subjectList = Object.values(subjects);
+  const activeSubjects = subjectList.filter((subject) => subject.status === 'active');
 
   return (
     <div className="grid" style={{ gap: 24 }}>
@@ -14,9 +15,9 @@ export default function AboutPage() {
           <div style={{ display: 'grid', gap: 10 }}>
             <h1 style={{ margin: 0 }}>Tutoring you can trust, across every subject branch.</h1>
             <p className="small" style={{ margin: 0, maxWidth: 860 }}>
-              TutoVera is being shaped as a calm AI learning platform where each subject can have its
-              own identity, tutor behavior, examples, and learning flow while still sharing one
-              account system, one deployment, and one coherent product foundation.
+              TutoVera is a calm AI learning platform where Math, Physics, Chemistry, and Biology
+              each have their own learning workspace while still sharing one account system, one
+              history foundation, one settings experience, and one connected product structure.
             </p>
           </div>
         </section>
@@ -64,26 +65,26 @@ export default function AboutPage() {
       <Reveal delay={0.14}>
         <section className="grid cols-3">
           <div className="card innerFeatureCard">
-            <h3 style={{ marginTop: 0 }}>One parent brand</h3>
+            <h3 style={{ marginTop: 0 }}>One parent platform</h3>
             <p className="small" style={{ marginBottom: 0 }}>
-              TutoVera is the umbrella experience. Math is the first active branch, with Physics,
-              Chemistry, and Biology prepared as future subject branches.
+              TutoVera is the umbrella experience. Each subject branch can feel tailored without
+              becoming a disconnected app or separate product.
             </p>
           </div>
 
           <div className="card innerFeatureCard">
             <h3 style={{ marginTop: 0 }}>Shared foundation</h3>
             <p className="small" style={{ marginBottom: 0 }}>
-              The goal is to avoid disconnected apps. Auth, history, settings, deployment, and backend
-              structure should remain unified wherever practical.
+              Account access, history, settings, deployment, and backend structure stay unified
+              wherever practical so the product remains easier to maintain and grow.
             </p>
           </div>
 
           <div className="card innerFeatureCard">
             <h3 style={{ marginTop: 0 }}>Subject-specific learning</h3>
             <p className="small" style={{ marginBottom: 0 }}>
-              Each subject can eventually have its own prompts, examples, tools, visual identity, and
-              tutor behavior without requiring a separate codebase.
+              Math, Physics, Chemistry, and Biology can each have their own prompts, examples, tools,
+              visual identity, and tutor behavior inside the same platform.
             </p>
           </div>
         </section>
@@ -93,11 +94,11 @@ export default function AboutPage() {
         <section className="card" style={{ display: 'grid', gap: 18 }}>
           <div style={{ display: 'grid', gap: 8 }}>
             <span className="badge">Subject branches</span>
-            <h2 style={{ margin: 0 }}>Start with Math, then expand carefully.</h2>
+            <h2 style={{ margin: 0 }}>Four active branches, one connected learning system.</h2>
             <p className="small" style={{ margin: 0, maxWidth: 860 }}>
-              Math is the active learning workspace today. The other branches are being introduced
-              gradually so the product can scale cleanly without duplicating infrastructure or losing
-              the current working experience.
+              TutoVera currently supports {activeSubjects.map((subject) => subject.name).join(', ')}.
+              Each branch has its own student workspace, parent workspace, history view, and about
+              page while staying connected to the same broader product foundation.
             </p>
           </div>
 
@@ -119,13 +120,17 @@ export default function AboutPage() {
                     ? 'Active'
                     : subject.status === 'beta'
                       ? 'Beta preview'
-                      : 'Coming soon'}
+                      : 'Preparing'}
                 </span>
 
                 <h3 style={{ marginBottom: 8 }}>{subject.name}</h3>
 
                 <p className="small" style={{ margin: 0 }}>
                   {subject.description}
+                </p>
+
+                <p className="small" style={{ margin: '14px 0 0' }}>
+                  <strong>Open {subject.name} →</strong>
                 </p>
               </Link>
             ))}
@@ -138,18 +143,25 @@ export default function AboutPage() {
           <div style={{ display: 'grid', gap: 8 }}>
             <h2 style={{ margin: 0 }}>Current focus</h2>
             <p className="small" style={{ margin: 0, maxWidth: 860 }}>
-              The current focus is preserving and improving TutoVera Math while building the structure
-              needed for future subjects. The product is moving step by step so the foundation stays
-              clean and the working Math experience remains stable.
+              The current focus is making all active branches feel stable, consistent, and useful:
+              clearer tutor responses, stronger saved history, better subject-specific behavior,
+              smoother parent support, cleaner navigation, and a more polished interface across the
+              whole platform.
             </p>
           </div>
 
           <div className="buttonRow">
             <Link className="btn" href="/math">
-              Open TutoVera Math
+              Open Math
             </Link>
-            <Link className="btn secondary" href="/contact">
-              Contact / Feedback
+            <Link className="btn secondary" href="/physics">
+              Open Physics
+            </Link>
+            <Link className="btn secondary" href="/chemistry">
+              Open Chemistry
+            </Link>
+            <Link className="btn secondary" href="/biology">
+              Open Biology
             </Link>
           </div>
         </section>

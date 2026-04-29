@@ -53,11 +53,18 @@ export default async function DashboardPage({
   if (!expected || password !== expected) {
     return (
       <div className="grid" style={{ gap: 24 }}>
-        <section className="card">
-          <h1>Admin dashboard</h1>
-          <p className="small">This page is restricted.</p>
+        <section className="card spotlightCard" style={{ display: 'grid', gap: 14 }}>
+          <span className="badge">Admin dashboard</span>
 
-          <form method="GET" className="grid" style={{ gap: 12 }}>
+          <div style={{ display: 'grid', gap: 10 }}>
+            <h1 style={{ margin: 0 }}>TutoVera internal dashboard.</h1>
+            <p className="small" style={{ margin: 0, maxWidth: 760 }}>
+              This page is restricted and is used to review recent beta signups, contact messages,
+              and tutor activity across active subject branches.
+            </p>
+          </div>
+
+          <form method="GET" className="grid" style={{ gap: 12, maxWidth: 520 }}>
             <div>
               <label>Admin password</label>
               <input
@@ -88,15 +95,49 @@ export default async function DashboardPage({
 
   return (
     <div className="grid" style={{ gap: 24 }}>
-      <section className="card">
-        <h1>Admin dashboard</h1>
-        <p className="small">
-          Internal beta overview for tutor activity, signups, and contact messages.
-        </p>
+      <section className="card spotlightCard" style={{ display: 'grid', gap: 14 }}>
+        <span className="badge">Admin dashboard</span>
+
+        <div style={{ display: 'grid', gap: 10 }}>
+          <h1 style={{ margin: 0 }}>TutoVera internal overview.</h1>
+          <p className="small" style={{ margin: 0, maxWidth: 820 }}>
+            Review recent platform activity across beta signups, contact messages, and tutor
+            sessions for Math, Physics, Chemistry, Biology, and future branches.
+          </p>
+        </div>
       </section>
 
-      <section className="card">
-        <h2>Recent beta signups</h2>
+      <section className="grid cols-3">
+        <div className="card innerFeatureCard">
+          <h3 style={{ marginTop: 0 }}>Beta signups</h3>
+          <p className="small" style={{ marginBottom: 0 }}>
+            {signupsError ? 'Unable to load signups.' : `${signups?.length || 0} recent records loaded.`}
+          </p>
+        </div>
+
+        <div className="card innerFeatureCard">
+          <h3 style={{ marginTop: 0 }}>Contact messages</h3>
+          <p className="small" style={{ marginBottom: 0 }}>
+            {messagesError ? 'Unable to load messages.' : `${messages?.length || 0} recent records loaded.`}
+          </p>
+        </div>
+
+        <div className="card innerFeatureCard">
+          <h3 style={{ marginTop: 0 }}>Tutor sessions</h3>
+          <p className="small" style={{ marginBottom: 0 }}>
+            {sessionsError ? 'Unable to load sessions.' : `${sessions?.length || 0} recent records loaded.`}
+          </p>
+        </div>
+      </section>
+
+      <section className="card" style={{ display: 'grid', gap: 16 }}>
+        <div style={{ display: 'grid', gap: 8 }}>
+          <h2 style={{ margin: 0 }}>Recent beta signups</h2>
+          <p className="small" style={{ margin: 0 }}>
+            People who joined the platform beta list from the TutoVera signup form.
+          </p>
+        </div>
+
         {signupsError ? (
           <p className="small">Error loading beta signups: {signupsError.message}</p>
         ) : !signups || signups.length === 0 ? (
@@ -104,7 +145,7 @@ export default async function DashboardPage({
         ) : (
           <div className="grid" style={{ gap: 16 }}>
             {signups.map((signup) => (
-              <div key={signup.id} className="card">
+              <div key={signup.id} className="card innerFeatureCard">
                 <p className="small">
                   <strong>Name:</strong> {signup.name || 'Not provided'}
                 </p>
@@ -124,8 +165,15 @@ export default async function DashboardPage({
         )}
       </section>
 
-      <section className="card">
-        <h2>Recent contact messages</h2>
+      <section className="card" style={{ display: 'grid', gap: 16 }}>
+        <div style={{ display: 'grid', gap: 8 }}>
+          <h2 style={{ margin: 0 }}>Recent contact messages</h2>
+          <p className="small" style={{ margin: 0 }}>
+            Feedback, bug reports, product ideas, and general messages submitted through the contact
+            page.
+          </p>
+        </div>
+
         {messagesError ? (
           <p className="small">Error loading contact messages: {messagesError.message}</p>
         ) : !messages || messages.length === 0 ? (
@@ -133,7 +181,7 @@ export default async function DashboardPage({
         ) : (
           <div className="grid" style={{ gap: 16 }}>
             {messages.map((message) => (
-              <div key={message.id} className="card">
+              <div key={message.id} className="card innerFeatureCard">
                 <p className="small">
                   <strong>Name:</strong> {message.name || 'Not provided'}
                 </p>
@@ -152,8 +200,15 @@ export default async function DashboardPage({
         )}
       </section>
 
-      <section className="card">
-        <h2>Recent tutor sessions</h2>
+      <section className="card" style={{ display: 'grid', gap: 16 }}>
+        <div style={{ display: 'grid', gap: 8 }}>
+          <h2 style={{ margin: 0 }}>Recent tutor sessions</h2>
+          <p className="small" style={{ margin: 0 }}>
+            Recent tutor requests across active subject branches. This helps review actual usage,
+            response quality, subject coverage, and early product needs.
+          </p>
+        </div>
+
         {sessionsError ? (
           <p className="small">Error loading tutor sessions: {sessionsError.message}</p>
         ) : !sessions || sessions.length === 0 ? (
@@ -161,12 +216,12 @@ export default async function DashboardPage({
         ) : (
           <div className="grid" style={{ gap: 18 }}>
             {sessions.map((session) => (
-              <div key={session.id} className="card">
+              <div key={session.id} className="card innerFeatureCard">
                 <p className="small">
                   <strong>Email:</strong> {session.email || 'Not provided'}
                 </p>
                 <p className="small">
-                  <strong>Subject:</strong> {session.subject || 'math'} |{' '}
+                  <strong>Subject:</strong> {session.subject || 'unknown'} |{' '}
                   <strong>Mode:</strong> {session.mode} | <strong>Level:</strong>{' '}
                   {session.level}
                 </p>

@@ -46,7 +46,7 @@ export default function ContactPage() {
             <p className="small" style={{ margin: 0, maxWidth: 820 }}>
               Use this page to share bugs, confusing moments, feature requests, product ideas, or
               anything that would make TutoVera more useful and trustworthy for students, parents,
-              and future subject branches.
+              and the broader TutoVera platform.
             </p>
           </div>
         </section>

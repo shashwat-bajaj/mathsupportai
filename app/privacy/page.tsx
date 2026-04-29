@@ -90,7 +90,7 @@ export default function PrivacyPage() {
           <p className="small" style={{ margin: 0 }}>
             Submitted information may be used to operate the tutor, save session history, support
             account features, improve product quality, understand beta usage, reduce abuse, diagnose
-            technical issues, and help shape future subject branches, tools, and workflows.
+            technical issues, and help shape subject branches, tools, and workflows.
           </p>
         </section>
       </Reveal>
