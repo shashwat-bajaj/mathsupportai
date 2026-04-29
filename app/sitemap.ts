@@ -1,24 +1,44 @@
-export default function sitemap() {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+import type { MetadataRoute } from 'next';
 
-  return [
-    { url: `${base}/`, lastModified: new Date() },
-    { url: `${base}/about`, lastModified: new Date() },
-    { url: `${base}/math`, lastModified: new Date() },
-    { url: `${base}/math/about`, lastModified: new Date() },
-    { url: `${base}/math/tutor`, lastModified: new Date() },
-    { url: `${base}/math/parents`, lastModified: new Date() },
-    { url: `${base}/math/history`, lastModified: new Date() },
-    { url: `${base}/math/pricing`, lastModified: new Date() },
-    { url: `${base}/physics`, lastModified: new Date() },
-    { url: `${base}/physics/tutor`, lastModified: new Date() },
-    { url: `${base}/physics/history`, lastModified: new Date() },
-    { url: `${base}/chemistry`, lastModified: new Date() },
-    { url: `${base}/chemistry/tutor`, lastModified: new Date() },
-    { url: `${base}/chemistry/history`, lastModified: new Date() },
-    { url: `${base}/biology`, lastModified: new Date() },
-    { url: `${base}/biology/tutor`, lastModified: new Date() },
-    { url: `${base}/biology/history`, lastModified: new Date() },
-    { url: `${base}/login`, lastModified: new Date() }
+export default function sitemap(): MetadataRoute.Sitemap {
+  const base = (process.env.NEXT_PUBLIC_SITE_URL || 'https://tutovera.com').replace(/\/$/, '');
+  const lastModified = new Date();
+
+  const routes = [
+    '/',
+    '/about',
+    '/contact',
+    '/pricing',
+    '/privacy',
+    '/terms',
+
+    '/math',
+    '/math/tutor',
+    '/math/parents',
+    '/math/history',
+    '/math/about',
+
+    '/physics',
+    '/physics/tutor',
+    '/physics/parents',
+    '/physics/history',
+    '/physics/about',
+
+    '/chemistry',
+    '/chemistry/tutor',
+    '/chemistry/parents',
+    '/chemistry/history',
+    '/chemistry/about',
+
+    '/biology',
+    '/biology/tutor',
+    '/biology/parents',
+    '/biology/history',
+    '/biology/about'
   ];
+
+  return routes.map((route) => ({
+    url: `${base}${route}`,
+    lastModified
+  }));
 }

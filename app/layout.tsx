@@ -11,13 +11,13 @@ import { Analytics } from '@vercel/analytics/next';
 
 export const metadata = {
   title: 'TutoVera',
-  description: 'A unified AI learning platform starting with Math.'
+  description: 'A unified AI learning platform for Math, Physics, Chemistry, and Biology.'
 };
 
 const footerLinks = [
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
-  { href: '/math/pricing', label: 'Pricing' },
+  { href: '/pricing', label: 'Pricing' },
   { href: '/settings', label: 'Settings' },
   { href: '/privacy', label: 'Privacy Policy' },
   { href: '/terms', label: 'Terms of Use' }
@@ -131,12 +131,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               >
                 <div style={{ display: 'grid', gap: 8, minWidth: 0 }}>
                   <p className="small" style={{ margin: 0 }}>
-                    <strong>TutoVera</strong> is being shaped into a calmer AI learning platform across
-                    Math, Physics, Chemistry, and Biology.
+                    <strong>TutoVera</strong> is being shaped into a calmer AI learning platform
+                    across Math, Physics, Chemistry, and Biology.
                   </p>
                   <p className="small" style={{ margin: 0, maxWidth: 720 }}>
-                    Math is the active subject branch now. The long-term focus is a unified product
-                    experience with subject-specific learning support and shared account history.
+                    Each subject branch has its own learning workspace while sharing the same
+                    account, settings, history foundation, deployment, and backend structure.
                   </p>
                 </div>
 

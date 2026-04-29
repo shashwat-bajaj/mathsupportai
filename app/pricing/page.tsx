@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
-export default function PricingPage() {
-  redirect('/math/pricing');
+export default function MathPricingRedirectPage() {
+  redirect('/pricing');
 }

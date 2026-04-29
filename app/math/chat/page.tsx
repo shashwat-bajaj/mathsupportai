@@ -1,5 +1,5 @@
-import StudentWorkspacePage from '@/components/workspaces/StudentWorkspacePage';
+import { redirect } from 'next/navigation';
 
-export const dynamic = 'force-dynamic';
-
-export default StudentWorkspacePage;
+export default function MathChatRedirectPage() {
+  redirect('/math/tutor');
+}
