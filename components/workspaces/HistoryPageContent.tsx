@@ -3,7 +3,7 @@ import { createClient as createAuthClient } from '@/lib/supabase/server';
 import DeleteConversationButton from '@/components/DeleteConversationButton';
 import ConversationThread from '@/components/ConversationThread';
 import Reveal from '@/components/Reveal';
-import type { SubjectKey } from '@/lib/subjects';
+import { getSubjectConfig, type SubjectKey } from '@/lib/subjects';
 
 type ConversationRecord = {
   id: string;
@@ -71,16 +71,21 @@ function buildHistoryHref({
 }
 
 function getHistoryLabel(subject?: SubjectKey) {
-  if (subject === 'math') return 'Math History';
-  return 'History';
+  if (!subject) return 'History';
+
+  const subjectConfig = getSubjectConfig(subject);
+  return subjectConfig ? `${subjectConfig.name} History` : 'History';
 }
 
 function getEmptyMessage(subject?: SubjectKey) {
-  if (subject === 'math') {
-    return 'No saved math conversations were found for this history view.';
+  if (!subject) {
+    return 'No saved conversations were found for this history view.';
   }
 
-  return 'No saved conversations were found for this history view.';
+  const subjectConfig = getSubjectConfig(subject);
+  const subjectName = subjectConfig?.name.toLowerCase() || subject;
+
+  return `No saved ${subjectName} conversations were found for this history view.`;
 }
 
 export default async function HistoryPageContent({
@@ -201,6 +206,10 @@ export default async function HistoryPageContent({
       turns = (data || []) as TurnRecord[];
     }
   }
+
+  const graphingEnabledForSelectedConversation = selectedConversation
+    ? Boolean(getSubjectConfig(selectedConversation.subject)?.features.graphing)
+    : false;
 
   return (
     <div className="grid" style={{ gap: 24 }}>
@@ -424,6 +433,7 @@ export default async function HistoryPageContent({
                         ? `${historyHref}?conversation=${selectedConversation.id}`
                         : undefined
                     }
+                    graphingEnabled={graphingEnabledForSelectedConversation}
                   />
                 ) : (
                   <p className="small" style={{ margin: 0 }}>

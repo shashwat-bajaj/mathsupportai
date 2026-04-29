@@ -71,7 +71,7 @@ function getWorkspaceIntro(subject: SubjectConfig) {
 
   if (subject.key === 'physics') {
     return {
-      badge: 'Student workspace',
+      badge: 'Physics student workspace',
       signedOutTitle: 'Work through physics concepts, formulas, units, and problem setup.',
       signedOutDescription:
         'Use this workspace for physics explanations, equation-based reasoning, variable setup, unit checks, conceptual questions, and practice prompts. Signed-in users can also save sessions and revisit them later.',
@@ -87,8 +87,44 @@ function getWorkspaceIntro(subject: SubjectConfig) {
     };
   }
 
+  if (subject.key === 'chemistry') {
+    return {
+      badge: 'Chemistry student workspace',
+      signedOutTitle: 'Work through chemistry reactions, formulas, conversions, and reasoning.',
+      signedOutDescription:
+        'Use this workspace for chemistry explanations, balancing equations, stoichiometry, molarity, unit conversions, reactions, and practice prompts. Signed-in users can also save sessions and revisit them later.',
+      signedInTitle: 'A chemistry tutor surface built for reactions, units, and follow-up flow.',
+      signedInDescription:
+        'Ask new chemistry questions, continue earlier threads, reason through formulas and reactions, and revisit saved sessions without losing context.',
+      defaultFlow:
+        'Auto mode, reaction-aware explanations, unit-aware reasoning, and structured tutor continuity.',
+      bestFor:
+        'Balancing, stoichiometry, reactions, conversions, lab-style reasoning, and checking mistakes.',
+      tutorDescription:
+        'Ask a new chemistry question or continue an earlier Chemistry session with follow-up questions, equation support, conversions, units, and guided explanation.'
+    };
+  }
+
+  if (subject.key === 'biology') {
+    return {
+      badge: 'Biology student workspace',
+      signedOutTitle: 'Work through biology vocabulary, systems, processes, and big-picture ideas.',
+      signedOutDescription:
+        'Use this workspace for biology explanations, process comparisons, vocabulary support, systems thinking, review prompts, and practice questions. Signed-in users can also save sessions and revisit them later.',
+      signedInTitle: 'A biology tutor surface built for systems, vocabulary, and follow-up flow.',
+      signedInDescription:
+        'Ask new biology questions, continue earlier threads, compare processes, and revisit saved sessions without losing context.',
+      defaultFlow:
+        'Auto mode, process-aware explanations, vocabulary support, and structured tutor continuity.',
+      bestFor:
+        'Processes, systems, vocabulary, diagrams, comparisons, review, and practice prompts.',
+      tutorDescription:
+        'Ask a new biology question or continue an earlier Biology session with follow-up questions, process explanations, comparisons, and guided review.'
+    };
+  }
+
   return {
-    badge: 'Student workspace',
+    badge: `${subject.name} student workspace`,
     signedOutTitle: `Work through ${subject.name.toLowerCase()} questions with a clearer learning flow.`,
     signedOutDescription:
       `Use this workspace for ${subject.name.toLowerCase()} explanations, guided support, diagnosis, and practice prompts. Signed-in users can also save sessions and revisit them later.`,
@@ -225,8 +261,7 @@ export default async function StudentWorkspacePage({
                 <strong>Saved sessions</strong>
               </p>
               <p className="small" style={{ margin: 0 }}>
-                {conversations.length} available in your{' '}
-                {subjectConfig.name.toLowerCase()} student history.
+                {conversations.length} available in your {subjectConfig.name.toLowerCase()} student history.
               </p>
             </div>
 
@@ -342,8 +377,7 @@ export default async function StudentWorkspacePage({
                     <div style={{ display: 'grid', gap: 4 }}>
                       <h2 style={{ margin: 0 }}>Current Session Thread</h2>
                       <p className="small" style={{ margin: 0 }}>
-                        View the full question-and-answer flow for this{' '}
-                        {subjectConfig.name.toLowerCase()} student session.
+                        View the full question-and-answer flow for this {subjectConfig.name.toLowerCase()} student session.
                       </p>
                     </div>
 
@@ -361,6 +395,7 @@ export default async function StudentWorkspacePage({
                     turns={turns}
                     showDeleteTurnControls
                     redirectHref={`${studentWorkspaceHref}?conversation=${selectedConversation.id}`}
+                    graphingEnabled={subjectConfig.features.graphing}
                   />
                 </section>
               ) : null}

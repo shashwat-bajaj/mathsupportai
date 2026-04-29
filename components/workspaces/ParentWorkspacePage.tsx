@@ -75,7 +75,7 @@ function getParentWorkspaceCopy(subject: SubjectConfig) {
 
   if (subject.key === 'physics') {
     return {
-      badge: 'Parent workspace',
+      badge: 'Physics parent workspace',
       signedOutTitle:
         'Guidance for helping a child understand physics without simply giving the answer.',
       signedOutDescription:
@@ -95,8 +95,52 @@ function getParentWorkspaceCopy(subject: SubjectConfig) {
     };
   }
 
+  if (subject.key === 'chemistry') {
+    return {
+      badge: 'Chemistry parent workspace',
+      signedOutTitle:
+        'Guidance for helping a child understand chemistry without simply giving the answer.',
+      signedOutDescription:
+        'Use this workspace when you want parent-friendly chemistry explanations, simple examples, reaction reasoning, likely-mistake guidance, and practice prompts that help a child understand the concept more clearly.',
+      signedInTitle:
+        'A calmer support surface for adults helping a child learn chemistry more clearly.',
+      signedInDescription:
+        'Ask for simpler explanations, reaction setup guidance, unit conversion support, likely-mistake guidance, and practice prompts without turning everything into a full worked solution.',
+      defaultFlow:
+        'Guided hint mode with reaction-aware explanation, parent-friendly language, and unit-aware support.',
+      bestFor:
+        'Explaining concepts aloud, connecting equations to meaning, spotting confusion, and supporting practice.',
+      tutorDescription:
+        'Use this version when you want parent-friendly Chemistry guidance, simpler explanations, talking points, examples, and practice prompts without jumping straight to a full solution.',
+      placeholder:
+        'Example: My child is learning chemical equation balancing and keeps changing only one side. How can I explain it clearly?'
+    };
+  }
+
+  if (subject.key === 'biology') {
+    return {
+      badge: 'Biology parent workspace',
+      signedOutTitle:
+        'Guidance for helping a child understand biology concepts more clearly.',
+      signedOutDescription:
+        'Use this workspace when you want parent-friendly biology explanations, simple examples, vocabulary support, process comparisons, likely-mistake guidance, and practice prompts.',
+      signedInTitle:
+        'A calmer support surface for adults helping a child learn biology more clearly.',
+      signedInDescription:
+        'Ask for simpler explanations, everyday analogies, vocabulary breakdowns, process comparisons, likely-mistake guidance, and practice prompts.',
+      defaultFlow:
+        'Guided hint mode with process-aware explanation, parent-friendly language, and vocabulary support.',
+      bestFor:
+        'Explaining concepts aloud, connecting vocabulary to meaning, spotting confusion, and supporting review.',
+      tutorDescription:
+        'Use this version when you want parent-friendly Biology guidance, simpler explanations, talking points, examples, and practice prompts.',
+      placeholder:
+        'Example: My child is learning mitosis and meiosis and keeps mixing them up. How can I explain the difference clearly?'
+    };
+  }
+
   return {
-    badge: 'Parent workspace',
+    badge: `${subject.name} parent workspace`,
     signedOutTitle:
       `Guidance for helping a child understand ${subject.name.toLowerCase()} more clearly.`,
     signedOutDescription:
@@ -239,8 +283,7 @@ export default async function ParentWorkspacePage({
                 <strong>Saved sessions</strong>
               </p>
               <p className="small" style={{ margin: 0 }}>
-                {conversations.length} available in your{' '}
-                {subjectConfig.name.toLowerCase()} parent history.
+                {conversations.length} available in your {subjectConfig.name.toLowerCase()} parent history.
               </p>
             </div>
 
@@ -358,8 +401,7 @@ export default async function ParentWorkspacePage({
                     <div style={{ display: 'grid', gap: 4 }}>
                       <h2 style={{ margin: 0 }}>Current Session Thread</h2>
                       <p className="small" style={{ margin: 0 }}>
-                        View the full question-and-answer flow for this{' '}
-                        {subjectConfig.name.toLowerCase()} parent session.
+                        View the full question-and-answer flow for this {subjectConfig.name.toLowerCase()} parent session.
                       </p>
                     </div>
 
@@ -377,6 +419,7 @@ export default async function ParentWorkspacePage({
                     turns={turns}
                     showDeleteTurnControls
                     redirectHref={`${parentWorkspaceHref}?conversation=${selectedConversation.id}`}
+                    graphingEnabled={subjectConfig.features.graphing}
                   />
                 </section>
               ) : null}

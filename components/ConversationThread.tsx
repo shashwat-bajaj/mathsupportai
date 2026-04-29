@@ -47,7 +47,8 @@ export default function ConversationThread({
   updatedAt,
   turns,
   showDeleteTurnControls = false,
-  redirectHref
+  redirectHref,
+  graphingEnabled = false
 }: {
   title: string | null;
   audience: string;
@@ -64,6 +65,7 @@ export default function ConversationThread({
   }>;
   showDeleteTurnControls?: boolean;
   redirectHref?: string;
+  graphingEnabled?: boolean;
 }) {
   let lastKnownGraphExpression = '';
 
@@ -117,18 +119,21 @@ export default function ConversationThread({
 
       <div className="threadTurns" style={{ gap: 22 }}>
         {turns.map((turn, index) => {
-          const rememberedCandidate =
-            audience === 'student' ? extractRememberedGraphExpression(turn.prompt) : '';
+          const canRenderGraph = graphingEnabled && audience === 'student';
+
+          const rememberedCandidate = canRenderGraph
+            ? extractRememberedGraphExpression(turn.prompt)
+            : '';
 
           if (rememberedCandidate) {
             lastKnownGraphExpression = rememberedCandidate;
           }
 
           const requestedGraphContext =
-            audience === 'student' && isGraphReferenceRequest(turn.prompt);
+            canRenderGraph && isGraphReferenceRequest(turn.prompt);
 
           const graphExpression =
-            audience === 'student' && requestedGraphContext
+            canRenderGraph && requestedGraphContext
               ? rememberedCandidate || lastKnownGraphExpression
               : '';
 
