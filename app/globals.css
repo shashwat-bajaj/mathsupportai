@@ -1013,6 +1013,67 @@ pre {
   padding: 6px 0;
 }
 
+.renderedContent {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.renderedContent > * {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.renderedContent ul,
+.renderedContent ol {
+  margin: 0;
+  padding-left: 1.35rem;
+}
+
+.renderedContent li {
+  margin: 0.35rem 0;
+}
+
+.renderedContent p {
+  line-height: 1.7;
+}
+
+.markdownTableWrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--surface-soft) 82%, transparent);
+}
+
+.markdownTableWrap table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 560px;
+}
+
+.markdownTableWrap th,
+.markdownTableWrap td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.markdownTableWrap th {
+  font-weight: 700;
+  color: var(--text);
+  background: color-mix(in srgb, var(--panel-strong) 88%, transparent);
+}
+
+.markdownTableWrap tr:last-child td {
+  border-bottom: 0;
+}
+
+.markdownTableWrap td {
+  color: var(--text-soft);
+}
+
 .question-block {
   white-space: pre-wrap;
   line-height: 1.65;
