@@ -1,3 +1,5 @@
-import PricingPageContent from '@/components/pages/PricingPageContent';
+import { redirect } from 'next/navigation';
 
-export default PricingPageContent;
+export default function MathPricingRedirectPage() {
+  redirect('/pricing');
+}
