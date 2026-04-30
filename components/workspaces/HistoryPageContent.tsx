@@ -38,6 +38,12 @@ type HistoryPageContentProps = {
   subject?: SubjectKey;
 };
 
+type ConversationGroup = {
+  subject: string;
+  subjectName: string;
+  conversations: ConversationRecord[];
+};
+
 function formatDate(value: string) {
   try {
     return new Date(value).toLocaleString();
@@ -70,11 +76,79 @@ function buildHistoryHref({
   return `${historyHref}?email=${encodeURIComponent(fallbackEmail)}&conversation=${conversationId}`;
 }
 
+function getSubjectName(value: string) {
+  const subjectConfig = getSubjectConfig(value);
+
+  if (subjectConfig) {
+    return subjectConfig.name;
+  }
+
+  return value ? value.charAt(0).toUpperCase() + value.slice(1) : 'Unknown Subject';
+}
+
 function getHistoryLabel(subject?: SubjectKey) {
-  if (!subject) return 'History';
+  if (!subject) return 'Global History';
 
   const subjectConfig = getSubjectConfig(subject);
   return subjectConfig ? `${subjectConfig.name} History` : 'History';
+}
+
+function getHistoryTitle(subject?: SubjectKey) {
+  if (!subject) {
+    return 'Revisit earlier sessions across every subject.';
+  }
+
+  const subjectConfig = getSubjectConfig(subject);
+  const subjectName = subjectConfig?.name || 'this subject';
+
+  return `Revisit earlier ${subjectName} sessions without losing the thread.`;
+}
+
+function getHistoryDescription({
+  subject,
+  userEmail
+}: {
+  subject?: SubjectKey;
+  userEmail?: string | null;
+}) {
+  const subjectName = subject ? getSubjectName(subject).toLowerCase() : '';
+
+  if (userEmail) {
+    if (subject) {
+      return (
+        <>
+          Signed in as <strong>{userEmail}</strong>. These are your private account-linked{' '}
+          {subjectName} conversations, saved so you can return to earlier work and continue
+          naturally.
+        </>
+      );
+    }
+
+    return (
+      <>
+        Signed in as <strong>{userEmail}</strong>. Your saved conversations are grouped by subject so
+        you can quickly find the right TutoVera thread and continue naturally.
+      </>
+    );
+  }
+
+  if (subject) {
+    return (
+      <>
+        You are not signed in yet. You can still use the legacy beta email lookup below for older{' '}
+        {subjectName} conversations, but account-linked history is now the preferred way to keep
+        sessions private and easier to manage.
+      </>
+    );
+  }
+
+  return (
+    <>
+      You are not signed in yet. You can still use the legacy beta email lookup below for older
+      conversations, but account-linked history is now the preferred way to keep sessions private and
+      easier to manage.
+    </>
+  );
 }
 
 function getEmptyMessage(subject?: SubjectKey) {
@@ -86,6 +160,37 @@ function getEmptyMessage(subject?: SubjectKey) {
   const subjectName = subjectConfig?.name.toLowerCase() || subject;
 
   return `No saved ${subjectName} conversations were found for this history view.`;
+}
+
+function buildConversationGroups(conversations: ConversationRecord[]): ConversationGroup[] {
+  const preferredOrder = ['math', 'physics', 'chemistry', 'biology'];
+  const grouped = new Map<string, ConversationRecord[]>();
+
+  for (const conversation of conversations) {
+    const key = conversation.subject || 'unknown';
+    const existing = grouped.get(key) || [];
+    existing.push(conversation);
+    grouped.set(key, existing);
+  }
+
+  const orderedSubjects = [
+    ...preferredOrder.filter((key) => grouped.has(key)),
+    ...Array.from(grouped.keys())
+      .filter((key) => !preferredOrder.includes(key))
+      .sort()
+  ];
+
+  return orderedSubjects.map((subjectKey) => ({
+    subject: subjectKey,
+    subjectName: getSubjectName(subjectKey),
+    conversations: grouped.get(subjectKey) || []
+  }));
+}
+
+function getAudienceLabel(value: string) {
+  if (value === 'parent') return 'Parent';
+  if (value === 'student') return 'Student';
+  return value ? value.charAt(0).toUpperCase() + value.slice(1) : 'Unknown';
 }
 
 export default async function HistoryPageContent({
@@ -118,7 +223,7 @@ export default async function HistoryPageContent({
       .select('id, title, audience, subject, created_at, updated_at')
       .eq('user_id', user.id)
       .order('updated_at', { ascending: false })
-      .limit(30);
+      .limit(40);
 
     if (subject) {
       query = query.eq('subject', subject);
@@ -139,7 +244,7 @@ export default async function HistoryPageContent({
       .select('id, title, audience, subject, created_at, updated_at')
       .eq('email', fallbackEmail)
       .order('updated_at', { ascending: false })
-      .limit(30);
+      .limit(40);
 
     if (subject) {
       query = query.eq('subject', subject);
@@ -211,6 +316,9 @@ export default async function HistoryPageContent({
     ? Boolean(getSubjectConfig(selectedConversation.subject)?.features.graphing)
     : false;
 
+  const conversationGroups = buildConversationGroups(conversations);
+  const isGlobalHistory = !subject;
+
   return (
     <div className="grid" style={{ gap: 24 }}>
       <Reveal delay={0.02}>
@@ -218,19 +326,13 @@ export default async function HistoryPageContent({
           <span className="badge">{getHistoryLabel(subject)}</span>
 
           <div style={{ display: 'grid', gap: 10 }}>
-            <h1 style={{ margin: 0 }}>Revisit earlier sessions without losing the thread.</h1>
-            {user ? (
-              <p className="small" style={{ margin: 0, maxWidth: 820 }}>
-                Signed in as <strong>{user.email}</strong>. These are your private account-linked
-                conversations, saved so you can return to earlier work and continue naturally.
-              </p>
-            ) : (
-              <p className="small" style={{ margin: 0, maxWidth: 820 }}>
-                You are not signed in yet. You can still use the legacy beta email lookup below, but
-                account-linked history is now the preferred way to keep sessions private and easier to
-                manage.
-              </p>
-            )}
+            <h1 style={{ margin: 0 }}>{getHistoryTitle(subject)}</h1>
+            <p className="small" style={{ margin: 0, maxWidth: 860 }}>
+              {getHistoryDescription({
+                subject,
+                userEmail: user?.email || null
+              })}
+            </p>
           </div>
         </section>
       </Reveal>
@@ -314,7 +416,7 @@ export default async function HistoryPageContent({
             className="historyLayout"
             style={{
               display: 'grid',
-              gridTemplateColumns: 'minmax(280px, 340px) minmax(0, 1fr)',
+              gridTemplateColumns: 'minmax(300px, 380px) minmax(0, 1fr)',
               gap: 26,
               alignItems: 'start',
               width: '100%'
@@ -324,64 +426,127 @@ export default async function HistoryPageContent({
               className="card"
               style={{
                 display: 'grid',
-                gap: 14,
+                gap: 16,
                 width: '100%',
                 minWidth: 0,
                 alignSelf: 'start'
               }}
             >
               <div style={{ display: 'grid', gap: 6 }}>
-                <h2 style={{ margin: 0 }}>Saved conversations</h2>
+                <h2 style={{ margin: 0 }}>
+                  {isGlobalHistory ? 'Saved conversations by subject' : 'Saved conversations'}
+                </h2>
                 <p className="small" style={{ margin: 0 }}>
                   {conversations.length} saved {conversations.length === 1 ? 'conversation' : 'conversations'}
                   {historyMode === 'account' ? ' in your account.' : ' found from email lookup.'}
                 </p>
               </div>
 
-              <div className="sessionList">
-                {conversations.map((conversation) => {
-                  const isActive = selectedConversation?.id === conversation.id;
-                  const firstPrompt =
-                    firstPromptByConversation[conversation.id] ||
-                    conversation.title ||
-                    'Untitled conversation';
-
-                  const href = buildHistoryHref({
-                    historyHref,
-                    historyMode,
-                    fallbackEmail,
-                    conversationId: conversation.id
-                  });
-
-                  return (
-                    <div
-                      key={conversation.id}
-                      className={`sessionItem ${isActive ? 'active' : ''}`}
-                      style={{ display: 'grid', gap: 8 }}
-                    >
-                      <a href={href}>
-                        <p className="small" style={{ margin: '0 0 6px' }}>
-                          <strong>{makePreview(firstPrompt)}</strong>
-                        </p>
+              {isGlobalHistory ? (
+                <div className="subjectHistoryGroups">
+                  {conversationGroups.map((group) => (
+                    <div key={group.subject} className="subjectHistoryGroup">
+                      <div className="subjectHistoryGroupHeader">
+                        <span className="badge">{group.subjectName}</span>
                         <p className="small" style={{ margin: 0 }}>
-                          {conversation.subject} • {conversation.audience} • Updated{' '}
-                          {formatDate(conversation.updated_at)}
+                          {group.conversations.length}{' '}
+                          {group.conversations.length === 1 ? 'session' : 'sessions'}
                         </p>
-                      </a>
+                      </div>
 
-                      {historyMode === 'account' ? (
-                        <div className="buttonRow" style={{ justifyContent: 'flex-start' }}>
-                          <DeleteConversationButton
-                            conversationId={conversation.id}
-                            redirectHref={historyHref}
-                            compact
-                          />
-                        </div>
-                      ) : null}
+                      <div className="sessionList">
+                        {group.conversations.map((conversation) => {
+                          const isActive = selectedConversation?.id === conversation.id;
+                          const firstPrompt =
+                            firstPromptByConversation[conversation.id] ||
+                            conversation.title ||
+                            'Untitled conversation';
+
+                          const href = buildHistoryHref({
+                            historyHref,
+                            historyMode,
+                            fallbackEmail,
+                            conversationId: conversation.id
+                          });
+
+                          return (
+                            <div
+                              key={conversation.id}
+                              className={`sessionItem ${isActive ? 'active' : ''}`}
+                              style={{ display: 'grid', gap: 8 }}
+                            >
+                              <a href={href}>
+                                <p className="small" style={{ margin: '0 0 6px' }}>
+                                  <strong>{makePreview(firstPrompt)}</strong>
+                                </p>
+                                <p className="small" style={{ margin: 0 }}>
+                                  {getAudienceLabel(conversation.audience)} • Updated{' '}
+                                  {formatDate(conversation.updated_at)}
+                                </p>
+                              </a>
+
+                              {historyMode === 'account' ? (
+                                <div className="buttonRow" style={{ justifyContent: 'flex-start' }}>
+                                  <DeleteConversationButton
+                                    conversationId={conversation.id}
+                                    redirectHref={historyHref}
+                                    compact
+                                  />
+                                </div>
+                              ) : null}
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
-                  );
-                })}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="sessionList">
+                  {conversations.map((conversation) => {
+                    const isActive = selectedConversation?.id === conversation.id;
+                    const firstPrompt =
+                      firstPromptByConversation[conversation.id] ||
+                      conversation.title ||
+                      'Untitled conversation';
+
+                    const href = buildHistoryHref({
+                      historyHref,
+                      historyMode,
+                      fallbackEmail,
+                      conversationId: conversation.id
+                    });
+
+                    return (
+                      <div
+                        key={conversation.id}
+                        className={`sessionItem ${isActive ? 'active' : ''}`}
+                        style={{ display: 'grid', gap: 8 }}
+                      >
+                        <a href={href}>
+                          <p className="small" style={{ margin: '0 0 6px' }}>
+                            <strong>{makePreview(firstPrompt)}</strong>
+                          </p>
+                          <p className="small" style={{ margin: 0 }}>
+                            {getAudienceLabel(conversation.audience)} • Updated{' '}
+                            {formatDate(conversation.updated_at)}
+                          </p>
+                        </a>
+
+                        {historyMode === 'account' ? (
+                          <div className="buttonRow" style={{ justifyContent: 'flex-start' }}>
+                            <DeleteConversationButton
+                              conversationId={conversation.id}
+                              redirectHref={historyHref}
+                              compact
+                            />
+                          </div>
+                        ) : null}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </aside>
 
             <main
@@ -403,7 +568,11 @@ export default async function HistoryPageContent({
                 }}
               >
                 <div style={{ display: 'grid', gap: 4 }}>
-                  <h2 style={{ margin: 0 }}>Conversation thread</h2>
+                  <h2 style={{ margin: 0 }}>
+                    {selectedConversation
+                      ? `${getSubjectName(selectedConversation.subject)} conversation thread`
+                      : 'Conversation thread'}
+                  </h2>
                   <p className="small" style={{ margin: 0 }}>
                     View the full question-and-answer flow for the selected session.
                   </p>
@@ -458,6 +627,31 @@ export default async function HistoryPageContent({
 
           .historyLayout {
             width: 100%;
+          }
+
+          .subjectHistoryGroups {
+            display: grid;
+            gap: 18px;
+          }
+
+          .subjectHistoryGroup {
+            display: grid;
+            gap: 12px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border);
+          }
+
+          .subjectHistoryGroup:first-child {
+            padding-top: 0;
+            border-top: 0;
+          }
+
+          .subjectHistoryGroupHeader {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
           }
 
           @media (max-width: 760px) {
