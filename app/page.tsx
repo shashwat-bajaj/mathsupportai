@@ -171,18 +171,11 @@ export default function HomePage() {
           </div>
 
           <div className="buttonRow">
-            <Link className="btn" href="/math">
-              Math
-            </Link>
-            <Link className="btn secondary" href="/physics">
-              Physics
-            </Link>
-            <Link className="btn secondary" href="/chemistry">
-              Chemistry
-            </Link>
-            <Link className="btn secondary" href="/biology">
-              Biology
-            </Link>
+            {activeSubjects.map((subject) => (
+              <Link key={subject.key} className="btn secondary" href={subject.path}>
+                {subject.name}
+              </Link>
+            ))}
           </div>
         </section>
       </Reveal>

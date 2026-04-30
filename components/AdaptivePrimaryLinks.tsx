@@ -13,7 +13,12 @@ const tutoveraLinks = [
   { href: '/math', label: 'Math' },
   { href: '/physics', label: 'Physics' },
   { href: '/chemistry', label: 'Chemistry' },
-  { href: '/biology', label: 'Biology' }
+  { href: '/biology', label: 'Biology' },
+  { href: '/tutor', label: 'Students' },
+  { href: '/parents', label: 'Parents' },
+  { href: '/history', label: 'History' },
+  { href: '/pricing', label: 'Pricing' },
+  { href: '/contact', label: 'Contact' }
 ];
 
 function getActiveSubjectNav(pathname: string): ActiveSubjectNav | null {
@@ -60,6 +65,7 @@ function getSubjectProductLinks(subject: ActiveSubjectNav) {
     { href: `${subject.basePath}/parents`, label: 'Parents' },
     { href: `${subject.basePath}/history`, label: 'History' },
     { href: `${subject.basePath}/about`, label: 'About' },
+    { href: '/pricing', label: 'Pricing' },
     { href: '/contact', label: 'Contact' }
   ];
 }

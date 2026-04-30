@@ -19,7 +19,7 @@ function getStatusLabel(status: SubjectConfig['status']) {
 }
 
 function getHeroBadge(subject: SubjectConfig) {
-  return `TutoVera ${subject.name} • ${getStatusLabel(subject.status)}`;
+  return `TutoVera ${subject.name}`;
 }
 
 function getStatusDescription(subject: SubjectConfig) {
@@ -27,7 +27,11 @@ function getStatusDescription(subject: SubjectConfig) {
     return `TutoVera ${subject.name} is active now with student, parent, and history workspaces.`;
   }
 
-  return `${subject.name} is being prepared as a TutoVera subject branch. Active TutoVera branches are available while this workspace is still being shaped.`;
+  if (subject.status === 'beta') {
+    return `${subject.name} is being prepared as one of the next TutoVera subject branches. Active TutoVera branches are available now while this workspace is still being prepared.`;
+  }
+
+  return `${subject.name} is being prepared as a TutoVera subject branch. Active TutoVera branches are available now while this workspace is still being refined.`;
 }
 
 function getPreviewPrompt(subject: SubjectConfig) {
@@ -37,20 +41,64 @@ function getPreviewPrompt(subject: SubjectConfig) {
 function getPreviewResponse(subject: SubjectConfig) {
   switch (subject.key) {
     case 'physics':
-      return subject.status === 'active'
-        ? 'TutoVera Physics can explain the concept, identify variables, connect formulas, check units, and guide the problem step by step.'
-        : 'A Physics workspace can explain the concept, identify variables, connect formulas, check units, and guide the problem step by step.';
+      return 'TutoVera Physics can explain the concept, identify variables, connect formulas, check units, and guide the problem step by step.';
     case 'chemistry':
-      return subject.status === 'active'
-        ? 'TutoVera Chemistry can explain reactions, balance equations, walk through stoichiometry, and connect formulas to lab-style reasoning.'
-        : 'A Chemistry workspace can explain reactions, balance equations, walk through stoichiometry, and connect formulas to lab-style reasoning.';
+      return 'TutoVera Chemistry can explain reactions, balance equations, walk through stoichiometry, and connect formulas to lab-style reasoning.';
     case 'biology':
-      return subject.status === 'active'
-        ? 'TutoVera Biology can explain vocabulary, compare biological processes, summarize systems, and help connect details to the bigger concept.'
-        : 'A Biology workspace can explain vocabulary, compare processes, summarize systems, and help connect details to the bigger concept.';
+      return 'TutoVera Biology can explain vocabulary, compare processes, summarize systems, and help connect details to the bigger concept.';
     case 'math':
     default:
-      return 'TutoVera Math can explain steps, support follow-ups, graph when useful, diagnose mistakes, and keep the learning thread connected.';
+      return 'TutoVera Math explains steps, supports follow-ups, graphs when useful, and keeps the learning thread connected.';
+  }
+}
+
+function getPreviewCards(subject: SubjectConfig) {
+  switch (subject.key) {
+    case 'physics':
+      return [
+        {
+          label: 'Concept first',
+          text: 'Explain the physical idea before choosing formulas.'
+        },
+        {
+          label: 'Units matter',
+          text: 'Track variables, units, and substitutions clearly.'
+        }
+      ];
+    case 'chemistry':
+      return [
+        {
+          label: 'Equation support',
+          text: 'Balance reactions and walk through stoichiometry.'
+        },
+        {
+          label: 'Lab reasoning',
+          text: 'Connect observations, units, conversions, and formulas.'
+        }
+      ];
+    case 'biology':
+      return [
+        {
+          label: 'Vocabulary clarity',
+          text: 'Break down terms before connecting them to systems.'
+        },
+        {
+          label: 'Process review',
+          text: 'Compare processes and connect details to the big picture.'
+        }
+      ];
+    case 'math':
+    default:
+      return [
+        {
+          label: 'Graph-aware',
+          text: 'Show visual support when a function or curve helps.'
+        },
+        {
+          label: 'Step-by-step',
+          text: 'Explain the reasoning without skipping key steps.'
+        }
+      ];
   }
 }
 
@@ -105,77 +153,11 @@ function getUseCases(subject: SubjectConfig) {
     default:
       return [
         {
-          title: 'Step-by-step help',
-          text: 'Explain the reasoning behind each step instead of only producing the final answer.'
-        },
-        {
-          title: 'Follow-up flow',
-          text: 'Keep the same learning thread going so students can ask what comes next.'
-        },
-        {
           title: 'Graph-aware support',
-          text: 'Support graphable questions when a visual explanation helps the math make sense.'
-        }
-      ];
-  }
-}
-
-function getSubjectTools(subject: SubjectConfig) {
-  switch (subject.key) {
-    case 'physics':
-      return [
-        {
-          title: 'Formula reasoning',
-          text: 'Connect variables, formulas, substitutions, and units so the equation actually makes sense.'
-        },
-        {
-          title: 'Unit checks',
-          text: 'Support dimensional thinking by tracking units and helping users notice mismatches.'
-        },
-        {
-          title: 'Future simulators',
-          text: 'Physics can later grow into motion, forces, circuits, waves, and energy simulators.'
-        }
-      ];
-    case 'chemistry':
-      return [
-        {
-          title: 'Equation balancing',
-          text: 'Guide chemical equation balancing with clear atom-count reasoning instead of guessing.'
-        },
-        {
-          title: 'Stoichiometry support',
-          text: 'Help with mole ratios, conversions, limiting reactants, molarity, and unit-aware setup.'
-        },
-        {
-          title: 'Future lab tools',
-          text: 'Chemistry can later grow into reaction helpers, lab-style reasoning, and conversion tools.'
-        }
-      ];
-    case 'biology':
-      return [
-        {
-          title: 'Process explainers',
-          text: 'Support processes like mitosis, DNA replication, respiration, evolution, and physiology.'
-        },
-        {
-          title: 'Vocabulary breakdowns',
-          text: 'Explain biology terms in everyday language before connecting them to formal meaning.'
-        },
-        {
-          title: 'Future diagram support',
-          text: 'Biology can later grow into labeled diagrams, systems maps, and comparison tools.'
-        }
-      ];
-    case 'math':
-    default:
-      return [
-        {
-          title: 'Graphing support',
           text: 'Graphable math questions can show a visual graph when a function or curve helps the explanation.'
         },
         {
-          title: 'Step-by-step solving',
+          title: 'Step-by-step help',
           text: 'Support algebra, calculus, statistics, and problem-solving with clear intermediate steps.'
         },
         {
@@ -192,25 +174,28 @@ function getFinalHeading(subject: SubjectConfig) {
   }
 
   if (subject.status === 'beta') {
-    return `${subject.name} is being prepared for beta access.`;
+    return `${subject.name} is being prepared inside TutoVera.`;
   }
 
-  return `${subject.name} is being prepared.`;
+  return `${subject.name} is being refined inside TutoVera.`;
 }
 
 export default function SubjectLandingPage({ subject }: SubjectLandingPageProps) {
   const isActive = subject.status === 'active';
   const previewPrompt = getPreviewPrompt(subject);
   const previewResponse = getPreviewResponse(subject);
+  const previewCards = getPreviewCards(subject);
   const useCases = getUseCases(subject);
-  const subjectTools = getSubjectTools(subject);
 
   return (
     <div className="grid" style={{ gap: 34 }}>
       <section className="homeLead">
         <div className="homeLeadGrid">
           <div className="homeLeadCopy">
-            <span className="badge">{getHeroBadge(subject)}</span>
+            <div className="buttonRow">
+              <span className="badge">{getHeroBadge(subject)}</span>
+              <span className="badge">{getStatusLabel(subject.status)}</span>
+            </div>
 
             <h1 className="homeLeadTitle">
               {subject.name} support shaped for the TutoVera learning system.
@@ -234,11 +219,11 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
                 </>
               ) : (
                 <>
-                  <Link className="btn" href="/">
-                    Back to TutoVera Home
+                  <Link className="btn" href="/tutor">
+                    Choose Student Workspace
                   </Link>
-                  <Link className="btn secondary" href="/contact">
-                    Contact / Feedback
+                  <Link className="btn secondary" href="/parents">
+                    Choose Parent Workspace
                   </Link>
                 </>
               )}
@@ -260,11 +245,11 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
               </div>
 
               <div className="homeLeadProofItem">
-                <strong>{isActive ? 'Active branch' : 'Careful rollout'}</strong>
+                <strong>{isActive ? 'Active branch' : 'Platform branch'}</strong>
                 <p className="small" style={{ margin: 0 }}>
                   {isActive
                     ? 'Student, parent, and history workspaces are available now.'
-                    : 'This branch is being shaped carefully before active use.'}
+                    : 'The branch stays connected to the same platform structure.'}
                 </p>
               </div>
             </div>
@@ -278,9 +263,7 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
                   <span />
                   <span />
                 </div>
-                <span className="small">
-                  {isActive ? `TutoVera ${subject.name} preview` : `${subject.name} preview`}
-                </span>
+                <span className="small">TutoVera {subject.name} preview</span>
               </div>
 
               <div className="homePreviewStack">
@@ -299,21 +282,14 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
                 </div>
 
                 <div className="homePreviewGrid">
-                  <div className="homePreviewMiniCard">
-                    <span className="badge">Subject tools</span>
-                    <p className="small" style={{ margin: 0 }}>
-                      {subjectTools[0]?.text || 'Subject-specific tools and guided learning support.'}
-                    </p>
-                  </div>
-
-                  <div className="homePreviewMiniCard">
-                    <span className="badge">Status</span>
-                    <p className="small" style={{ margin: 0 }}>
-                      {subject.status === 'active'
-                        ? 'This subject branch is active.'
-                        : 'This subject branch is being prepared.'}
-                    </p>
-                  </div>
+                  {previewCards.map((card) => (
+                    <div key={card.label} className="homePreviewMiniCard">
+                      <span className="badge">{card.label}</span>
+                      <p className="small" style={{ margin: 0 }}>
+                        {card.text}
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -342,8 +318,8 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
                 asking the next question without restarting the whole flow.
               </p>
               <div className="buttonRow">
-                <Link className="btn" href={isActive ? `${subject.path}/tutor` : '/'}>
-                  {isActive ? 'Go to Students' : 'Back to TutoVera Home'}
+                <Link className="btn" href={`${subject.path}/tutor`}>
+                  Go to Students
                 </Link>
               </div>
             </div>
@@ -356,8 +332,8 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
                 guided help that supports learning instead of replacing it.
               </p>
               <div className="buttonRow">
-                <Link className="btn secondary" href={isActive ? `${subject.path}/parents` : '/'}>
-                  {isActive ? 'Go to Parents' : 'Back to TutoVera Home'}
+                <Link className="btn secondary" href={`${subject.path}/parents`}>
+                  Go to Parents
                 </Link>
               </div>
             </div>
@@ -368,35 +344,11 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
       <Reveal delay={0.08}>
         <section className="card" style={{ display: 'grid', gap: 16 }}>
           <div style={{ display: 'grid', gap: 8 }}>
-            <span className="badge">Subject tools</span>
-            <h2 style={{ margin: 0 }}>{subject.name} has its own learning needs.</h2>
-            <p className="small" style={{ margin: 0, maxWidth: 820 }}>
-              The interface stays consistent across TutoVera, while the tools and learning behavior
-              can become specific to each subject.
-            </p>
-          </div>
-
-          <div className="grid cols-3">
-            {subjectTools.map((tool) => (
-              <div key={tool.title} className="card innerFeatureCard">
-                <h3 style={{ marginTop: 0 }}>{tool.title}</h3>
-                <p className="small" style={{ marginBottom: 0 }}>
-                  {tool.text}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-      </Reveal>
-
-      <Reveal delay={0.12}>
-        <section className="card" style={{ display: 'grid', gap: 16 }}>
-          <div style={{ display: 'grid', gap: 8 }}>
             <span className="badge">Example prompts</span>
             <h2 style={{ margin: 0 }}>What users may ask in {subject.name}.</h2>
             <p className="small" style={{ margin: 0, maxWidth: 820 }}>
-              These examples come from the subject configuration and help preview the kind of
-              subject-specific tutor behavior this branch can support.
+              These examples come from the subject configuration and help shape the kind of
+              subject-specific tutor behavior this branch supports.
             </p>
           </div>
 
@@ -412,14 +364,14 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
         </section>
       </Reveal>
 
-      <Reveal delay={0.16}>
+      <Reveal delay={0.12}>
         <section className="card spotlightCard" style={{ display: 'grid', gap: 16 }}>
           <div style={{ display: 'grid', gap: 8 }}>
             <h2 style={{ margin: 0 }}>{getFinalHeading(subject)}</h2>
             <p className="small" style={{ margin: 0, maxWidth: 860 }}>
               {isActive
-                ? `TutoVera ${subject.name} now has its own student workspace, parent workspace, and subject-specific history while still sharing the broader TutoVera foundation.`
-                : `This ${subject.name} branch is being shaped so it can support its own tutor behavior, examples, history, and learning flow without splitting TutoVera into separate apps.`}
+                ? `TutoVera ${subject.name} has its own student workspace, parent workspace, and subject-specific history while still sharing the broader TutoVera foundation.`
+                : `This ${subject.name} branch is connected to the broader TutoVera foundation so it can support its own tutor behavior, examples, history, and learning flow without splitting into a separate app.`}
             </p>
           </div>
 
@@ -435,8 +387,11 @@ export default function SubjectLandingPage({ subject }: SubjectLandingPageProps)
               </>
             ) : (
               <>
-                <Link className="btn" href="/">
-                  Back to TutoVera Home
+                <Link className="btn" href="/tutor">
+                  Choose Student Workspace
+                </Link>
+                <Link className="btn secondary" href="/parents">
+                  Choose Parent Workspace
                 </Link>
                 <Link className="btn secondary" href="/contact">
                   Contact / Feedback
