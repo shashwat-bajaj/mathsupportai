@@ -16,8 +16,10 @@ export const metadata = {
 
 const footerLinks = [
   { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/tutor', label: 'Students' },
+  { href: '/parents', label: 'Parents' },
   { href: '/pricing', label: 'Pricing' },
+  { href: '/contact', label: 'Contact' },
   { href: '/settings', label: 'Settings' },
   { href: '/privacy', label: 'Privacy Policy' },
   { href: '/terms', label: 'Terms of Use' }
@@ -131,8 +133,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               >
                 <div style={{ display: 'grid', gap: 8, minWidth: 0 }}>
                   <p className="small" style={{ margin: 0 }}>
-                    <strong>TutoVera</strong> is being shaped into a calmer AI learning platform
-                    across Math, Physics, Chemistry, and Biology.
+                    <strong>TutoVera</strong> is a calmer AI learning platform across Math,
+                    Physics, Chemistry, and Biology.
                   </p>
                   <p className="small" style={{ margin: 0, maxWidth: 720 }}>
                     Each subject branch has its own learning workspace while sharing the same
