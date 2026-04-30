@@ -17,7 +17,6 @@ type GradeLevel = 'elementary' | 'middle-school' | 'high-school' | 'college';
 type TutorMode = 'auto' | 'teach' | 'hint' | 'diagnose' | 'quiz';
 
 const STORAGE_KEY = 'tutovera-theme';
-const LEGACY_STORAGE_KEY = 'mathsupport-theme';
 const THEME_EVENT = 'tutovera-theme-change';
 
 function resolveTheme(theme: ThemePreference) {
@@ -104,19 +103,9 @@ export default function SettingsForm({
     }
 
     window.localStorage.setItem(STORAGE_KEY, themePreference);
-    window.localStorage.removeItem(LEGACY_STORAGE_KEY);
-
-    const resolved = resolveTheme(themePreference);
-    document.documentElement.setAttribute('data-theme', resolved);
-    document.documentElement.style.colorScheme = resolved;
-    document.body?.setAttribute('data-theme', resolved);
-
-    requestAnimationFrame(() => {
-      document.documentElement.setAttribute('data-theme', resolved);
-      document.documentElement.style.colorScheme = resolved;
-      document.body?.setAttribute('data-theme', resolved);
-    });
-
+    document.documentElement.setAttribute('data-theme', resolveTheme(themePreference));
+    document.documentElement.style.colorScheme = resolveTheme(themePreference);
+    document.body?.setAttribute('data-theme', resolveTheme(themePreference));
     window.dispatchEvent(new Event(THEME_EVENT));
 
     setStatus('Settings saved.');
@@ -136,8 +125,8 @@ export default function SettingsForm({
         <div style={{ display: 'grid', gap: 8 }}>
           <h3 style={{ margin: 0 }}>Display and language</h3>
           <p className="small" style={{ margin: 0 }}>
-            Choose how the product looks by default and what translation language should be ready
-            when you need it.
+            Choose how TutoVera looks by default and what translation language should be ready when
+            you need it.
           </p>
         </div>
 
@@ -192,8 +181,8 @@ export default function SettingsForm({
         <div style={{ display: 'grid', gap: 8 }}>
           <h3 style={{ margin: 0 }}>Student tutor defaults</h3>
           <p className="small" style={{ margin: 0 }}>
-            Auto mode follows the wording of the question more naturally, while the other modes
-            push the tutor toward a more specific teaching style.
+            Auto mode follows the wording of the question more naturally, while the other modes push
+            the tutor toward a more specific teaching style.
           </p>
         </div>
 
@@ -242,8 +231,8 @@ export default function SettingsForm({
         <div style={{ display: 'grid', gap: 8 }}>
           <h3 style={{ margin: 0 }}>Parent tutor defaults</h3>
           <p className="small" style={{ margin: 0 }}>
-            Parent Tutor stays in guided hint mode by design, but you can choose the default
-            learner level here.
+            Parent workspaces stay guided by design, but you can choose the default learner level
+            here.
           </p>
         </div>
 
@@ -289,7 +278,8 @@ export default function SettingsForm({
           </p>
         ) : (
           <p className="small" style={{ margin: 0 }}>
-            Saved changes affect your default experience, but you can still adjust things inside a session.
+            Saved changes affect your default experience, but you can still adjust things inside a
+            session.
           </p>
         )}
       </div>

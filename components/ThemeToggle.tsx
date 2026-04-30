@@ -7,12 +7,7 @@ type ThemePreference = 'system' | 'light' | 'dark';
 type ResolvedTheme = 'light' | 'dark';
 
 const STORAGE_KEY = 'tutovera-theme';
-const LEGACY_STORAGE_KEY = 'mathsupport-theme';
 const THEME_EVENT = 'tutovera-theme-change';
-
-function isThemePreference(value: string | null): value is ThemePreference {
-  return value === 'light' || value === 'dark' || value === 'system';
-}
 
 function getSystemTheme(): ResolvedTheme {
   if (typeof window === 'undefined') return 'dark';
@@ -35,15 +30,8 @@ function getSavedPreference(): ThemePreference {
   if (typeof window === 'undefined') return 'system';
 
   const saved = window.localStorage.getItem(STORAGE_KEY);
-  if (isThemePreference(saved)) {
+  if (saved === 'light' || saved === 'dark' || saved === 'system') {
     return saved;
-  }
-
-  const legacySaved = window.localStorage.getItem(LEGACY_STORAGE_KEY);
-  if (isThemePreference(legacySaved)) {
-    window.localStorage.setItem(STORAGE_KEY, legacySaved);
-    window.localStorage.removeItem(LEGACY_STORAGE_KEY);
-    return legacySaved;
   }
 
   return 'system';
@@ -70,7 +58,7 @@ export default function ThemeToggle() {
     }
 
     function handleStorage(event: StorageEvent) {
-      if (event.key !== STORAGE_KEY && event.key !== LEGACY_STORAGE_KEY) return;
+      if (event.key !== STORAGE_KEY) return;
 
       const nextPreference = getSavedPreference();
       setPreference(nextPreference);
@@ -121,7 +109,6 @@ export default function ThemeToggle() {
   function setThemePreference(nextPreference: ThemePreference) {
     setPreference(nextPreference);
     window.localStorage.setItem(STORAGE_KEY, nextPreference);
-    window.localStorage.removeItem(LEGACY_STORAGE_KEY);
 
     const resolved = resolveTheme(nextPreference);
 
