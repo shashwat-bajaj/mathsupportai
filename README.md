@@ -1,96 +1,127 @@
-# MathSupport AI Starter
+# TutoVera
 
-A practical starter for launching a paid AI math support website.
+TutoVera is a calm AI learning platform with subject branches for Math, Physics, Chemistry, and Biology.
 
-## Recommended architecture
+The product is designed around the idea of **“Tutoring you can trust”** — clear explanations, guided learning, parent support, saved history, and subject-specific tutor behavior inside one connected platform.
 
-- **Frontend + app server:** Next.js (App Router) on Vercel
-- **Auth + database:** Supabase
-- **Payments:** Stripe Checkout + customer portal
-- **AI:** OpenAI Responses API
-- **Optional symbolic verification:** FastAPI + SymPy microservice
-- **Automation:** n8n for onboarding, re-engagement, CRM, lead capture, and human tutor handoffs
+## Current status
 
-## What is included
+TutoVera is currently in free beta.
 
-- Landing page
-- Login page (Supabase client-side auth)
-- Basic tutor UI
-- Chat API route using OpenAI Responses API
-- Stripe checkout route
-- Stripe webhook route
-- Suggested Supabase schema
-- Optional Python math-checker microservice using SymPy
+Active subject branches:
 
-## Local setup
+- Math
+- Physics
+- Chemistry
+- Biology
 
-1. Create a Supabase project.
-2. In Supabase SQL editor, run `db/schema.sql`.
-3. Create a Stripe product and recurring price.
-4. Create an OpenAI API key.
-5. Copy `.env.example` to `.env.local` and fill values.
-6. Install dependencies:
+Each active subject branch includes:
+
+- Student workspace
+- Parent workspace
+- Subject-filtered history
+- Subject-specific prompts and tutor behavior
+- Shared account, settings, and saved history foundation
+
+## Product structure
+
+TutoVera is built as one connected platform rather than separate cloned apps for each subject.
+
+The current route structure includes:
+
+- `/` — TutoVera homepage
+- `/math` — Math branch homepage
+- `/physics` — Physics branch homepage
+- `/chemistry` — Chemistry branch homepage
+- `/biology` — Biology branch homepage
+- `/[subject]/tutor` — student workspace
+- `/[subject]/parents` — parent workspace
+- `/[subject]/history` — subject-filtered history
+- `/[subject]/about` — subject-specific about page
+- `/history` — global saved history
+- `/account` — account page
+- `/settings` — learning and display preferences
+- `/pricing` — global beta pricing page
+- `/privacy` — privacy policy
+- `/terms` — terms of use
+- `/contact` — feedback/contact page
+
+Some legacy compatibility routes remain intentionally so older links do not break.
+
+## Core features
+
+### Student workspaces
+
+Student workspaces are built for direct subject help, follow-up questions, explanations, diagnosis, practice prompts, and saved learning sessions.
+
+Examples:
+
+- Math: solving, graphing, algebra, calculus, statistics, mistake diagnosis
+- Physics: concepts, formulas, variables, units, word problems
+- Chemistry: reactions, balancing, stoichiometry, molarity, conversions
+- Biology: vocabulary, systems, processes, comparisons, review
+
+### Parent workspaces
+
+Parent workspaces are designed for adults helping a child learn.
+
+They focus on:
+
+- simpler explanations
+- parent-friendly talking points
+- likely-mistake guidance
+- child-level examples
+- practice prompts
+- guided support without jumping straight to the final answer
+
+### Saved history
+
+Signed-in users can save and revisit sessions.
+
+History is available through:
+
+- global history at `/history`
+- subject-specific history at `/math/history`, `/physics/history`, `/chemistry/history`, and `/biology/history`
+
+### Settings
+
+Users can manage:
+
+- theme preference
+- translation language
+- student default learner level
+- student default tutor mode
+- parent default learner level
+
+### Answer tools
+
+Tutor responses support:
+
+- markdown formatting
+- tables
+- math rendering through KaTeX
+- read aloud
+- translation
+- graph rendering for supported Math graph requests
+
+## Tech stack
+
+- Next.js App Router
+- React
+- Supabase Auth
+- Supabase database
+- Gemini API
+- React Markdown
+- Remark GFM
+- Remark Math
+- Rehype KaTeX
+- Vercel Analytics
+- Vercel Speed Insights
+- Three.js / React Three Fiber dependencies reserved for future visual tools
+
+## Local development
+
+Install dependencies:
 
 ```bash
 npm install
-```
-
-7. Run the Next.js app:
-
-```bash
-npm run dev
-```
-
-8. For symbolic checking, create a Python virtual environment inside `math-checker/`:
-
-```bash
-cd math-checker
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn main:app --reload --port 8001
-```
-
-## Deployment
-
-### Web app
-Deploy the Next.js app to Vercel.
-
-### Python checker
-Deploy `math-checker/` to Railway, Render, or Fly.io.
-
-## Environment variables
-See `.env.example`.
-
-## Production sequence
-
-### Week 1
-- Landing page
-- Tutor page
-- OpenAI integration
-- Free usage cap
-
-### Week 2
-- Supabase auth
-- Stripe subscriptions
-- Email capture and onboarding
-
-### Week 3
-- Mistake tracking
-- Mastery dashboard
-- SEO pages for algebra/calculus/statistics
-
-### Week 4+
-- Symbolic checker
-- Image input / worksheet upload
-- School / tutor partnerships
-- Affiliate and sponsored tools
-
-## Important note
-This starter is meant to get you to a serious MVP quickly. For a hardened paid launch, add:
-- server-side auth enforcement
-- rate limiting at the edge
-- abuse detection
-- logging/monitoring
-- subscription middleware
-- tests and evals
