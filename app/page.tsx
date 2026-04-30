@@ -23,11 +23,11 @@ export default function HomePage() {
             </p>
 
             <div className="buttonRow">
-              <Link className="btn" href="/math">
-                Open TutoVera Math
+              <Link className="btn" href="#subjects">
+                Explore Subjects
               </Link>
-              <Link className="btn secondary" href="#subjects">
-                View Subjects
+              <Link className="btn secondary" href="#beta">
+                Join Free Beta
               </Link>
             </div>
 
@@ -42,7 +42,7 @@ export default function HomePage() {
               <div className="homeLeadProofItem">
                 <strong>Active branches</strong>
                 <p className="small" style={{ margin: 0 }}>
-                  Math, Physics, Chemistry, and Biology are active now.
+                  {activeSubjects.map((subject) => subject.name).join(', ')} are active now.
                 </p>
               </div>
 
@@ -70,15 +70,16 @@ export default function HomePage() {
                 <div className="homePreviewPanel homePreviewChat">
                   <div className="homePreviewPrompt">
                     <p className="small" style={{ margin: 0 }}>
-                      I need help learning a topic, but I want the explanation to feel clear and
-                      trustworthy.
+                      I need help learning a topic, but I want the explanation to feel clear,
+                      trustworthy, and easy to continue.
                     </p>
                   </div>
 
                   <div className="homePreviewResponse">
                     <p className="small" style={{ margin: 0 }}>
-                      Choose an active branch for subject-specific tutoring, parent guidance, saved
-                      history, and follow-up support inside the same TutoVera platform.
+                      Choose the subject branch you need, then use the student workspace, parent
+                      workspace, saved history, and follow-up support inside the same TutoVera
+                      platform.
                     </p>
                   </div>
                 </div>
@@ -93,10 +94,10 @@ export default function HomePage() {
                   </div>
 
                   <div className="homePreviewMiniCard">
-                    <span className="badge">Built to expand</span>
+                    <span className="badge">Built to grow</span>
                     <p className="small" style={{ margin: 0 }}>
-                      TutoVera is structured so future tools, subjects, and study workflows can grow
-                      from the same shared foundation.
+                      Each subject can develop its own tools, examples, and tutor behavior without
+                      becoming a separate cloned app.
                     </p>
                   </div>
                 </div>
@@ -116,8 +117,8 @@ export default function HomePage() {
             <span className="badge">Subjects</span>
             <h2 style={{ margin: 0 }}>Choose a TutoVera branch.</h2>
             <p className="small" style={{ margin: 0, maxWidth: 1120 }}>
-              Each subject branch has its own homepage, examples, tutor behavior, tools, and visual
-              identity while sharing the same core account, history, settings, deployment, and backend
+              Each subject branch has its own homepage, examples, tutor behavior, and visual identity
+              while sharing the same core account, history, settings, deployment, and backend
               structure.
             </p>
           </div>
@@ -140,7 +141,7 @@ export default function HomePage() {
                     ? 'Active'
                     : subject.status === 'beta'
                       ? 'Beta preview'
-                      : 'Coming soon'}
+                      : 'Preparing'}
                 </span>
 
                 <h3 style={{ marginBottom: 8 }}>{subject.name}</h3>
@@ -150,7 +151,7 @@ export default function HomePage() {
                 </p>
 
                 <p className="small" style={{ margin: '14px 0 0' }}>
-                  <strong>{subject.status === 'active' ? 'Open workspace' : 'View subject page'} →</strong>
+                  <strong>Open {subject.name} →</strong>
                 </p>
               </Link>
             ))}
@@ -162,33 +163,34 @@ export default function HomePage() {
         <section className="card" style={{ display: 'grid', gap: 16 }}>
           <div style={{ display: 'grid', gap: 8 }}>
             <span className="badge">Current focus</span>
-            <h2 style={{ margin: 0 }}>All four core subject branches are active today.</h2>
+            <h2 style={{ margin: 0 }}>A consistent learning experience across active branches.</h2>
             <p className="small" style={{ margin: 0, maxWidth: 920 }}>
-              The current focus is making Math, Physics, Chemistry, and Biology feel stable,
-              consistent, and useful before expanding into payments, richer subject tools, mobile app
-              polish, and future product features.
+              The current focus is making all active branches feel stable, useful, and consistent
+              before adding larger future tools, premium access, or mobile app features.
             </p>
           </div>
 
           <div className="buttonRow">
-            <Link className="btn" href="/math/tutor">
-              Open Math
+            <Link className="btn" href="/math">
+              Math
             </Link>
-            <Link className="btn secondary" href="/physics/tutor">
-              Open Physics
+            <Link className="btn secondary" href="/physics">
+              Physics
             </Link>
-            <Link className="btn secondary" href="/chemistry/tutor">
-              Open Chemistry
+            <Link className="btn secondary" href="/chemistry">
+              Chemistry
             </Link>
-            <Link className="btn secondary" href="/biology/tutor">
-              Open Biology
+            <Link className="btn secondary" href="/biology">
+              Biology
             </Link>
           </div>
         </section>
       </Reveal>
 
       <Reveal delay={0.12}>
-        <BetaSignup />
+        <section id="beta">
+          <BetaSignup />
+        </section>
       </Reveal>
     </div>
   );
