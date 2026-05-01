@@ -1,4 +1,3 @@
-import Reveal from '@/components/Reveal';
 import { plans } from '@/lib/plans';
 
 const comparisonRows = [
@@ -82,273 +81,319 @@ const comparisonRows = [
   }
 ];
 
-export default function PricingPageContent() {
-  const freePlan = plans.find((plan) => plan.key === 'free');
-  const plusPlan = plans.find((plan) => plan.key === 'plus');
-  const proPlan = plans.find((plan) => plan.key === 'pro');
+function getPlanHeadline(planKey: string) {
+  if (planKey === 'free') return 'Try the tutor';
+  if (planKey === 'plus') return 'Learn from worksheets and photos';
+  return 'Build a deeper study system';
+}
 
+function getPlanKeyPoints(planKey: string) {
+  if (planKey === 'free') {
+    return [
+      'Text-based tutoring across all subjects',
+      'Student and parent workspaces',
+      'Basic saved history',
+      'No worksheet/photo support'
+    ];
+  }
+
+  if (planKey === 'plus') {
+    return [
+      'Worksheet/photo support included',
+      'Higher daily tutor limits',
+      'Extended saved history',
+      'Practice and mistake diagnosis'
+    ];
+  }
+
+  return [
+    'Advanced worksheet/photo help',
+    'Deeper revision workflows',
+    'Mistake pattern tools planned',
+    'Highest access to future tools'
+  ];
+}
+
+export default function PricingPageContent() {
   return (
     <div className="grid" style={{ gap: 24 }}>
-      <Reveal delay={0.02}>
-        <section className="card spotlightCard" style={{ display: 'grid', gap: 14 }}>
-          <span className="badge">Pricing</span>
+      <section className="card spotlightCard" style={{ display: 'grid', gap: 14 }}>
+        <span className="badge">Pricing</span>
 
-          <div style={{ display: 'grid', gap: 10 }}>
-            <h1 style={{ margin: 0 }}>Choose the support level that fits how you study.</h1>
-            <p className="small" style={{ margin: 0, maxWidth: 900 }}>
-              TutoVera is currently in free beta. These tiers define the planned launch structure:
-              Free helps users try the tutor, Plus unlocks worksheet/photo support for regular
-              study, and Pro is designed for deeper revision, mistake patterns, and advanced tools.
-            </p>
-          </div>
-        </section>
-      </Reveal>
+        <div style={{ display: 'grid', gap: 10 }}>
+          <h1 style={{ margin: 0 }}>Choose the support level that fits how you study.</h1>
+          <p className="small" style={{ margin: 0, maxWidth: 900 }}>
+            TutoVera is currently in free beta. These tiers define the planned launch structure:
+            Free helps users try the tutor, Plus unlocks worksheet/photo support for regular study,
+            and Pro is designed for deeper revision, mistake patterns, and advanced tools.
+          </p>
+        </div>
+      </section>
 
-      <Reveal delay={0.06}>
-        <section className="grid cols-3">
-          <div className="card innerFeatureCard">
-            <span className="badge">Free</span>
-            <h3 style={{ marginBottom: 8 }}>Try the tutor</h3>
-            <p className="small" style={{ margin: 0 }}>
-              Text-based help across every subject branch with basic history and core tutor access.
-            </p>
-          </div>
+      <section className="grid cols-3">
+        {plans.map((plan) => (
+          <div
+            key={plan.key}
+            className="card featureCard pricingPlanCard"
+            style={{
+              borderColor: plan.highlighted ? 'var(--accent-border)' : 'var(--border)',
+              display: 'grid',
+              gap: 16
+            }}
+          >
+            <div style={{ display: 'grid', gap: 10 }}>
+              <span className="badge">{plan.badge}</span>
 
-          <div className="card innerFeatureCard" style={{ borderColor: 'var(--accent-border)' }}>
-            <span className="badge">Plus</span>
-            <h3 style={{ marginBottom: 8 }}>Learn from worksheets and photos</h3>
-            <p className="small" style={{ margin: 0 }}>
-              The main paid plan for regular students and parents who want image support, guided
-              practice, and extended history.
-            </p>
-          </div>
+              <div>
+                <h2 style={{ margin: 0 }}>{plan.name}</h2>
+                <p className="small" style={{ margin: '6px 0 0' }}>
+                  <strong>{getPlanHeadline(plan.key)}</strong>
+                </p>
+              </div>
 
-          <div className="card innerFeatureCard">
-            <span className="badge">Pro</span>
-            <h3 style={{ marginBottom: 8 }}>Build a deeper study system</h3>
-            <p className="small" style={{ margin: 0 }}>
-              A higher-access plan for revision workflows, repeated mistake patterns, advanced
-              tools, and heavier study usage.
-            </p>
-          </div>
-        </section>
-      </Reveal>
+              <div>
+                <div className="price">{plan.monthlyPrice}</div>
+                <p className="small" style={{ margin: 0 }}>
+                  per month
+                </p>
+                <p className="small" style={{ margin: '6px 0 0' }}>
+                  <strong>{plan.annualPrice}</strong> · {plan.annualNote}
+                </p>
+              </div>
 
-      <Reveal delay={0.1}>
-        <section className="grid cols-3">
-          {plans.map((plan) => (
+              <p className="small" style={{ margin: 0 }}>
+                {plan.description}
+              </p>
+            </div>
+
             <div
-              key={plan.key}
-              className="card featureCard"
+              className="grid"
               style={{
-                borderColor: plan.highlighted ? 'var(--accent-border)' : 'var(--border)',
-                display: 'grid',
-                gap: 16
+                gap: 10,
+                paddingTop: 12,
+                borderTop: '1px solid var(--border)'
               }}
             >
-              <div style={{ display: 'grid', gap: 10 }}>
-                <span className="badge">{plan.badge}</span>
-
-                <div>
-                  <h2 style={{ margin: 0 }}>{plan.name}</h2>
-                  <p className="small" style={{ margin: '6px 0 0' }}>
-                    {plan.audience}
-                  </p>
-                </div>
-
-                <div>
-                  <div className="price">{plan.monthlyPrice}</div>
-                  <p className="small" style={{ margin: 0 }}>
-                    per month
-                  </p>
-                  <p className="small" style={{ margin: '6px 0 0' }}>
-                    <strong>{plan.annualPrice}</strong> · {plan.annualNote}
-                  </p>
-                </div>
-
-                <p className="small" style={{ margin: 0 }}>
-                  {plan.description}
+              <div className="card questionSurface" style={{ padding: 14 }}>
+                <p className="small" style={{ margin: '0 0 4px' }}>
+                  <strong>Tutor requests</strong>
                 </p>
-
                 <p className="small" style={{ margin: 0 }}>
-                  <strong>{plan.positioning}</strong>
+                  {plan.limits.tutorRequestsPerDay}
                 </p>
               </div>
 
-              <div
-                className="grid"
-                style={{
-                  gap: 10,
-                  paddingTop: 12,
-                  borderTop: '1px solid var(--border)'
-                }}
-              >
-                <div className="card questionSurface" style={{ padding: 14 }}>
-                  <p className="small" style={{ margin: '0 0 4px' }}>
-                    <strong>Tutor requests</strong>
-                  </p>
-                  <p className="small" style={{ margin: 0 }}>
-                    {plan.limits.tutorRequestsPerDay}
-                  </p>
-                </div>
-
-                <div className="card questionSurface" style={{ padding: 14 }}>
-                  <p className="small" style={{ margin: '0 0 4px' }}>
-                    <strong>Image support</strong>
-                  </p>
-                  <p className="small" style={{ margin: 0 }}>
-                    {plan.limits.imageUploadsPerMonth}
-                  </p>
-                </div>
-
-                <div className="card questionSurface" style={{ padding: 14 }}>
-                  <p className="small" style={{ margin: '0 0 4px' }}>
-                    <strong>Saved history</strong>
-                  </p>
-                  <p className="small" style={{ margin: 0 }}>
-                    {plan.limits.savedConversations}
-                  </p>
-                </div>
-              </div>
-
-              <div
-                className="grid"
-                style={{
-                  gap: 10,
-                  paddingTop: 12,
-                  borderTop: '1px solid var(--border)'
-                }}
-              >
-                <p className="small" style={{ margin: 0 }}>
-                  <strong>Why users choose this plan</strong>
+              <div className="card questionSurface" style={{ padding: 14 }}>
+                <p className="small" style={{ margin: '0 0 4px' }}>
+                  <strong>Image support</strong>
                 </p>
-                <ul className="list" style={{ marginTop: 0 }}>
-                  {plan.paidValue.map((feature) => (
-                    <li key={feature}>{feature}</li>
-                  ))}
-                </ul>
+                <p className="small" style={{ margin: 0 }}>
+                  {plan.limits.imageUploadsPerMonth}
+                </p>
               </div>
+
+              <div className="card questionSurface" style={{ padding: 14 }}>
+                <p className="small" style={{ margin: '0 0 4px' }}>
+                  <strong>Saved history</strong>
+                </p>
+                <p className="small" style={{ margin: 0 }}>
+                  {plan.limits.savedConversations}
+                </p>
+              </div>
+            </div>
+
+            <div
+              className="grid"
+              style={{
+                gap: 10,
+                paddingTop: 12,
+                borderTop: '1px solid var(--border)'
+              }}
+            >
+              <p className="small" style={{ margin: 0 }}>
+                <strong>Key features</strong>
+              </p>
 
               <ul className="list" style={{ marginTop: 0 }}>
-                {plan.features.map((feature) => (
+                {getPlanKeyPoints(plan.key).map((feature) => (
                   <li key={feature}>{feature}</li>
                 ))}
               </ul>
-
-              <div className="buttonRow" style={{ marginTop: 'auto' }}>
-                <a className={plan.highlighted ? 'btn' : 'btn secondary'} href={plan.ctaHref}>
-                  {plan.ctaLabel}
-                </a>
-              </div>
             </div>
-          ))}
-        </section>
-      </Reveal>
 
-      <Reveal delay={0.16}>
-        <section className="card spotlightCard" style={{ display: 'grid', gap: 18 }}>
-          <div style={{ display: 'grid', gap: 8 }}>
-            <span className="badge">Paid plan value</span>
-            <h2 style={{ margin: 0 }}>The paid tiers are built around learning workflows, not just more answers.</h2>
-            <p className="small" style={{ margin: 0, maxWidth: 900 }}>
-              TutoVera should not compete only as another answer generator. The planned paid value is
-              worksheet/photo support, guided practice, parent-friendly help, mistake diagnosis,
-              saved continuity, and deeper revision workflows over time.
-            </p>
-          </div>
-
-          <div className="grid cols-3">
-            <div className="card innerFeatureCard">
-              <h3 style={{ marginTop: 0 }}>{freePlan?.name}: Try</h3>
-              <p className="small" style={{ marginBottom: 0 }}>
-                Free gives users enough access to understand the platform, ask text questions, and
-                see the learning flow.
+            <div
+              className="grid"
+              style={{
+                gap: 10,
+                paddingTop: 12,
+                borderTop: '1px solid var(--border)'
+              }}
+            >
+              <p className="small" style={{ margin: 0 }}>
+                <strong>Why users choose this plan</strong>
               </p>
-            </div>
 
-            <div className="card innerFeatureCard" style={{ borderColor: 'var(--accent-border)' }}>
-              <h3 style={{ marginTop: 0 }}>{plusPlan?.name}: Study</h3>
-              <p className="small" style={{ marginBottom: 0 }}>
-                Plus is the main conversion tier because worksheet/photo help is concrete,
-                practical, and valuable for regular homework support.
-              </p>
-            </div>
-
-            <div className="card innerFeatureCard">
-              <h3 style={{ marginTop: 0 }}>{proPlan?.name}: Improve</h3>
-              <p className="small" style={{ marginBottom: 0 }}>
-                Pro is designed around deeper revision, mistake patterns, and advanced tools that
-                help users improve over time.
-              </p>
-            </div>
-          </div>
-        </section>
-      </Reveal>
-
-      <Reveal delay={0.22}>
-        <section className="card" style={{ display: 'grid', gap: 18 }}>
-          <div style={{ display: 'grid', gap: 8 }}>
-            <span className="badge">Compare plans</span>
-            <h2 style={{ margin: 0 }}>What changes when users upgrade?</h2>
-            <p className="small" style={{ margin: 0, maxWidth: 860 }}>
-              The free plan is designed for trying TutoVera. Paid plans are designed for regular
-              study, image-based help, longer saved history, and future advanced subject tools.
-            </p>
-          </div>
-
-          <div className="pricingTableWrap">
-            <table className="pricingTable">
-              <thead>
-                <tr>
-                  <th>Feature</th>
-                  <th>Free</th>
-                  <th>Plus</th>
-                  <th>Pro</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {comparisonRows.map((row) => (
-                  <tr key={row.label}>
-                    <td>{row.label}</td>
-                    <td>{row.free}</td>
-                    <td>{row.plus}</td>
-                    <td>{row.pro}</td>
-                  </tr>
+              <ul className="list" style={{ marginTop: 0 }}>
+                {plan.paidValue.slice(0, 4).map((feature) => (
+                  <li key={feature}>{feature}</li>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      </Reveal>
+              </ul>
+            </div>
 
-      <Reveal delay={0.28}>
-        <section className="card spotlightCard" style={{ display: 'grid', gap: 16 }}>
-          <div style={{ display: 'grid', gap: 8 }}>
-            <h2 style={{ margin: 0 }}>Why image support is paid-only</h2>
-            <p className="small" style={{ margin: 0, maxWidth: 880 }}>
-              Image and worksheet support is more expensive to operate and more valuable for serious
-              study. Free users can still use text-based tutoring across all subjects, while Plus and
-              Pro are planned to unlock image-based help with monthly usage caps.
-            </p>
+            <div className="buttonRow" style={{ marginTop: 'auto' }}>
+              <a className={plan.key === 'free' ? 'btn secondary' : 'btn'} href={plan.ctaHref}>
+                {plan.ctaLabel}
+              </a>
+            </div>
           </div>
+        ))}
+      </section>
 
-          <div className="buttonRow">
-            <a className="btn" href="/tutor">
-              Try Student Workspaces
-            </a>
-            <a className="btn secondary" href="/parents">
-              Try Parent Workspaces
-            </a>
-            <a className="btn secondary" href="/contact">
-              Ask About Paid Access
-            </a>
+      <section className="card spotlightCard" style={{ display: 'grid', gap: 16 }}>
+        <div style={{ display: 'grid', gap: 8 }}>
+          <span className="badge">Paid plan value</span>
+          <h2 style={{ margin: 0 }}>
+            Paid tiers are built around learning workflows, not just more answers.
+          </h2>
+          <p className="small" style={{ margin: 0, maxWidth: 900 }}>
+            TutoVera should not compete only as another answer generator. The planned paid value is
+            worksheet/photo support, guided practice, parent-friendly help, mistake diagnosis, saved
+            continuity, and deeper revision workflows over time.
+          </p>
+        </div>
+
+        <div className="buttonRow">
+          <a className="btn" href="/contact">
+            Ask About Plus
+          </a>
+          <a className="btn" href="/contact">
+            Ask About Pro
+          </a>
+          <a className="btn secondary" href="/tutor">
+            Try Free Tutor
+          </a>
+        </div>
+      </section>
+
+      <section className="card" style={{ display: 'grid', gap: 18 }}>
+        <details className="pricingCompareDetails">
+          <summary className="pricingCompareSummary">
+            <span>
+              <span className="badge">Compare plans</span>
+            </span>
+            <span className="pricingCompareSummaryText">
+              Open full feature comparison
+            </span>
+          </summary>
+
+          <div className="pricingComparePanel">
+            <div style={{ display: 'grid', gap: 8 }}>
+              <h2 style={{ margin: 0 }}>What changes when users upgrade?</h2>
+              <p className="small" style={{ margin: 0, maxWidth: 860 }}>
+                The free plan is designed for trying TutoVera. Paid plans are designed for regular
+                study, image-based help, longer saved history, and future advanced subject tools.
+              </p>
+            </div>
+
+            <div className="pricingTableWrap">
+              <table className="pricingTable">
+                <thead>
+                  <tr>
+                    <th>Feature</th>
+                    <th>Free</th>
+                    <th>Plus</th>
+                    <th>Pro</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {comparisonRows.map((row) => (
+                    <tr key={row.label}>
+                      <td>{row.label}</td>
+                      <td>{row.free}</td>
+                      <td>{row.plus}</td>
+                      <td>{row.pro}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </section>
-      </Reveal>
+        </details>
+      </section>
+
+      <section className="card spotlightCard" style={{ display: 'grid', gap: 16 }}>
+        <div style={{ display: 'grid', gap: 8 }}>
+          <h2 style={{ margin: 0 }}>Why image support is paid-only</h2>
+          <p className="small" style={{ margin: 0, maxWidth: 880 }}>
+            Image and worksheet support is more expensive to operate and more valuable for serious
+            study. Free users can still use text-based tutoring across all subjects, while Plus and
+            Pro are planned to unlock image-based help with monthly usage caps.
+          </p>
+        </div>
+
+        <div className="buttonRow">
+          <a className="btn" href="/tutor">
+            Try Student Workspaces
+          </a>
+          <a className="btn secondary" href="/parents">
+            Try Parent Workspaces
+          </a>
+          <a className="btn secondary" href="/contact">
+            Ask About Paid Access
+          </a>
+        </div>
+      </section>
 
       <style>
         {`
+          .pricingPlanCard {
+            align-content: start;
+          }
+
+          .pricingCompareDetails {
+            display: grid;
+            gap: 16px;
+          }
+
+          .pricingCompareSummary {
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+          }
+
+          .pricingCompareSummary::-webkit-details-marker {
+            display: none;
+          }
+
+          .pricingCompareSummary::after {
+            content: '+';
+            color: var(--text-soft);
+            font-weight: 800;
+            font-size: 1.2rem;
+          }
+
+          .pricingCompareDetails[open] .pricingCompareSummary::after {
+            content: '−';
+          }
+
+          .pricingCompareSummaryText {
+            color: var(--text-soft);
+            font-size: 0.94rem;
+            margin-left: auto;
+          }
+
+          .pricingComparePanel {
+            display: grid;
+            gap: 18px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border);
+          }
+
           .pricingTableWrap {
             width: 100%;
             overflow-x: auto;
@@ -382,6 +427,13 @@ export default function PricingPageContent() {
 
           .pricingTable tr:last-child td {
             border-bottom: 0;
+          }
+
+          @media (max-width: 760px) {
+            .pricingCompareSummaryText {
+              width: 100%;
+              margin-left: 0;
+            }
           }
         `}
       </style>
