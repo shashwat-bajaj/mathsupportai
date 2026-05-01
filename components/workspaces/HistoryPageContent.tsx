@@ -196,20 +196,6 @@ function getAudienceLabel(value: string) {
   return value ? value.charAt(0).toUpperCase() + value.slice(1) : 'Unknown';
 }
 
-function getDefaultOpenSubject({
-  selectedConversation,
-  conversationGroups
-}: {
-  selectedConversation: ConversationRecord | null;
-  conversationGroups: ConversationGroup[];
-}) {
-  if (selectedConversation?.subject) {
-    return selectedConversation.subject;
-  }
-
-  return conversationGroups.find((group) => group.conversations.length > 0)?.subject || '';
-}
-
 export default async function HistoryPageContent({
   searchParams,
   historyHref = '/history',
@@ -335,10 +321,9 @@ export default async function HistoryPageContent({
 
   const conversationGroups = buildConversationGroups(conversations);
   const isGlobalHistory = !subject;
-  const defaultOpenSubject = getDefaultOpenSubject({
-    selectedConversation,
-    conversationGroups
-  });
+
+  const defaultOpenSubject =
+    selectedConversationId && selectedConversation ? selectedConversation.subject : '';
 
   return (
     <div className="grid" style={{ gap: 24 }}>
