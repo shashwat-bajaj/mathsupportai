@@ -3,6 +3,12 @@ import { plans } from '@/lib/plans';
 
 const comparisonRows = [
   {
+    label: 'Main purpose',
+    free: 'Try the tutor',
+    plus: 'Regular study + worksheets',
+    pro: 'Deep revision + advanced tools'
+  },
+  {
     label: 'Tutor requests',
     free: '10/day',
     plus: '100/day',
@@ -13,6 +19,12 @@ const comparisonRows = [
     free: 'Not included',
     plus: '100/month',
     pro: '500/month'
+  },
+  {
+    label: 'Worksheet/photo help',
+    free: 'Not included',
+    plus: 'Included',
+    pro: 'Advanced'
   },
   {
     label: 'Student workspaces',
@@ -39,22 +51,28 @@ const comparisonRows = [
     pro: 'Highest allowance'
   },
   {
-    label: 'Math graphing',
-    free: 'Included',
-    plus: 'Included',
-    pro: 'Included'
-  },
-  {
     label: 'Read aloud and translation',
-    free: 'Included',
-    plus: 'Included',
-    pro: 'Included'
+    free: 'Basic access',
+    plus: 'Higher access',
+    pro: 'Highest access'
   },
   {
-    label: 'Worksheet/photo help',
-    free: 'Not included',
+    label: 'Practice generation',
+    free: 'Basic prompts',
     plus: 'Included',
     pro: 'Advanced'
+  },
+  {
+    label: 'Mistake tracking',
+    free: 'Not included',
+    plus: 'Basic diagnosis',
+    pro: 'Mistake Map planned'
+  },
+  {
+    label: 'Revision workflows',
+    free: 'Not included',
+    plus: 'Guided practice',
+    pro: 'Revision Mode planned'
   },
   {
     label: 'Advanced subject tools',
@@ -65,6 +83,10 @@ const comparisonRows = [
 ];
 
 export default function PricingPageContent() {
+  const freePlan = plans.find((plan) => plan.key === 'free');
+  const plusPlan = plans.find((plan) => plan.key === 'plus');
+  const proPlan = plans.find((plan) => plan.key === 'pro');
+
   return (
     <div className="grid" style={{ gap: 24 }}>
       <Reveal delay={0.02}>
@@ -73,16 +95,46 @@ export default function PricingPageContent() {
 
           <div style={{ display: 'grid', gap: 10 }}>
             <h1 style={{ margin: 0 }}>Choose the support level that fits how you study.</h1>
-            <p className="small" style={{ margin: 0, maxWidth: 860 }}>
-              TutoVera is currently in free beta. These tiers define the planned product structure
-              for launch, with paid plans designed around higher usage, longer history, and
-              paid-only image and worksheet support.
+            <p className="small" style={{ margin: 0, maxWidth: 900 }}>
+              TutoVera is currently in free beta. These tiers define the planned launch structure:
+              Free helps users try the tutor, Plus unlocks worksheet/photo support for regular
+              study, and Pro is designed for deeper revision, mistake patterns, and advanced tools.
             </p>
           </div>
         </section>
       </Reveal>
 
-      <Reveal delay={0.08}>
+      <Reveal delay={0.06}>
+        <section className="grid cols-3">
+          <div className="card innerFeatureCard">
+            <span className="badge">Free</span>
+            <h3 style={{ marginBottom: 8 }}>Try the tutor</h3>
+            <p className="small" style={{ margin: 0 }}>
+              Text-based help across every subject branch with basic history and core tutor access.
+            </p>
+          </div>
+
+          <div className="card innerFeatureCard" style={{ borderColor: 'var(--accent-border)' }}>
+            <span className="badge">Plus</span>
+            <h3 style={{ marginBottom: 8 }}>Learn from worksheets and photos</h3>
+            <p className="small" style={{ margin: 0 }}>
+              The main paid plan for regular students and parents who want image support, guided
+              practice, and extended history.
+            </p>
+          </div>
+
+          <div className="card innerFeatureCard">
+            <span className="badge">Pro</span>
+            <h3 style={{ marginBottom: 8 }}>Build a deeper study system</h3>
+            <p className="small" style={{ margin: 0 }}>
+              A higher-access plan for revision workflows, repeated mistake patterns, advanced
+              tools, and heavier study usage.
+            </p>
+          </div>
+        </section>
+      </Reveal>
+
+      <Reveal delay={0.1}>
         <section className="grid cols-3">
           {plans.map((plan) => (
             <div
@@ -116,6 +168,10 @@ export default function PricingPageContent() {
 
                 <p className="small" style={{ margin: 0 }}>
                   {plan.description}
+                </p>
+
+                <p className="small" style={{ margin: 0 }}>
+                  <strong>{plan.positioning}</strong>
                 </p>
               </div>
 
@@ -155,6 +211,24 @@ export default function PricingPageContent() {
                 </div>
               </div>
 
+              <div
+                className="grid"
+                style={{
+                  gap: 10,
+                  paddingTop: 12,
+                  borderTop: '1px solid var(--border)'
+                }}
+              >
+                <p className="small" style={{ margin: 0 }}>
+                  <strong>Why users choose this plan</strong>
+                </p>
+                <ul className="list" style={{ marginTop: 0 }}>
+                  {plan.paidValue.map((feature) => (
+                    <li key={feature}>{feature}</li>
+                  ))}
+                </ul>
+              </div>
+
               <ul className="list" style={{ marginTop: 0 }}>
                 {plan.features.map((feature) => (
                   <li key={feature}>{feature}</li>
@@ -171,7 +245,47 @@ export default function PricingPageContent() {
         </section>
       </Reveal>
 
-      <Reveal delay={0.14}>
+      <Reveal delay={0.16}>
+        <section className="card spotlightCard" style={{ display: 'grid', gap: 18 }}>
+          <div style={{ display: 'grid', gap: 8 }}>
+            <span className="badge">Paid plan value</span>
+            <h2 style={{ margin: 0 }}>The paid tiers are built around learning workflows, not just more answers.</h2>
+            <p className="small" style={{ margin: 0, maxWidth: 900 }}>
+              TutoVera should not compete only as another answer generator. The planned paid value is
+              worksheet/photo support, guided practice, parent-friendly help, mistake diagnosis,
+              saved continuity, and deeper revision workflows over time.
+            </p>
+          </div>
+
+          <div className="grid cols-3">
+            <div className="card innerFeatureCard">
+              <h3 style={{ marginTop: 0 }}>{freePlan?.name}: Try</h3>
+              <p className="small" style={{ marginBottom: 0 }}>
+                Free gives users enough access to understand the platform, ask text questions, and
+                see the learning flow.
+              </p>
+            </div>
+
+            <div className="card innerFeatureCard" style={{ borderColor: 'var(--accent-border)' }}>
+              <h3 style={{ marginTop: 0 }}>{plusPlan?.name}: Study</h3>
+              <p className="small" style={{ marginBottom: 0 }}>
+                Plus is the main conversion tier because worksheet/photo help is concrete,
+                practical, and valuable for regular homework support.
+              </p>
+            </div>
+
+            <div className="card innerFeatureCard">
+              <h3 style={{ marginTop: 0 }}>{proPlan?.name}: Improve</h3>
+              <p className="small" style={{ marginBottom: 0 }}>
+                Pro is designed around deeper revision, mistake patterns, and advanced tools that
+                help users improve over time.
+              </p>
+            </div>
+          </div>
+        </section>
+      </Reveal>
+
+      <Reveal delay={0.22}>
         <section className="card" style={{ display: 'grid', gap: 18 }}>
           <div style={{ display: 'grid', gap: 8 }}>
             <span className="badge">Compare plans</span>
@@ -208,7 +322,7 @@ export default function PricingPageContent() {
         </section>
       </Reveal>
 
-      <Reveal delay={0.2}>
+      <Reveal delay={0.28}>
         <section className="card spotlightCard" style={{ display: 'grid', gap: 16 }}>
           <div style={{ display: 'grid', gap: 8 }}>
             <h2 style={{ margin: 0 }}>Why image support is paid-only</h2>
@@ -245,7 +359,7 @@ export default function PricingPageContent() {
 
           .pricingTable {
             width: 100%;
-            min-width: 720px;
+            min-width: 760px;
             border-collapse: collapse;
           }
 

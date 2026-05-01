@@ -9,6 +9,7 @@ export type Plan = {
   annualNote: string;
   description: string;
   audience: string;
+  positioning: string;
   highlighted: boolean;
   ctaLabel: string;
   ctaHref: string;
@@ -18,19 +19,22 @@ export type Plan = {
     savedConversations: string;
   };
   features: string[];
+  paidValue: string[];
+  futureTools: string[];
 };
 
 export const plans: Plan[] = [
   {
     key: 'free',
     name: 'Free',
-    badge: 'Start here',
+    badge: 'Try TutoVera',
     monthlyPrice: '$0',
     annualPrice: '$0',
     annualNote: 'Free beta access',
     description:
       'A simple way to try TutoVera across all subject branches with text-based tutoring and basic saved history.',
     audience: 'Best for light use, testing the platform, and occasional study support.',
+    positioning: 'Try the tutor and see how the learning flow works.',
     highlighted: false,
     ctaLabel: 'Start Free',
     ctaHref: '/tutor',
@@ -44,12 +48,22 @@ export const plans: Plan[] = [
       'Student workspaces',
       'Parent workspaces',
       'Text-based tutoring',
-      'Saved history with limits',
-      'Read aloud',
-      'Translation',
+      'Basic saved history',
+      'Basic read aloud access',
+      'Basic translation access',
       'Math graphing',
       'Tables and math formatting',
       'No image upload or worksheet-photo support'
+    ],
+    paidValue: [
+      'Good for trying the platform',
+      'Helpful for occasional text questions',
+      'Limited enough that regular users have a reason to upgrade'
+    ],
+    futureTools: [
+      'Upgrade for worksheet/photo support',
+      'Upgrade for deeper revision workflows',
+      'Upgrade for higher usage and longer saved history'
     ]
   },
   {
@@ -60,8 +74,9 @@ export const plans: Plan[] = [
     annualPrice: '$99.99/year',
     annualNote: 'Annual plan saves about 2 months',
     description:
-      'For regular students and parents who want higher usage, longer history, and paid-only image support.',
+      'For regular students and parents who want worksheet/photo support, higher usage, guided practice, and longer saved history.',
     audience: 'Best for students, parents, and families using TutoVera regularly.',
+    positioning: 'The main study plan for regular homework, worksheets, and guided practice.',
     highlighted: true,
     ctaLabel: 'Join Plus Waitlist',
     ctaHref: '/contact',
@@ -79,20 +94,33 @@ export const plans: Plan[] = [
       'Mistake diagnosis',
       'Practice generation',
       'Parent support across all subjects',
-      'Priority beta access',
+      'Higher read aloud and translation access',
       'Better fit for regular study routines'
+    ],
+    paidValue: [
+      'Upload worksheet photos and screenshots',
+      'Turn mistakes into guided explanations',
+      'Generate practice from the topic or question',
+      'Keep more study history across subjects'
+    ],
+    futureTools: [
+      'Worksheet/photo support',
+      'Practice set generation',
+      'Mistake-focused follow-up prompts',
+      'Stronger parent support workflows'
     ]
   },
   {
     key: 'pro',
     name: 'Pro',
-    badge: 'Highest access',
+    badge: 'Deep study',
     monthlyPrice: '$19.99',
     annualPrice: '$199.99/year',
     annualNote: 'Annual plan saves about 2 months',
     description:
-      'For heavier study, larger image usage, advanced workflows, and early access to future subject tools.',
+      'For heavier study, larger worksheet/photo usage, deeper revision workflows, and early access to advanced subject tools.',
     audience: 'Best for serious users, heavier study periods, and advanced learning workflows.',
+    positioning: 'The deeper study system for revision, mistake patterns, and advanced tools.',
     highlighted: false,
     ctaLabel: 'Join Pro Waitlist',
     ctaHref: '/contact',
@@ -112,6 +140,19 @@ export const plans: Plan[] = [
       'Early access to simulators and diagrams',
       'Best access for future premium tools',
       'Generous high-usage limits without calling it unlimited'
+    ],
+    paidValue: [
+      'Build revision from saved sessions',
+      'Track repeated mistake patterns over time',
+      'Generate deeper practice and review flows',
+      'Use the highest access tier for advanced tools'
+    ],
+    futureTools: [
+      'Mistake Map',
+      'Revision Mode',
+      'Exam Prep Mode',
+      'Advanced diagrams and simulators',
+      'Deeper subject-specific toolkits'
     ]
   }
 ];
