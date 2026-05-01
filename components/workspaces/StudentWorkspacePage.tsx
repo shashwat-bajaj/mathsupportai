@@ -1,6 +1,6 @@
 import { createAdminSupabase } from '@/lib/supabase-admin';
 import { createClient as createAuthClient } from '@/lib/supabase/server';
-import MathTutor from '@/components/MathTutor';
+import SubjectTutor from '@/components/SubjectTutor';
 import ConversationThread from '@/components/ConversationThread';
 import DeleteConversationButton from '@/components/DeleteConversationButton';
 import Reveal from '@/components/Reveal';
@@ -226,7 +226,7 @@ export default async function StudentWorkspacePage({
         </Reveal>
 
         <Reveal delay={0.08}>
-          <MathTutor
+          <SubjectTutor
             subject={subjectConfig.key}
             audience="student"
             title={`Tutor Support for ${subjectConfig.name} Students`}
@@ -362,7 +362,7 @@ export default async function StudentWorkspacePage({
 
           <Reveal delay={0.14}>
             <main style={{ display: 'grid', gap: 18, minWidth: 0 }}>
-              <MathTutor
+              <SubjectTutor
                 subject={subjectConfig.key}
                 audience="student"
                 initialConversationId={selectedConversation?.id || null}

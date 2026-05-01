@@ -13,7 +13,7 @@ import {
   isGraphReferenceRequest
 } from '@/lib/graphing';
 
-type MathTutorProps = {
+type SubjectTutorProps = {
   subject?: SubjectKey;
   audience?: 'student' | 'parent';
   lockedMode?: 'auto' | 'teach' | 'hint' | 'diagnose' | 'quiz';
@@ -214,7 +214,7 @@ function getFollowUpSuggestions(args: {
   ];
 }
 
-export default function MathTutor({
+export default function SubjectTutor({
   subject = 'math',
   audience = 'student',
   lockedMode,
@@ -223,7 +223,7 @@ export default function MathTutor({
   placeholder,
   initialConversationId = null,
   newSessionHref
-}: MathTutorProps) {
+}: SubjectTutorProps) {
   const router = useRouter();
   const questionRef = useRef<HTMLTextAreaElement | null>(null);
 
