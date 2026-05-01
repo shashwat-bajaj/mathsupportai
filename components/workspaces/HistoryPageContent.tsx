@@ -3,7 +3,7 @@ import { createClient as createAuthClient } from '@/lib/supabase/server';
 import DeleteConversationButton from '@/components/DeleteConversationButton';
 import ConversationThread from '@/components/ConversationThread';
 import Reveal from '@/components/Reveal';
-import { getSubjectConfig, type SubjectKey } from '@/lib/subjects';
+import { getSubjectConfig, subjectKeys, type SubjectKey } from '@/lib/subjects';
 
 type ConversationRecord = {
   id: string;
@@ -163,7 +163,6 @@ function getEmptyMessage(subject?: SubjectKey) {
 }
 
 function buildConversationGroups(conversations: ConversationRecord[]): ConversationGroup[] {
-  const preferredOrder = ['math', 'physics', 'chemistry', 'biology'];
   const grouped = new Map<string, ConversationRecord[]>();
 
   for (const conversation of conversations) {
@@ -173,24 +172,42 @@ function buildConversationGroups(conversations: ConversationRecord[]): Conversat
     grouped.set(key, existing);
   }
 
-  const orderedSubjects = [
-    ...preferredOrder.filter((key) => grouped.has(key)),
-    ...Array.from(grouped.keys())
-      .filter((key) => !preferredOrder.includes(key))
-      .sort()
-  ];
-
-  return orderedSubjects.map((subjectKey) => ({
+  const knownGroups = subjectKeys.map((subjectKey) => ({
     subject: subjectKey,
     subjectName: getSubjectName(subjectKey),
     conversations: grouped.get(subjectKey) || []
   }));
+
+  const unknownGroups = Array.from(grouped.keys())
+    .filter((key) => !subjectKeys.includes(key as SubjectKey))
+    .sort()
+    .map((subjectKey) => ({
+      subject: subjectKey,
+      subjectName: getSubjectName(subjectKey),
+      conversations: grouped.get(subjectKey) || []
+    }));
+
+  return [...knownGroups, ...unknownGroups];
 }
 
 function getAudienceLabel(value: string) {
   if (value === 'parent') return 'Parent';
   if (value === 'student') return 'Student';
   return value ? value.charAt(0).toUpperCase() + value.slice(1) : 'Unknown';
+}
+
+function getDefaultOpenSubject({
+  selectedConversation,
+  conversationGroups
+}: {
+  selectedConversation: ConversationRecord | null;
+  conversationGroups: ConversationGroup[];
+}) {
+  if (selectedConversation?.subject) {
+    return selectedConversation.subject;
+  }
+
+  return conversationGroups.find((group) => group.conversations.length > 0)?.subject || '';
 }
 
 export default async function HistoryPageContent({
@@ -318,6 +335,10 @@ export default async function HistoryPageContent({
 
   const conversationGroups = buildConversationGroups(conversations);
   const isGlobalHistory = !subject;
+  const defaultOpenSubject = getDefaultOpenSubject({
+    selectedConversation,
+    conversationGroups
+  });
 
   return (
     <div className="grid" style={{ gap: 24 }}>
@@ -443,62 +464,81 @@ export default async function HistoryPageContent({
               </div>
 
               {isGlobalHistory ? (
-                <div className="subjectHistoryGroups">
+                <div className="subjectHistoryAccordion">
                   {conversationGroups.map((group) => (
-                    <div key={group.subject} className="subjectHistoryGroup">
-                      <div className="subjectHistoryGroupHeader">
-                        <span className="badge">{group.subjectName}</span>
-                        <p className="small" style={{ margin: 0 }}>
-                          {group.conversations.length}{' '}
-                          {group.conversations.length === 1 ? 'session' : 'sessions'}
-                        </p>
-                      </div>
+                    <details
+                      key={group.subject}
+                      className="subjectHistoryDetails"
+                      open={group.subject === defaultOpenSubject}
+                    >
+                      <summary className="subjectHistorySummary">
+                        <span className="subjectHistorySummaryMain">
+                          <span className="badge">{group.subjectName}</span>
+                          <span className="small">
+                            {group.conversations.length}{' '}
+                            {group.conversations.length === 1 ? 'session' : 'sessions'}
+                          </span>
+                        </span>
+                      </summary>
 
-                      <div className="sessionList">
-                        {group.conversations.map((conversation) => {
-                          const isActive = selectedConversation?.id === conversation.id;
-                          const firstPrompt =
-                            firstPromptByConversation[conversation.id] ||
-                            conversation.title ||
-                            'Untitled conversation';
+                      <div className="subjectHistoryPanel">
+                        {group.conversations.length === 0 ? (
+                          <div className="card questionSurface" style={{ padding: 14 }}>
+                            <p className="small" style={{ margin: 0 }}>
+                              No saved {group.subjectName.toLowerCase()} sessions yet.
+                            </p>
+                          </div>
+                        ) : (
+                          <div className="sessionList">
+                            {group.conversations.map((conversation) => {
+                              const isActive = selectedConversation?.id === conversation.id;
+                              const firstPrompt =
+                                firstPromptByConversation[conversation.id] ||
+                                conversation.title ||
+                                'Untitled conversation';
 
-                          const href = buildHistoryHref({
-                            historyHref,
-                            historyMode,
-                            fallbackEmail,
-                            conversationId: conversation.id
-                          });
+                              const href = buildHistoryHref({
+                                historyHref,
+                                historyMode,
+                                fallbackEmail,
+                                conversationId: conversation.id
+                              });
 
-                          return (
-                            <div
-                              key={conversation.id}
-                              className={`sessionItem ${isActive ? 'active' : ''}`}
-                              style={{ display: 'grid', gap: 8 }}
-                            >
-                              <a href={href}>
-                                <p className="small" style={{ margin: '0 0 6px' }}>
-                                  <strong>{makePreview(firstPrompt)}</strong>
-                                </p>
-                                <p className="small" style={{ margin: 0 }}>
-                                  {getAudienceLabel(conversation.audience)} • Updated{' '}
-                                  {formatDate(conversation.updated_at)}
-                                </p>
-                              </a>
+                              return (
+                                <div
+                                  key={conversation.id}
+                                  className={`sessionItem ${isActive ? 'active' : ''}`}
+                                  style={{ display: 'grid', gap: 8 }}
+                                >
+                                  <a href={href}>
+                                    <p className="small" style={{ margin: '0 0 6px' }}>
+                                      <strong>{makePreview(firstPrompt)}</strong>
+                                    </p>
+                                    <p className="small" style={{ margin: 0 }}>
+                                      {getAudienceLabel(conversation.audience)} • Updated{' '}
+                                      {formatDate(conversation.updated_at)}
+                                    </p>
+                                  </a>
 
-                              {historyMode === 'account' ? (
-                                <div className="buttonRow" style={{ justifyContent: 'flex-start' }}>
-                                  <DeleteConversationButton
-                                    conversationId={conversation.id}
-                                    redirectHref={historyHref}
-                                    compact
-                                  />
+                                  {historyMode === 'account' ? (
+                                    <div
+                                      className="buttonRow"
+                                      style={{ justifyContent: 'flex-start' }}
+                                    >
+                                      <DeleteConversationButton
+                                        conversationId={conversation.id}
+                                        redirectHref={historyHref}
+                                        compact
+                                      />
+                                    </div>
+                                  ) : null}
                                 </div>
-                              ) : null}
-                            </div>
-                          );
-                        })}
+                              );
+                            })}
+                          </div>
+                        )}
                       </div>
-                    </div>
+                    </details>
                   ))}
                 </div>
               ) : (
@@ -629,29 +669,52 @@ export default async function HistoryPageContent({
             width: 100%;
           }
 
-          .subjectHistoryGroups {
+          .subjectHistoryAccordion {
             display: grid;
-            gap: 18px;
+            gap: 10px;
           }
 
-          .subjectHistoryGroup {
-            display: grid;
-            gap: 12px;
-            padding-top: 14px;
-            border-top: 1px solid var(--border);
+          .subjectHistoryDetails {
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: color-mix(in srgb, var(--surface-soft) 88%, transparent);
+            overflow: hidden;
           }
 
-          .subjectHistoryGroup:first-child {
-            padding-top: 0;
-            border-top: 0;
+          .subjectHistorySummary {
+            cursor: pointer;
+            list-style: none;
+            padding: 13px 14px;
           }
 
-          .subjectHistoryGroupHeader {
+          .subjectHistorySummary::-webkit-details-marker {
+            display: none;
+          }
+
+          .subjectHistorySummary::after {
+            content: '+';
+            float: right;
+            color: var(--text-soft);
+            font-weight: 700;
+            margin-top: 4px;
+          }
+
+          .subjectHistoryDetails[open] .subjectHistorySummary::after {
+            content: '−';
+          }
+
+          .subjectHistorySummaryMain {
             display: flex;
-            justify-content: space-between;
-            gap: 12px;
+            gap: 10px;
             align-items: center;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            padding-right: 18px;
+          }
+
+          .subjectHistoryPanel {
+            display: grid;
+            gap: 12px;
+            padding: 0 14px 14px;
           }
 
           @media (max-width: 760px) {
