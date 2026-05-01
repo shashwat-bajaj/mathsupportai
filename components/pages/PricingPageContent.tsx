@@ -2,82 +2,133 @@ import { plans } from '@/lib/plans';
 
 const comparisonRows = [
   {
-    label: 'Main purpose',
-    free: 'Try the tutor',
-    plus: 'Regular study + worksheets',
-    pro: 'Deep revision + advanced tools'
+    group: 'Included in every plan',
+    rows: [
+      {
+        label: 'All subjects',
+        free: 'Included',
+        plus: 'Included',
+        pro: 'Included'
+      },
+      {
+        label: 'Student workspaces',
+        free: 'Included',
+        plus: 'Included',
+        pro: 'Included'
+      },
+      {
+        label: 'Parent workspaces',
+        free: 'Included',
+        plus: 'Included',
+        pro: 'Included'
+      },
+      {
+        label: 'Text-based tutoring',
+        free: 'Included',
+        plus: 'Included',
+        pro: 'Included'
+      },
+      {
+        label: 'Math graphing',
+        free: 'Included',
+        plus: 'Included',
+        pro: 'Included'
+      },
+      {
+        label: 'Tables and math formatting',
+        free: 'Included',
+        plus: 'Included',
+        pro: 'Included'
+      },
+      {
+        label: 'Saved history',
+        free: 'Basic',
+        plus: 'Extended',
+        pro: 'Highest allowance'
+      },
+      {
+        label: 'Read aloud and translation',
+        free: 'Basic access',
+        plus: 'Higher access',
+        pro: 'Highest access'
+      },
+      {
+        label: 'Tutor requests',
+        free: '10/day',
+        plus: '100/day',
+        pro: '300/day'
+      }
+    ]
   },
   {
-    label: 'Tutor requests',
-    free: '10/day',
-    plus: '100/day',
-    pro: '300/day'
+    group: 'Included in Plus and Pro',
+    rows: [
+      {
+        label: 'Image uploads',
+        free: 'Not included',
+        plus: '100/month',
+        pro: '500/month'
+      },
+      {
+        label: 'Worksheet/photo help',
+        free: 'Not included',
+        plus: 'Included',
+        pro: 'Advanced'
+      },
+      {
+        label: 'Practice generation',
+        free: 'Basic prompts',
+        plus: 'Included',
+        pro: 'Advanced'
+      },
+      {
+        label: 'Mistake diagnosis',
+        free: 'Not included',
+        plus: 'Basic diagnosis',
+        pro: 'Advanced diagnosis'
+      },
+      {
+        label: 'Longer saved continuity',
+        free: 'Limited',
+        plus: 'Included',
+        pro: 'Highest access'
+      }
+    ]
   },
   {
-    label: 'Image uploads',
-    free: 'Not included',
-    plus: '100/month',
-    pro: '500/month'
-  },
-  {
-    label: 'Worksheet/photo help',
-    free: 'Not included',
-    plus: 'Included',
-    pro: 'Advanced'
-  },
-  {
-    label: 'Student workspaces',
-    free: 'Included',
-    plus: 'Included',
-    pro: 'Included'
-  },
-  {
-    label: 'Parent workspaces',
-    free: 'Included',
-    plus: 'Included',
-    pro: 'Included'
-  },
-  {
-    label: 'All subjects',
-    free: 'Included',
-    plus: 'Included',
-    pro: 'Included'
-  },
-  {
-    label: 'Saved history',
-    free: 'Basic',
-    plus: 'Extended',
-    pro: 'Highest allowance'
-  },
-  {
-    label: 'Read aloud and translation',
-    free: 'Basic access',
-    plus: 'Higher access',
-    pro: 'Highest access'
-  },
-  {
-    label: 'Practice generation',
-    free: 'Basic prompts',
-    plus: 'Included',
-    pro: 'Advanced'
-  },
-  {
-    label: 'Mistake tracking',
-    free: 'Not included',
-    plus: 'Basic diagnosis',
-    pro: 'Mistake Map planned'
-  },
-  {
-    label: 'Revision workflows',
-    free: 'Not included',
-    plus: 'Guided practice',
-    pro: 'Revision Mode planned'
-  },
-  {
-    label: 'Advanced subject tools',
-    free: 'Not included',
-    plus: 'Early access',
-    pro: 'Highest access'
+    group: 'Pro-focused advantages',
+    rows: [
+      {
+        label: 'Advanced worksheet/photo help',
+        free: 'Not included',
+        plus: 'Standard',
+        pro: 'Advanced'
+      },
+      {
+        label: 'Revision workflows',
+        free: 'Not included',
+        plus: 'Guided practice',
+        pro: 'Revision Mode planned'
+      },
+      {
+        label: 'Mistake pattern tools',
+        free: 'Not included',
+        plus: 'Basic',
+        pro: 'Mistake Map planned'
+      },
+      {
+        label: 'Advanced subject tools',
+        free: 'Not included',
+        plus: 'Early access',
+        pro: 'Highest access'
+      },
+      {
+        label: 'Future diagrams and simulators',
+        free: 'Not included',
+        plus: 'Limited early access',
+        pro: 'Highest access'
+      }
+    ]
   }
 ];
 
@@ -114,6 +165,18 @@ function getPlanKeyPoints(planKey: string) {
   ];
 }
 
+function getPlanShortDescription(planKey: string) {
+  if (planKey === 'free') {
+    return 'A simple way to try TutoVera with text-based tutoring and basic saved history.';
+  }
+
+  if (planKey === 'plus') {
+    return 'The main study plan for regular users who want worksheets, photos, and guided practice.';
+  }
+
+  return 'A deeper study plan for heavier usage, revision workflows, and advanced subject tools.';
+}
+
 export default function PricingPageContent() {
   return (
     <div className="grid" style={{ gap: 24 }}>
@@ -130,51 +193,45 @@ export default function PricingPageContent() {
         </div>
       </section>
 
-      <section className="grid cols-3">
+      <section className="pricingCards">
         {plans.map((plan) => (
           <div
             key={plan.key}
             className="card featureCard pricingPlanCard"
             style={{
-              borderColor: plan.highlighted ? 'var(--accent-border)' : 'var(--border)',
-              display: 'grid',
-              gap: 16
+              borderColor: plan.highlighted ? 'var(--accent-border)' : 'var(--border)'
             }}
           >
-            <div style={{ display: 'grid', gap: 10 }}>
+            <div className="pricingCardHeader">
               <span className="badge">{plan.badge}</span>
 
-              <div>
+              <div className="pricingPlanTitleBlock">
                 <h2 style={{ margin: 0 }}>{plan.name}</h2>
                 <p className="small" style={{ margin: '6px 0 0' }}>
                   <strong>{getPlanHeadline(plan.key)}</strong>
                 </p>
               </div>
 
-              <div>
+              <div className="pricingPriceBlock">
                 <div className="price">{plan.monthlyPrice}</div>
                 <p className="small" style={{ margin: 0 }}>
                   per month
                 </p>
                 <p className="small" style={{ margin: '6px 0 0' }}>
-                  <strong>{plan.annualPrice}</strong> · {plan.annualNote}
+                  <strong>{plan.annualPrice}</strong>
+                </p>
+                <p className="small" style={{ margin: '4px 0 0' }}>
+                  {plan.annualNote}
                 </p>
               </div>
 
-              <p className="small" style={{ margin: 0 }}>
-                {plan.description}
+              <p className="small pricingDescription">
+                {getPlanShortDescription(plan.key)}
               </p>
             </div>
 
-            <div
-              className="grid"
-              style={{
-                gap: 10,
-                paddingTop: 12,
-                borderTop: '1px solid var(--border)'
-              }}
-            >
-              <div className="card questionSurface" style={{ padding: 14 }}>
+            <div className="pricingMiniStats">
+              <div className="card questionSurface pricingMiniStat">
                 <p className="small" style={{ margin: '0 0 4px' }}>
                   <strong>Tutor requests</strong>
                 </p>
@@ -183,7 +240,7 @@ export default function PricingPageContent() {
                 </p>
               </div>
 
-              <div className="card questionSurface" style={{ padding: 14 }}>
+              <div className="card questionSurface pricingMiniStat">
                 <p className="small" style={{ margin: '0 0 4px' }}>
                   <strong>Image support</strong>
                 </p>
@@ -192,7 +249,7 @@ export default function PricingPageContent() {
                 </p>
               </div>
 
-              <div className="card questionSurface" style={{ padding: 14 }}>
+              <div className="card questionSurface pricingMiniStat">
                 <p className="small" style={{ margin: '0 0 4px' }}>
                   <strong>Saved history</strong>
                 </p>
@@ -202,45 +259,31 @@ export default function PricingPageContent() {
               </div>
             </div>
 
-            <div
-              className="grid"
-              style={{
-                gap: 10,
-                paddingTop: 12,
-                borderTop: '1px solid var(--border)'
-              }}
-            >
+            <div className="pricingFeatureBlock">
               <p className="small" style={{ margin: 0 }}>
                 <strong>Key features</strong>
               </p>
 
-              <ul className="list" style={{ marginTop: 0 }}>
+              <ul className="list pricingFeatureList">
                 {getPlanKeyPoints(plan.key).map((feature) => (
                   <li key={feature}>{feature}</li>
                 ))}
               </ul>
             </div>
 
-            <div
-              className="grid"
-              style={{
-                gap: 10,
-                paddingTop: 12,
-                borderTop: '1px solid var(--border)'
-              }}
-            >
+            <div className="pricingFeatureBlock">
               <p className="small" style={{ margin: 0 }}>
                 <strong>Why users choose this plan</strong>
               </p>
 
-              <ul className="list" style={{ marginTop: 0 }}>
-                {plan.paidValue.slice(0, 4).map((feature) => (
+              <ul className="list pricingFeatureList">
+                {plan.paidValue.slice(0, 3).map((feature) => (
                   <li key={feature}>{feature}</li>
                 ))}
               </ul>
             </div>
 
-            <div className="buttonRow" style={{ marginTop: 'auto' }}>
+            <div className="buttonRow pricingButtonRow">
               <a className={plan.key === 'free' ? 'btn secondary' : 'btn'} href={plan.ctaHref}>
                 {plan.ctaLabel}
               </a>
@@ -290,8 +333,8 @@ export default function PricingPageContent() {
             <div style={{ display: 'grid', gap: 8 }}>
               <h2 style={{ margin: 0 }}>What changes when users upgrade?</h2>
               <p className="small" style={{ margin: 0, maxWidth: 860 }}>
-                The free plan is designed for trying TutoVera. Paid plans are designed for regular
-                study, image-based help, longer saved history, and future advanced subject tools.
+                The comparison is grouped by inclusiveness: features included in every plan first,
+                then Plus and Pro features, then Pro-focused advantages.
               </p>
             </div>
 
@@ -307,13 +350,21 @@ export default function PricingPageContent() {
                 </thead>
 
                 <tbody>
-                  {comparisonRows.map((row) => (
-                    <tr key={row.label}>
-                      <td>{row.label}</td>
-                      <td>{row.free}</td>
-                      <td>{row.plus}</td>
-                      <td>{row.pro}</td>
-                    </tr>
+                  {comparisonRows.map((group) => (
+                    <>
+                      <tr key={group.group} className="pricingTableGroupRow">
+                        <td colSpan={4}>{group.group}</td>
+                      </tr>
+
+                      {group.rows.map((row) => (
+                        <tr key={`${group.group}-${row.label}`}>
+                          <td>{row.label}</td>
+                          <td>{row.free}</td>
+                          <td>{row.plus}</td>
+                          <td>{row.pro}</td>
+                        </tr>
+                      ))}
+                    </>
                   ))}
                 </tbody>
               </table>
@@ -347,8 +398,65 @@ export default function PricingPageContent() {
 
       <style>
         {`
+          .pricingCards {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            align-items: stretch;
+            width: 100%;
+          }
+
           .pricingPlanCard {
+            display: grid;
+            gap: 16px;
             align-content: start;
+            min-width: 0;
+          }
+
+          .pricingCardHeader {
+            display: grid;
+            gap: 12px;
+            min-height: 300px;
+            align-content: start;
+          }
+
+          .pricingPlanTitleBlock {
+            min-height: 72px;
+          }
+
+          .pricingPriceBlock {
+            min-height: 118px;
+          }
+
+          .pricingDescription {
+            margin: 0;
+            min-height: 72px;
+          }
+
+          .pricingMiniStats {
+            display: grid;
+            gap: 10px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+          }
+
+          .pricingMiniStat {
+            padding: 14px;
+          }
+
+          .pricingFeatureBlock {
+            display: grid;
+            gap: 10px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+          }
+
+          .pricingFeatureList {
+            margin-top: 0;
+          }
+
+          .pricingButtonRow {
+            margin-top: auto;
           }
 
           .pricingCompareDetails {
@@ -425,8 +533,27 @@ export default function PricingPageContent() {
             color: var(--text-soft);
           }
 
+          .pricingTableGroupRow td {
+            color: var(--text);
+            font-weight: 750;
+            background: color-mix(in srgb, var(--accent-soft) 72%, transparent);
+          }
+
           .pricingTable tr:last-child td {
             border-bottom: 0;
+          }
+
+          @media (max-width: 1100px) {
+            .pricingCards {
+              grid-template-columns: 1fr;
+            }
+
+            .pricingCardHeader,
+            .pricingPlanTitleBlock,
+            .pricingPriceBlock,
+            .pricingDescription {
+              min-height: 0;
+            }
           }
 
           @media (max-width: 760px) {
