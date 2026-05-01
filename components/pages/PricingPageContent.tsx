@@ -180,7 +180,7 @@ function getPlanShortDescription(planKey: string) {
 
 export default function PricingPageContent() {
   return (
-    <div className="grid" style={{ gap: 24 }}>
+    <div className="pricingPage grid" style={{ gap: 24 }}>
       <section className="card spotlightCard" style={{ display: 'grid', gap: 14 }}>
         <span className="badge">Pricing</span>
 
@@ -194,101 +194,103 @@ export default function PricingPageContent() {
         </div>
       </section>
 
-      <section className="pricingCards" aria-label="Pricing plans">
-        {plans.map((plan) => (
-          <div
-            key={plan.key}
-            className="card featureCard pricingPlanCard"
-            style={{
-              borderColor: plan.highlighted ? 'var(--accent-border)' : 'var(--border)'
-            }}
-          >
-            <div className="pricingCardTop">
-              <span className="badge">{plan.badge}</span>
+      <section className="pricingCardsSection" aria-label="Pricing plans">
+        <div className="pricingCards">
+          {plans.map((plan) => (
+            <div
+              key={plan.key}
+              className="card featureCard pricingPlanCard"
+              style={{
+                borderColor: plan.highlighted ? 'var(--accent-border)' : 'var(--border)'
+              }}
+            >
+              <div className="pricingCardTop">
+                <span className="badge">{plan.badge}</span>
 
-              <div className="pricingPlanTitleBlock">
-                <h2 style={{ margin: 0 }}>{plan.name}</h2>
-                <p className="small" style={{ margin: '6px 0 0' }}>
-                  <strong>{getPlanHeadline(plan.key)}</strong>
-                </p>
+                <div className="pricingPlanTitleBlock">
+                  <h2 style={{ margin: 0 }}>{plan.name}</h2>
+                  <p className="small" style={{ margin: '6px 0 0' }}>
+                    <strong>{getPlanHeadline(plan.key)}</strong>
+                  </p>
+                </div>
+
+                <div className="pricingPriceBlock">
+                  <div className="price">{plan.monthlyPrice}</div>
+                  <p className="small" style={{ margin: 0 }}>
+                    per month
+                  </p>
+                  <p className="small" style={{ margin: '6px 0 0' }}>
+                    <strong>{plan.annualPrice}</strong>
+                  </p>
+                  <p className="small" style={{ margin: '4px 0 0' }}>
+                    {plan.annualNote}
+                  </p>
+                </div>
+
+                <p className="small pricingDescription">{getPlanShortDescription(plan.key)}</p>
               </div>
 
-              <div className="pricingPriceBlock">
-                <div className="price">{plan.monthlyPrice}</div>
+              <div className="pricingMiniStats">
+                <div className="card questionSurface pricingMiniStat">
+                  <p className="small" style={{ margin: '0 0 4px' }}>
+                    <strong>Tutor requests</strong>
+                  </p>
+                  <p className="small" style={{ margin: 0 }}>
+                    {plan.limits.tutorRequestsPerDay}
+                  </p>
+                </div>
+
+                <div className="card questionSurface pricingMiniStat">
+                  <p className="small" style={{ margin: '0 0 4px' }}>
+                    <strong>Image support</strong>
+                  </p>
+                  <p className="small" style={{ margin: 0 }}>
+                    {plan.limits.imageUploadsPerMonth}
+                  </p>
+                </div>
+
+                <div className="card questionSurface pricingMiniStat">
+                  <p className="small" style={{ margin: '0 0 4px' }}>
+                    <strong>Saved history</strong>
+                  </p>
+                  <p className="small" style={{ margin: 0 }}>
+                    {plan.limits.savedConversations}
+                  </p>
+                </div>
+              </div>
+
+              <div className="pricingFeatureBlock pricingKeyFeatureBlock">
                 <p className="small" style={{ margin: 0 }}>
-                  per month
+                  <strong>Key features</strong>
                 </p>
-                <p className="small" style={{ margin: '6px 0 0' }}>
-                  <strong>{plan.annualPrice}</strong>
-                </p>
-                <p className="small" style={{ margin: '4px 0 0' }}>
-                  {plan.annualNote}
-                </p>
+
+                <ul className="list pricingFeatureList">
+                  {getPlanKeyPoints(plan.key).map((feature) => (
+                    <li key={feature}>{feature}</li>
+                  ))}
+                </ul>
               </div>
 
-              <p className="small pricingDescription">{getPlanShortDescription(plan.key)}</p>
-            </div>
-
-            <div className="pricingMiniStats">
-              <div className="card questionSurface pricingMiniStat">
-                <p className="small" style={{ margin: '0 0 4px' }}>
-                  <strong>Tutor requests</strong>
-                </p>
+              <div className="pricingFeatureBlock pricingWhyBlock">
                 <p className="small" style={{ margin: 0 }}>
-                  {plan.limits.tutorRequestsPerDay}
+                  <strong>Why users choose this plan</strong>
                 </p>
+
+                <ul className="list pricingFeatureList">
+                  {plan.paidValue.slice(0, 3).map((feature) => (
+                    <li key={feature}>{feature}</li>
+                  ))}
+                </ul>
               </div>
 
-              <div className="card questionSurface pricingMiniStat">
-                <p className="small" style={{ margin: '0 0 4px' }}>
-                  <strong>Image support</strong>
-                </p>
-                <p className="small" style={{ margin: 0 }}>
-                  {plan.limits.imageUploadsPerMonth}
-                </p>
-              </div>
-
-              <div className="card questionSurface pricingMiniStat">
-                <p className="small" style={{ margin: '0 0 4px' }}>
-                  <strong>Saved history</strong>
-                </p>
-                <p className="small" style={{ margin: 0 }}>
-                  {plan.limits.savedConversations}
-                </p>
+              <div className="buttonRow pricingButtonRow">
+                <a className={plan.key === 'free' ? 'btn secondary' : 'btn'} href={plan.ctaHref}>
+                  {plan.ctaLabel}
+                </a>
               </div>
             </div>
-
-            <div className="pricingFeatureBlock pricingKeyFeatureBlock">
-              <p className="small" style={{ margin: 0 }}>
-                <strong>Key features</strong>
-              </p>
-
-              <ul className="list pricingFeatureList">
-                {getPlanKeyPoints(plan.key).map((feature) => (
-                  <li key={feature}>{feature}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="pricingFeatureBlock pricingWhyBlock">
-              <p className="small" style={{ margin: 0 }}>
-                <strong>Why users choose this plan</strong>
-              </p>
-
-              <ul className="list pricingFeatureList">
-                {plan.paidValue.slice(0, 3).map((feature) => (
-                  <li key={feature}>{feature}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="buttonRow pricingButtonRow">
-              <a className={plan.key === 'free' ? 'btn secondary' : 'btn'} href={plan.ctaHref}>
-                {plan.ctaLabel}
-              </a>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </section>
 
       <section className="card spotlightCard" style={{ display: 'grid', gap: 16 }}>
@@ -395,12 +397,37 @@ export default function PricingPageContent() {
 
       <style>
         {`
+          .pricingPage {
+            width: 100%;
+          }
+
+          .pricingCardsSection {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            clear: both;
+            float: none;
+            grid-column: 1 / -1;
+            margin-top: 2px;
+            isolation: isolate;
+          }
+
+          .pricingCardsSection::before,
+          .pricingCardsSection::after {
+            content: '';
+            display: table;
+            clear: both;
+          }
+
           .pricingCards {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 18px;
             align-items: stretch;
             width: 100%;
+            max-width: 100%;
+            clear: both;
+            float: none;
           }
 
           .pricingPlanCard {
@@ -414,6 +441,7 @@ export default function PricingPageContent() {
             gap: 16px;
             min-width: 0;
             height: 100%;
+            float: none;
           }
 
           .pricingCardTop {
