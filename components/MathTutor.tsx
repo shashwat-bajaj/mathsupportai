@@ -4,6 +4,7 @@ import { KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AnswerDisplay from '@/components/AnswerDisplay';
 import FunctionGraph from '@/components/FunctionGraph';
+import PaidImageUploadPlaceholder from '@/components/PaidImageUploadPlaceholder';
 import { createClient } from '@/lib/supabase/client';
 import { getSubjectConfig, subjects, type SubjectConfig, type SubjectKey } from '@/lib/subjects';
 import {
@@ -676,6 +677,22 @@ export default function MathTutor({
               </div>
             </div>
           )}
+        </div>
+
+        <div
+          style={{
+            display: 'grid',
+            gap: 16,
+            paddingTop: 18,
+            borderTop: '1px solid var(--border)'
+          }}
+        >
+          <SectionTitle
+            title="Image or worksheet support"
+            description="Image processing is planned as a paid-only feature for Plus and Pro."
+          />
+
+          <PaidImageUploadPlaceholder compact context={audience} />
         </div>
 
         <div
