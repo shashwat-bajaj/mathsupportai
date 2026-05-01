@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { plans } from '@/lib/plans';
 
 const comparisonRows = [
@@ -193,7 +194,7 @@ export default function PricingPageContent() {
         </div>
       </section>
 
-      <section className="pricingCards">
+      <section className="pricingCards" aria-label="Pricing plans">
         {plans.map((plan) => (
           <div
             key={plan.key}
@@ -202,7 +203,7 @@ export default function PricingPageContent() {
               borderColor: plan.highlighted ? 'var(--accent-border)' : 'var(--border)'
             }}
           >
-            <div className="pricingCardHeader">
+            <div className="pricingCardTop">
               <span className="badge">{plan.badge}</span>
 
               <div className="pricingPlanTitleBlock">
@@ -225,9 +226,7 @@ export default function PricingPageContent() {
                 </p>
               </div>
 
-              <p className="small pricingDescription">
-                {getPlanShortDescription(plan.key)}
-              </p>
+              <p className="small pricingDescription">{getPlanShortDescription(plan.key)}</p>
             </div>
 
             <div className="pricingMiniStats">
@@ -259,7 +258,7 @@ export default function PricingPageContent() {
               </div>
             </div>
 
-            <div className="pricingFeatureBlock">
+            <div className="pricingFeatureBlock pricingKeyFeatureBlock">
               <p className="small" style={{ margin: 0 }}>
                 <strong>Key features</strong>
               </p>
@@ -271,7 +270,7 @@ export default function PricingPageContent() {
               </ul>
             </div>
 
-            <div className="pricingFeatureBlock">
+            <div className="pricingFeatureBlock pricingWhyBlock">
               <p className="small" style={{ margin: 0 }}>
                 <strong>Why users choose this plan</strong>
               </p>
@@ -324,9 +323,7 @@ export default function PricingPageContent() {
             <span>
               <span className="badge">Compare plans</span>
             </span>
-            <span className="pricingCompareSummaryText">
-              Open full feature comparison
-            </span>
+            <span className="pricingCompareSummaryText">Open full feature comparison</span>
           </summary>
 
           <div className="pricingComparePanel">
@@ -351,8 +348,8 @@ export default function PricingPageContent() {
 
                 <tbody>
                   {comparisonRows.map((group) => (
-                    <>
-                      <tr key={group.group} className="pricingTableGroupRow">
+                    <Fragment key={group.group}>
+                      <tr className="pricingTableGroupRow">
                         <td colSpan={4}>{group.group}</td>
                       </tr>
 
@@ -364,7 +361,7 @@ export default function PricingPageContent() {
                           <td>{row.pro}</td>
                         </tr>
                       ))}
-                    </>
+                    </Fragment>
                   ))}
                 </tbody>
               </table>
@@ -408,29 +405,34 @@ export default function PricingPageContent() {
 
           .pricingPlanCard {
             display: grid;
+            grid-template-rows:
+              minmax(300px, auto)
+              minmax(260px, auto)
+              minmax(190px, auto)
+              minmax(170px, auto)
+              auto;
             gap: 16px;
+            min-width: 0;
+            height: 100%;
+          }
+
+          .pricingCardTop {
+            display: grid;
+            gap: 12px;
             align-content: start;
             min-width: 0;
           }
 
-          .pricingCardHeader {
-            display: grid;
-            gap: 12px;
-            min-height: 300px;
-            align-content: start;
-          }
-
           .pricingPlanTitleBlock {
-            min-height: 72px;
+            min-height: 76px;
           }
 
           .pricingPriceBlock {
-            min-height: 118px;
+            min-height: 120px;
           }
 
           .pricingDescription {
             margin: 0;
-            min-height: 72px;
           }
 
           .pricingMiniStats {
@@ -438,6 +440,7 @@ export default function PricingPageContent() {
             gap: 10px;
             padding-top: 12px;
             border-top: 1px solid var(--border);
+            align-content: start;
           }
 
           .pricingMiniStat {
@@ -449,6 +452,7 @@ export default function PricingPageContent() {
             gap: 10px;
             padding-top: 12px;
             border-top: 1px solid var(--border);
+            align-content: start;
           }
 
           .pricingFeatureList {
@@ -457,6 +461,7 @@ export default function PricingPageContent() {
 
           .pricingButtonRow {
             margin-top: auto;
+            align-self: end;
           }
 
           .pricingCompareDetails {
@@ -548,10 +553,12 @@ export default function PricingPageContent() {
               grid-template-columns: 1fr;
             }
 
-            .pricingCardHeader,
+            .pricingPlanCard {
+              grid-template-rows: none;
+            }
+
             .pricingPlanTitleBlock,
-            .pricingPriceBlock,
-            .pricingDescription {
+            .pricingPriceBlock {
               min-height: 0;
             }
           }
