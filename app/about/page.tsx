@@ -4,7 +4,6 @@ import { subjects } from '@/lib/subjects';
 
 export default function AboutPage() {
   const subjectList = Object.values(subjects);
-  const activeSubjects = subjectList.filter((subject) => subject.status === 'active');
 
   return (
     <div className="grid" style={{ gap: 24 }}>
@@ -13,11 +12,11 @@ export default function AboutPage() {
           <span className="badge">About TutoVera</span>
 
           <div style={{ display: 'grid', gap: 10 }}>
-            <h1 style={{ margin: 0 }}>Tutoring you can trust, across every subject branch.</h1>
+            <h1 style={{ margin: 0 }}>Learning support built to feel clearer and more continuous.</h1>
             <p className="small" style={{ margin: 0, maxWidth: 860 }}>
-              TutoVera is a calm AI learning platform where Math, Physics, Chemistry, and Biology
-              each have their own learning workspace while still sharing one account system, one
-              history foundation, one settings experience, and one connected product structure.
+              TutoVera is a calm AI learning platform where each subject can have its own identity,
+              tutor behavior, examples, and learning flow while still sharing one account system,
+              one deployment, and one coherent product foundation.
             </p>
           </div>
         </section>
@@ -33,6 +32,10 @@ export default function AboutPage() {
               <strong>“Vera,”</strong> a word associated with truth, faith, belief, and trust. The
               name reflects the kind of learning support this platform is meant to provide: clear,
               steady, and trustworthy guidance for students and parents.
+            </p>
+            <p className="small" style={{ margin: 0, maxWidth: 900 }}>
+              Since 2026, TutoVera has been shaped around a simple idea: learning support should
+              feel clear, steady, and useful enough to continue from one question to the next.
             </p>
           </div>
 
@@ -52,7 +55,7 @@ export default function AboutPage() {
             </div>
 
             <div className="card innerFeatureCard">
-              <h3 style={{ marginTop: 0 }}>Tutoring you can trust</h3>
+              <h3 style={{ marginTop: 0 }}>Clearer learning</h3>
               <p className="small" style={{ marginBottom: 0 }}>
                 The guiding idea behind the platform: helpful explanations, calmer learning, and
                 support that feels reliable.
@@ -65,26 +68,26 @@ export default function AboutPage() {
       <Reveal delay={0.14}>
         <section className="grid cols-3">
           <div className="card innerFeatureCard">
-            <h3 style={{ marginTop: 0 }}>One parent platform</h3>
+            <h3 style={{ marginTop: 0 }}>One parent brand</h3>
             <p className="small" style={{ marginBottom: 0 }}>
-              TutoVera is the umbrella experience. Each subject branch can feel tailored without
-              becoming a disconnected app or separate product.
+              TutoVera is the umbrella experience for Math, Physics, Chemistry, and Biology, with
+              each subject branch designed to feel distinct but connected.
             </p>
           </div>
 
           <div className="card innerFeatureCard">
             <h3 style={{ marginTop: 0 }}>Shared foundation</h3>
             <p className="small" style={{ marginBottom: 0 }}>
-              Account access, history, settings, deployment, and backend structure stay unified
-              wherever practical so the product remains easier to maintain and grow.
+              The goal is to avoid disconnected apps. Auth, history, settings, deployment, and backend
+              structure stay unified wherever practical.
             </p>
           </div>
 
           <div className="card innerFeatureCard">
             <h3 style={{ marginTop: 0 }}>Subject-specific learning</h3>
             <p className="small" style={{ marginBottom: 0 }}>
-              Math, Physics, Chemistry, and Biology can each have their own prompts, examples, tools,
-              visual identity, and tutor behavior inside the same platform.
+              Each subject can have its own prompts, examples, tools, visual identity, and tutor
+              behavior without requiring a separate codebase.
             </p>
           </div>
         </section>
@@ -94,11 +97,10 @@ export default function AboutPage() {
         <section className="card" style={{ display: 'grid', gap: 18 }}>
           <div style={{ display: 'grid', gap: 8 }}>
             <span className="badge">Subject branches</span>
-            <h2 style={{ margin: 0 }}>Four active branches, one connected learning system.</h2>
+            <h2 style={{ margin: 0 }}>Built around subject-specific learning paths.</h2>
             <p className="small" style={{ margin: 0, maxWidth: 860 }}>
-              TutoVera currently supports {activeSubjects.map((subject) => subject.name).join(', ')}.
-              Each branch has its own student workspace, parent workspace, history view, and about
-              page while staying connected to the same broader product foundation.
+              TutoVera organizes learning into subject branches so students and parents can choose
+              the workspace that best matches the question, topic, or study situation.
             </p>
           </div>
 
@@ -120,17 +122,13 @@ export default function AboutPage() {
                     ? 'Active'
                     : subject.status === 'beta'
                       ? 'Beta preview'
-                      : 'Preparing'}
+                      : 'Preview'}
                 </span>
 
                 <h3 style={{ marginBottom: 8 }}>{subject.name}</h3>
 
                 <p className="small" style={{ margin: 0 }}>
                   {subject.description}
-                </p>
-
-                <p className="small" style={{ margin: '14px 0 0' }}>
-                  <strong>Open {subject.name} →</strong>
                 </p>
               </Link>
             ))}
@@ -143,25 +141,21 @@ export default function AboutPage() {
           <div style={{ display: 'grid', gap: 8 }}>
             <h2 style={{ margin: 0 }}>Current focus</h2>
             <p className="small" style={{ margin: 0, maxWidth: 860 }}>
-              The current focus is making all active branches feel stable, consistent, and useful:
-              clearer tutor responses, stronger saved history, better subject-specific behavior,
-              smoother parent support, cleaner navigation, and a more polished interface across the
-              whole platform.
+              The current focus is building TutoVera into a polished multi-subject learning platform:
+              clearer tutor flow, saved continuity, parent support, pricing structure, branding, and
+              launch-ready product quality.
             </p>
           </div>
 
           <div className="buttonRow">
-            <Link className="btn" href="/math">
-              Open Math
+            <Link className="btn" href="/tutor">
+              Open Student Workspaces
             </Link>
-            <Link className="btn secondary" href="/physics">
-              Open Physics
+            <Link className="btn secondary" href="/parents">
+              Open Parent Workspaces
             </Link>
-            <Link className="btn secondary" href="/chemistry">
-              Open Chemistry
-            </Link>
-            <Link className="btn secondary" href="/biology">
-              Open Biology
+            <Link className="btn secondary" href="/contact">
+              Contact / Feedback
             </Link>
           </div>
         </section>
