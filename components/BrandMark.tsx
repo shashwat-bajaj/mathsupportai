@@ -24,7 +24,7 @@ function getBrandSubtitle(context: BrandContext) {
       return 'Systems, cells, and life';
     case 'platform':
     default:
-      return 'Tutoring you can trust';
+      return 'Learning support, made clearer';
   }
 }
 
@@ -36,7 +36,8 @@ function BadgeIcon({ context }: { context: BrandContext }) {
           position: 'relative',
           fontSize: '1rem',
           fontWeight: 800,
-          letterSpacing: '-0.02em'
+          letterSpacing: '-0.02em',
+          lineHeight: 1
         }}
       >
         ∑
@@ -147,14 +148,40 @@ function BadgeIcon({ context }: { context: BrandContext }) {
 
   return (
     <span
+      aria-hidden="true"
       style={{
         position: 'relative',
-        fontSize: '0.82rem',
-        fontWeight: 800,
-        letterSpacing: '-0.08em'
+        display: 'inline-grid',
+        placeItems: 'center',
+        width: 25,
+        height: 25,
+        lineHeight: 1
       }}
     >
-      TV
+      <span
+        style={{
+          position: 'absolute',
+          top: 2,
+          left: 4,
+          fontSize: '0.72rem',
+          fontWeight: 850,
+          letterSpacing: '-0.08em'
+        }}
+      >
+        T
+      </span>
+      <span
+        style={{
+          position: 'absolute',
+          right: 4,
+          bottom: 2,
+          fontSize: '0.82rem',
+          fontWeight: 850,
+          letterSpacing: '-0.08em'
+        }}
+      >
+        V
+      </span>
     </span>
   );
 }
