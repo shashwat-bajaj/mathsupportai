@@ -1,4 +1,5 @@
 import './globals.css';
+import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import AuthNav from '@/components/AuthNav';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -9,9 +10,78 @@ import AdaptivePrimaryLinks from '@/components/AdaptivePrimaryLinks';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from '@vercel/analytics/next';
 
-export const metadata = {
-  title: 'TutoVera',
-  description: 'A unified AI learning platform for Math, Physics, Chemistry, and Biology.'
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://tutovera.com').replace(/\/$/, '');
+
+export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: 'TutoVera',
+    template: '%s | TutoVera'
+  },
+  description:
+    'TutoVera is a calm AI learning platform for Math, Physics, Chemistry, and Biology, with student and parent workspaces, saved history, and guided learning support.',
+  applicationName: 'TutoVera',
+  authors: [{ name: 'TutoVera' }],
+  creator: 'TutoVera',
+  publisher: 'TutoVera',
+  keywords: [
+    'TutoVera',
+    'AI tutor',
+    'AI learning platform',
+    'math tutor',
+    'physics tutor',
+    'chemistry tutor',
+    'biology tutor',
+    'parent learning support',
+    'student workspace',
+    'homework help',
+    'guided learning'
+  ],
+  category: 'education',
+  alternates: {
+    canonical: '/'
+  },
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/icon', type: 'image/png', sizes: '32x32' }
+    ],
+    apple: [{ url: '/apple-icon', type: 'image/png', sizes: '180x180' }]
+  },
+  manifest: '/manifest.webmanifest',
+  openGraph: {
+    type: 'website',
+    url: '/',
+    siteName: 'TutoVera',
+    title: 'TutoVera',
+    description:
+      'A calm AI learning platform for Math, Physics, Chemistry, and Biology, built around student and parent workspaces.',
+    images: [
+      {
+        url: '/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: 'TutoVera learning platform preview'
+      }
+    ]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'TutoVera',
+    description:
+      'A calm AI learning platform for Math, Physics, Chemistry, and Biology.',
+    images: ['/twitter-image']
+  }
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  colorScheme: 'dark light',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f6f1e8' },
+    { media: '(prefers-color-scheme: dark)', color: '#101426' }
+  ]
 };
 
 const footerLinks = [
